@@ -7,7 +7,9 @@ export const useNotifications = () => {
 
     useEffect(() => {
         setIsSupported('Notification' in window);
-        setHasPermission(Notification.permission === 'granted');
+        if ('Notification' in window) {
+            setHasPermission(Notification.permission === 'granted');
+        }
     }, []);
 
     const requestPermission = useCallback(async () => {

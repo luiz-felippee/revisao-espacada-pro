@@ -135,16 +135,14 @@ export const PomodoroProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
         // Send notification
         try {
-            if (Notification.permission === 'granted') {
-                const isFocus = mode === 'focus';
-                NotificationService.showNotification(
-                    isFocus ? '🎉 Foco Completo!' : '⏰ Pausa Terminada!',
-                    isFocus
-                        ? 'Ótimo trabalho! Hora de fazer uma pausa.'
-                        : 'Pausa terminada! Pronto para focar?',
-                    isFocus ? '🎉' : '⏰'
-                );
-            }
+            const isFocus = mode === 'focus';
+            NotificationService.showNotification(
+                isFocus ? '🎉 Foco Completo!' : '⏰ Pausa Terminada!',
+                isFocus
+                    ? 'Ótimo trabalho! Hora de fazer uma pausa.'
+                    : 'Pausa terminada! Pronto para focar?',
+                isFocus ? '🎉' : '⏰'
+            );
         } catch (error) {
             logger.error('Error sending notification:', error);
         }
