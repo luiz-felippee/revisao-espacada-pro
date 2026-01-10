@@ -134,19 +134,17 @@ export class ErrorBoundary extends Component<Props, State> {
                                     Recarregar Página
                                 </button>
 
-                                {isDev && (
-                                    <button
-                                        onClick={this.handleCopyError}
-                                        className="flex items-center justify-center gap-2 px-4 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-bold transition-all"
-                                    >
-                                        <Copy className="w-5 h-5" />
-                                        Copiar Erro
-                                    </button>
-                                )}
+                                <button
+                                    onClick={this.handleCopyError}
+                                    className="flex items-center justify-center gap-2 px-4 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-bold transition-all"
+                                >
+                                    <Copy className="w-5 h-5" />
+                                    Copiar Erro
+                                </button>
                             </div>
 
-                            {/* Error Details (Dev Only) */}
-                            {isDev && this.state.error && (
+                            {/* Error Details (Tempoary Debug for Production) */}
+                            {this.state.error && (
                                 <details className="mt-6">
                                     <summary className="cursor-pointer text-slate-400 hover:text-white flex items-center gap-2 font-bold">
                                         <Bug className="w-4 h-4" />
