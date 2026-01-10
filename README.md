@@ -1,240 +1,125 @@
-# Study Panel PRO 📚
+# ⚡ Revisão Espaçada PRO
 
-> Painel de Estudos Profissional com Sistema de Repetição Espaçada, Pomodoro e Gamificação
+Sistema completo de estudos com Flashcards, Gamificação e Pomodoro Timer.
 
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)](https://www.typescriptlang.org/)
-[![React](https://img.shields.io/badge/React-19.2-61dafb)](https://react.dev/)
-[![Vite](https://img.shields.io/badge/Vite-7.2-646cff)](https://vitejs.dev/)
-[![Supabase](https://img.shields.io/badge/Supabase-2.87-3ecf8e)](https://supabase.com/)
+![Status](https://img.shields.io/badge/status-active-success.svg)
+![React](https://img.shields.io/badge/react-18.3-blue.svg)
+![TypeScript](https://img.shields.io/badge/typescript-5.6-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-## 🚀 Sobre o Projeto
+## 🚀 Features
 
-**Study Panel PRO** é uma aplicação web moderna e completa para gerenciamento de estudos, com foco em produtividade e retenção de conhecimento através de técnicas científicas comprovadas.
+### 📚 Sistema de Estudos
+- **Flashcards SRS** - Sistema de repetição espaçada com algoritmo inteligente
+- **Temas e Subtemas** - Organização hierárquica de conteúdo
+- **Metas e Tarefas** - Gestão completa de objetivos de estudo
+- **Calendário Inteligente** - Visualização de atividades e prazos
 
-### ✨ Principais Funcionalidades
+### 🎮 Gamificação
+- **Sistema de XP e Níveis** - Progressão de Recruta a Lenda
+- **Conquistas** - Desbloqueio de achievements
+- **Streaks** - Ofensivas diárias com bônus
+- **Dashboard Interativo** - Estatísticas e progressão visual
 
-- 🧠 **Sistema de Repetição Espaçada (SRS)** - Baseado no algoritmo SM-2
-- ⏱️ **Pomodoro Integrado** - Cronômetro flutuante e arrastável
-- 🎮 **Gamificação Completa** - XP, níveis, conquistas e streaks
-- 📅 **Calendário Inteligente** - Visualização de tarefas, metas e revisões
-- 🎯 **Gestão de Metas e Projetos** - Com checklist e progresso
-- 📕 **Temas e Subtemas** - Organize seu conteúdo de estudo
-- ☁️ **Offline-First** - Funciona sem internet com sincronização automática
-- 🎨 **UI Moderna** - Design responsivo com Dark Mode
-- 📱 **PWA** - Instalável como aplicativo
+### ⏱️ Produtividade
+- **Pomodoro Timer** - Timer flutuante e draggável
+- **Missões Diárias** - Sugestões inteligentes de atividades
+- **Analytics** - Gráficos de desempenho e consistência
+- **Busca Global** - Encontre qualquer conteúdo rapidamente
+
+### 🎨 Design
+- **Dark Mode Premium** - Interface moderna com glassmorphism
+- **Micro-animações** - Transições suaves e fluidas
+- **Responsivo** - Funciona perfeitamente em qualquer dispositivo
+- **PWA** - Instale como app nativo
+
+## 🛠️ Tecnologias
+
+- **Frontend**: React 18 + TypeScript + Vite
+- **Styling**: Tailwind CSS + Framer Motion
+- **Backend**: Supabase (Auth + Database + Storage)
+- **State**: Context API + Custom Hooks
+- **Icons**: Lucide React
+- **Charts**: Recharts
+- **PWA**: Vite PWA Plugin
 
 ## 📦 Instalação
 
-### Pré-requisitos
-
-- Node.js 18+ 
-- npm ou yarn
-- Conta Supabase (para backend)
-
-### Passo a Passo
-
-1. **Clone o repositório**
 ```bash
-git clone https://github.com/seu-usuario/study-panel.git
-cd study-panel
-```
+# Clone o repositório
+git clone https://github.com/seu-usuario/revisao-espacada-pro.git
 
-2. **Instale as dependências**
-```bash
+# Entre na pasta
+cd revisao-espacada-pro
+
+# Instale as dependências
 npm install
-```
 
-3. **Configure as variáveis de ambiente**
+# Configure as variáveis de ambiente
+cp .env.example .env
+# Edite o .env com suas credenciais do Supabase
 
-Crie um arquivo `.env` na raiz do projeto:
-
-```env
-VITE_SUPABASE_URL=sua_url_do_supabase
-VITE_SUPABASE_ANON_KEY=sua_chave_anonima
-```
-
-4. **Configure o banco de dados**
-
-Execute as migrações do Supabase:
-
-```bash
-npm run db:push
-```
-
-5. **Inicie o servidor de desenvolvimento**
-```bash
+# Rode em desenvolvimento
 npm run dev
 ```
 
-A aplicação estará disponível em `http://localhost:5173`
+## 🌐 Deploy
 
-## 🛠️ Scripts Disponíveis
+Para fazer o deploy, siga o guia completo em [DEPLOY.md](./DEPLOY.md).
 
-```bash
-# Desenvolvimento
-npm run dev              # Inicia servidor de desenvolvimento
+**Quick Start:**
+1. Crie um repositório no GitHub
+2. Push do código
+3. Conecte na Vercel
+4. Configure as variáveis de ambiente
+5. Deploy automático! 🚀
 
-# Build
-npm run build            # Compila para produção
-npm run preview          # Preview do build de produção
+## 📝 Variáveis de Ambiente
 
-# Testes
-npm run test             # Executa testes
-npm run test:ui          # Interface de testes
-npm run test:coverage    # Cobertura de testes
-
-# Database
-npm run db:start         # Inicia Supabase local
-npm run db:stop          # Para Supabase local
-npm run db:reset         # Reseta banco de dados
-npm run db:push          # Aplica migrações
-npm run db:diff          # Gera diff de migrações
-npm run db:migration     # Cria nova migração
-
-# Linting
-npm run lint             # Executa ESLint
+```env
+VITE_SUPABASE_URL=https://seu-projeto.supabase.co
+VITE_SUPABASE_ANON_KEY=sua-chave-anon
 ```
-
-## 📁 Estrutura do Projeto
-
-```
-study-panel/
-├── public/              # Arquivos estáticos
-├── src/
-│   ├── components/      # Componentes reutilizáveis
-│   │   ├── ui/         # Componentes de interface
-│   │   ├── forms/      # Formulários
-│   │   └── layout/     # Componentes de layout
-│   ├── context/        # React Contexts
-│   ├── features/       # Features organizadas por domínio
-│   │   ├── calendar/   # Calendário
-│   │   ├── dashboard/  # Dashboard principal
-│   │   ├── goals/      # Sistema de metas
-│   │   ├── pomodoro/   # Timer Pomodoro
-│   │   ├── themes/     # Temas de estudo
-│   │   └── ...
-│   ├── hooks/          # Custom React Hooks
-│   ├── lib/            # Bibliotecas e configurações
-│   ├── pages/          # Páginas da aplicação
-│   ├── services/       # Serviços (API, Sync, etc)
-│   ├── types/          # TypeScript types
-│   ├── utils/          # Utilitários
-│   └── main.tsx        # Entry point
-├── supabase/           # Migrações e configurações do Supabase
-├── package.json
-└── vite.config.ts
-```
-
-## 🔧 Tecnologias Principais
-
-### Core
-- **React 19.2** - Library UI
-- **TypeScript 5.9** - Tipagem estática
-- **Vite 7** - Build tool
-- **React Router 7** - Roteamento
-
-### Backend
-- **Supabase** - Backend as a Service (PostgreSQL, Auth, Storage)
-
-### UI/UX
-- **Tailwind CSS** - Estilização
-- **Framer Motion** - Animações
-- **Lucide React** - Ícones
-
-### Estado e Dados
-- **Context API** - Gerenciamento de estado
-- **date-fns** - Manipulação de datas
-- **Zod** - Validação de schemas
-
-### Performance
-- **React Window** - Virtualização de listas
-- **Terser** - Minificação
-
-### Testes
-- **Vitest** - Framework de testes
-- **Testing Library** - Testes de componentes
-
-## 🗄️ Configuração do Supabase
-
-### Criar Projeto
-
-1. Acesse [supabase.com](https://supabase.com)
-2. Crie um novo projeto
-3. Copie a URL e ANON KEY
-
-### Estrutura do Banco
-
-O banco possui as seguintes tabelas principais:
-
-- `profiles` - Perfis de usuários
-- `themes` - Temas de estudo
-- `subthemes` - Subtemas (com sistema SRS)
-- `tasks` - Tarefas
-- `goals` - Metas e hábitos
-
-### Row Level Security (RLS)
-
-Todas as tabelas possuem RLS habilitado para garantir que usuários só acessem seus próprios dados.
-
-## 🎮 Como Usar
-
-### 1. Criar um Tema de Estudo
-1. Vá para a aba "Temas"
-2. Clique em "Novo Tema"
-3. Preencha título, ícone, cor e categoria
-4. Adicione subtemas com o conteúdo
-
-### 2. Agendar Revisões
-- O sistema automaticamente agenda revisões com base no algoritmo SRS
-- Confira na aba "Calendário" ou em "Missões de Hoje"
-
-### 3. Usar o Pomodoro
-1. Clique no botão flutuante no canto inferior direito
-2. Configure o tempo de foco
-3. O widget pode ser arrastado pela tela
-4. Clique uma vez para pausar/resumir
-5. Clique duas vezes para expandir
-
-### 4. Acompanhar Progresso
-- Dashboard mostra XP, nível, streak e conquistas
-- Gráfico de consistência exibe sua dedicação
-- Calendário mostra todas as atividades agendadas
 
 ## 🧪 Testes
 
 ```bash
-# Executar todos os testes
+# Rodar testes
 npm run test
 
-# Modo watch
-npm run test -- --watch
-
-# Com interface
-npm run test:ui
-
-# Cobertura
+# Testes com coverage
 npm run test:coverage
+
+# Testes em watch mode
+npm run test:watch
 ```
 
-## 📝 Contribuindo
+## 📊 Scripts Disponíveis
 
-Contribuições são fundamentais para a evolução deste projeto! Por favor, leia nosso [Guia de Contribuição](./CONTRIBUTING.md) para detalhes sobre nosso processo de desenvolvimento, padrões de codificação e como submeter Pull Requests.
+```bash
+npm run dev          # Desenvolvimento
+npm run build        # Build de produção
+npm run preview      # Preview do build
+npm run test         # Rodar testes
+npm run lint         # Checar código
+```
+
+## 🤝 Contribuindo
+
+1. Fork o projeto
+2. Crie uma branch (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
 
 ## 📄 Licença
 
-Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
-## 👨‍💻 Autor
+## 👤 Autor
 
-**Seu Nome**
-- GitHub: [@seuusuario](https://github.com/seuusuario)
-
-## 🙏 Agradecimentos
-
-- Algoritmo SM-2 para SRS
-- Técnica Pomodoro
-- Comunidade React e Supabase
+Desenvolvido com ❤️ por Luiz F
 
 ---
 
-**Feito com ❤️ e muita ☕**
+⭐ Se este projeto te ajudou, considere dar uma estrela!
