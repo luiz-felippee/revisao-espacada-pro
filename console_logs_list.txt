@@ -1,0 +1,587 @@
+﻿
+src\App.tsx:84:       
+ console.log("🧹 
+Executing Hard Reset 
+for Guest 
+Session...");
+src\App.tsx:129:      
+console.log('PWA 
+installed');
+src\main.tsx:17:    
+console.log('App 
+ready to work 
+offline')
+src\components\ErrorBo
+undary.tsx:31:        
+console.error('🚨 
+Error Boundary 
+Caught:', {
+src\components\forms\I
+mageUpload.tsx:36:    
+        
+console.error("Erro 
+ao otimizar imagem:", 
+error);
+src\components\forms\S
+ymbolPicker.tsx:42:   
+             
+console.error('Failed 
+to parse recent 
+symbols', e);
+src\components\setting
+s\BackupSection.tsx:68
+:        console.log('
+Importing data:', 
+previewData);
+src\components\__tests
+__\ErrorBoundary.test.
+tsx:24:        // 
+Suppress 
+console.error for 
+this test
+src\config\env.ts:84: 
+       
+console.log('%c✅ 
+Environment 
+validated', 'color: 
+#10b981; font-weight: 
+bold', {
+src\context\AppProvide
+r.tsx:50:            
+} catch (err) { 
+console.error(err); }
+src\context\AppProvide
+r.tsx:70:             
+   console.log('🔄 
+Syncing Focus from 
+another tab:', 
+payload);
+src\context\AppProvide
+r.tsx:74:             
+   console.log('🔄 
+Syncing Zen Mode from 
+another tab:', 
+payload);
+src\context\AudioProvi
+der.tsx:102:          
+  rainAudioRef.current
+.play().catch(e => 
+console.error("Audio 
+play failed", e));
+src\context\AudioProvi
+der.tsx:209:          
+  console.warn("SFX 
+play failed (likely 
+browser 
+restriction):", e);
+src\context\AuthProvid
+er.tsx:12:            
+console.error("Failed 
+to parse app_user", 
+e);
+src\context\AuthProvid
+er.tsx:31:            
+console.log("Offline 
+detected on mount. 
+Using cached 
+session.");
+src\context\AuthProvid
+er.tsx:47:            
+console.error("Session
+ check failed", err);
+src\context\AuthProvid
+er.tsx:74:            
+    
+console.error('Error 
+fetching profile:', 
+error);
+src\context\Gamificati
+onProvider.tsx:30:    
+                
+console.error('Error 
+fetching gamification 
+data:', error);
+src\context\Gamificati
+onProvider.tsx:42:    
+                    
+console.warn('Empty 
+or invalid 
+gamification data 
+received, keeping 
+initial state');
+src\context\GoalProvid
+er.tsx:57:            
+            
+console.error("Error 
+reading sync queue 
+for goal protection", 
+e);
+src\context\GoalProvid
+er.tsx:71:            
+                    
+console.log(`🛡️ 
+Blocked zombie goal 
+resurrecion: 
+${serverGoal.id}`);
+src\context\PomodoroPr
+ovider.tsx:85:        
+    audioRef.current.p
+lay().catch((e: 
+unknown) => 
+console.log('Audio 
+play failed:', e));
+src\context\PomodoroPr
+ovider.tsx:122:       
+     
+console.error('Error 
+sending 
+notification:', 
+error);
+src\context\PomodoroPr
+ovider.tsx:172:       
+ console.log(`🚀 
+Starting focus 
+session for 
+${itemId}, duration: 
+${durationMinutes || 
+25}min`);
+src\context\PomodoroPr
+ovider.tsx:179:       
+ console.log(`✅ State 
+updated: 
+isActive=true, timeLef
+t=${durationSeconds}s`
+);
+src\context\ProjectPro
+vider.tsx:38:         
+       
+console.error('Error 
+loading projects:', 
+error);
+src\context\StudyProvi
+der.tsx:150:          
+      
+console.error("Error 
+resetting account 
+data:", tErrors, 
+gErrors, thErrors);
+src\context\TaskProvid
+er.tsx:60:            
+            
+console.error("Error 
+reading sync queue 
+for protection", e);
+src\context\TaskProvid
+er.tsx:75:            
+                    
+console.log(`🛡️ 
+Blocked zombie task 
+resurrecion: 
+${serverTask.id} `);
+src\context\ThemeProvi
+der.tsx:74:           
+             
+console.error("Error 
+reading sync queue 
+for theme 
+protection", e);
+src\context\ThemeProvi
+der.tsx:87:           
+                     
+console.log(`🛡️ 
+Blocked zombie theme 
+resurrecion: 
+${serverTheme.id}`);
+src\context\ThemeProvi
+der.tsx:105:          
+                      
+    console.warn(`[Sma
+rtMerge] Preserving ${
+localTheme.subthemes.l
+ength} local 
+subthemes for theme 
+${serverTheme.title} 
+(Server returned 0)`);
+src\features\auth\Logi
+nPage.tsx:41:         
+       
+console.error("Erro 
+de registro:", error);
+src\features\calendar\
+components\DayDetails.
+tsx:74:            
+console.warn(`⚠️ 
+Outro item já está em 
+foco: 
+${activeFocus.id}`);
+src\features\calendar\
+components\DayDetails.
+tsx:78:        
+console.log(`▶️ 
+Iniciando foco para: 
+${title} (${id})`);
+src\features\calendar\
+hooks\useCalendarEvent
+s.ts:125:        
+console.log('📅 === 
+BUILDING EVENTS MAP 
+===');
+src\features\calendar\
+hooks\useCalendarEvent
+s.ts:126:        
+console.log('📅 Total 
+tasks in system:', 
+tasks.length);
+src\features\calendar\
+hooks\useCalendarEvent
+s.ts:127:        
+console.log('📅 Total 
+goals in system:', 
+goals.length);
+src\features\calendar\
+hooks\useCalendarEvent
+s.ts:130:            
+console.log(`  📋 
+Task: "${t.title}" | 
+type: ${t.type} | 
+date: ${t.date} | 
+startDate: 
+${t.startDate} | 
+endDate: 
+${t.endDate}`);
+src\features\calendar\
+hooks\useCalendarEvent
+s.ts:132:             
+   console.log(`    ✅ 
+DAY task - adding to 
+${t.date}`);
+src\features\calendar\
+hooks\useCalendarEvent
+s.ts:136:             
+   console.log(`    ✅ 
+PERIOD task - adding 
+from ${t.startDate} 
+to ${t.endDate}`);
+src\features\calendar\
+hooks\useCalendarEvent
+s.ts:156:             
+   console.log(`    ✅ 
+RECURRING task - 
+recurrence: 
+${t.recurrence}`);
+src\features\calendar\
+hooks\useCalendarEvent
+s.ts:171:             
+   console.log(`    ❌ 
+Task did NOT match 
+any filter`);
+src\features\calendar\
+hooks\useCalendarEvent
+s.ts:174:        
+console.log('📅 === 
+EVENTS MAP BUILT 
+===');
+src\features\dashboard
+\TodayMissionModal.tsx
+:201:        console.l
+og("handleStartFocus 
+called for:", id);
+src\features\dashboard
+\TodayMissionModal.tsx
+:205:            conso
+le.warn("Attempted to 
+focus on future 
+item");
+src\features\dashboard
+\TodayMissionModal.tsx
+:213:            
+console.log("Task 
+already active, 
+reopening widget");
+src\features\dashboard
+\TodayMissionModal.tsx
+:218:        
+console.log("Starting 
+new focus session:", 
+id); // Debug log
+src\features\dashboard
+\hooks\useMissionLogic
+.ts:29:            
+try { setDailySchedule
+(JSON.parse(savedSched
+ule)); } catch (e) { 
+console.error("Failed 
+to parse daily 
+schedule", e); }
+src\features\dashboard
+\hooks\useMissionLogic
+.ts:36:            
+try { setMissionProgre
+ss(JSON.parse(savedPro
+gress)); } catch (e) 
+{ 
+console.error("Failed 
+to parse mission 
+progress", e); }
+src\features\integrati
+ons\IntegrationsPage.t
+sx:56:            
+console.error('Export 
+error:', error);
+src\features\lists\Pro
+jectList.tsx:122:     
+                      
+     
+console.log('Open 
+project:', 
+project.id);
+src\features\pomodoro\
+PomodoroWidget.tsx:130
+:            
+console.error("Failed 
+to validate:", error);
+src\hooks\useGoals.tes
+t.ts:327:        // 
+Suppress 
+console.error for 
+this test
+src\hooks\useGoals.ts:
+28:            
+console.error("Failed 
+to parse 
+study_goals_backup", 
+e);
+src\hooks\useGoals.ts:
+40:                
+console.log(`🧹 
+Cleaning orphaned 
+localStorage key: 
+${key}`);
+src\hooks\useGoals.ts:
+90:        
+console.log(`🗑️ 
+deleteGoal called for 
+ID: ${goalId}`);
+src\hooks\useGoals.ts:
+98:        
+console.log(`💾 
+Forced localStorage 
+update: ${updatedGoals
+.length} goals 
+remaining`);
+src\hooks\useLocalStor
+age.ts:17:            
+console.warn(`Error 
+reading localStorage 
+key “${key}”:`, 
+error);
+src\hooks\useLocalStor
+age.ts:37:            
+console.warn(`Error 
+setting localStorage 
+key “${key}”:`, 
+error);
+src\hooks\useOptimizat
+ion.ts:169:           
+ console.error(`Error 
+reading localStorage 
+key "${key}":`, 
+error);
+src\hooks\useOptimizat
+ion.ts:185:           
+     
+console.error(`Error 
+setting localStorage 
+key "${key}":`, 
+error);
+src\hooks\useTasks.ts:
+29:            
+console.error("Failed 
+to parse 
+study_tasks_backup", 
+e);
+src\hooks\useTasks.ts:
+43:                
+console.log(`🧹 
+Cleaning orphaned 
+localStorage key: 
+${key}`);
+src\hooks\useTasks.ts:
+120:        
+console.log(`🗑️ 
+deleteTask called for 
+ID: ${taskId}`);
+src\hooks\useTasks.ts:
+129:        
+console.log(`💾 
+Forced localStorage 
+update: ${updatedTasks
+.length} tasks 
+remaining`);
+src\hooks\useTasks.ts:
+138:            
+console.log(`📤 
+Queueing DELETE 
+operation for task: 
+${taskId}`);
+src\hooks\useTasks.ts:
+144:            
+console.log(`✅ DELETE 
+enqueued successfully 
+for task: ${taskId}`);
+src\hooks\useTasks.ts:
+146:            
+console.error('❌ 
+Error enqueuing 
+delete operation:', 
+error);
+src\hooks\useThemes.ts
+:67:            
+console.error("Failed 
+to parse 
+study_themes_backup", 
+e);
+src\hooks\useThemes.ts
+:83:            
+console.error("Add 
+Theme failed: No user 
+logged in");
+src\hooks\useThemes.ts
+:144:            
+console.error('Erro 
+ao processar 
+atualizações 
+diárias:', e);
+src\hooks\useThemes.ts
+:255:            
+console.error('Erro 
+ao excluir tema ou 
+subtemas:', e);
+src\lib\storage.ts:18:
+            
+console.warn(`Error 
+reading key 
+"${key}":`, error);
+src\lib\storage.ts:28:
+            
+console.warn(`Error 
+setting key 
+"${key}":`, error);
+src\lib\storage.ts:37:
+            
+console.warn(`Error 
+removing key 
+"${key}":`, error);
+src\services\Notificat
+ionService.ts:4:      
+      
+console.warn('Este 
+navegador não suporta 
+notificações 
+desktop');
+src\utils\deletedItems
+Blacklist.ts:36:      
+      console.log(`🚫 
+Added ${id} to 
+${type} blacklist 
+(total: ${blacklist.le
+ngth})`);
+src\utils\deletedItems
+Blacklist.ts:39:      
+  
+console.error('Error 
+adding to 
+blacklist:', error);
+src\utils\deletedItems
+Blacklist.ts:51:      
+  
+console.error('Error 
+checking blacklist:', 
+error);
+src\utils\deletedItems
+Blacklist.ts:67:      
+      console.log(`✅ 
+Removed ${id} from 
+${type} blacklist 
+(rollback)`);
+src\utils\deletedItems
+Blacklist.ts:70:      
+  
+console.error('Error 
+removing from 
+blacklist:', error);
+src\utils\deletedItems
+Blacklist.ts:83:      
+  
+console.error('Error 
+reading blacklist:', 
+error);
+src\utils\deletedItems
+Blacklist.ts:95:      
+  console.log(`🧹 
+Cleared ${type} 
+blacklist`);
+src\utils\deletedItems
+Blacklist.ts:97:      
+  
+console.error('Error 
+clearing blacklist:', 
+error);
+src\utils\deletedItems
+Blacklist.ts:115:     
+   console.log(`🛡️ 
+Blocked 
+${blockedCount} 
+blacklisted 
+${type}(s) from 
+resurrecting`);
+src\utils\logger.ts:26
+:            
+console.log(prefix, 
+message, data);
+src\utils\logger.ts:28
+:            
+console.log(prefix, 
+message);
+src\utils\logger.ts:40
+:            
+console.info(prefix, 
+message, data);
+src\utils\logger.ts:42
+:            
+console.info(prefix, 
+message);
+src\utils\logger.ts:52
+:            
+console.warn(prefix, 
+message, data);
+src\utils\logger.ts:54
+:            
+console.warn(prefix, 
+message);
+src\utils\logger.ts:64
+:            
+console.error(prefix, 
+message, error);
+src\utils\logger.ts:66
+:            
+console.error(prefix, 
+message);
+src\utils\logger.ts:79
+:        
+console.group(label);
+src\utils\logger.ts:81
+:        
+console.groupEnd();
+src\utils\webVitals.ts
+:9:        
+console.log(
+src\utils\webVitals.ts
+:39:    
+console.log('%c📊 Web 
+Vitals tracking 
+initialized', 'color: 
+#3b82f6; font-weight: 
+bold');
+
+

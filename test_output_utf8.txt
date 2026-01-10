@@ -1,0 +1,157 @@
+﻿
+[1m[46m RUN [49m[22m [36mv4.0.16 [39m[90mC:/Users/luizf/antigraty/study-panel[39m
+
+ [31mÔØ»[39m src/features/calendar/components/__tests__/DayDetails.test.tsx [2m([22m[2m3 tests[22m[2m | [22m[31m3 failed[39m[2m)[22m[32m 42[2mms[22m[39m
+[31m     [31m├ù[31m renders empty state message when no events[39m[32m 34[2mms[22m[39m
+[31m     [31m├ù[31m renders tasks correctly[39m[32m 3[2mms[22m[39m
+[31m     [31m├ù[31m calls onDeleteTask when delete button is clicked[39m[32m 3[2mms[22m[39m
+node.exe : 
+No linha:1 caractere:1
++ & "C:\Program Files\
+nodejs/node.exe" "C:\U
+sers\luizf\AppData\Roa
+ming\ ...
++ ~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~~~~~
+    + CategoryInfo    
+          : NotSpeci  
+  fied: (:String) [   
+ ], RemoteExceptio    
+n
+    + FullyQualifiedE 
+   rrorId : NativeCo  
+  mmandError
+ 
+[31mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ
+»ÔÄ»[39m[1m[41m 
+Failed Tests 3 [49m[
+22m[31mÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ
+»ÔÄ»ÔÄ»[39m
+
+[41m[1m FAIL 
+[22m[49m src/feature
+s/calendar/components/
+__tests__/DayDetails.t
+est.tsx[2m > 
+[22mDayDetails[2m > 
+[22mrenders empty 
+state message when no 
+events
+[41m[1m FAIL 
+[22m[49m src/feature
+s/calendar/components/
+__tests__/DayDetails.t
+est.tsx[2m > 
+[22mDayDetails[2m > 
+[22mrenders tasks 
+correctly
+[41m[1m FAIL 
+[22m[49m src/feature
+s/calendar/components/
+__tests__/DayDetails.t
+est.tsx[2m > 
+[22mDayDetails[2m > 
+[22mcalls 
+onDeleteTask when 
+delete button is 
+clicked
+[31m[1mError[22m: 
+useStudy must be used 
+within 
+StudyProvider[39m
+[36m [2mÔØ»[22m 
+useStudy src/context/S
+tudyContext.tsx:[2m22
+1:25[22m[39m
+    [90m219| 
+[39m[35mexport[39m 
+[35mconst[39m 
+useStudy [33m=[39m 
+() [33m=>[39m {
+    [90m220| [39m   
+ [35mconst[39m 
+context [33m=[39m [
+34museContext[39m([3
+3mStudyContext[39m)[
+33m;[39m
+    [90m221| [39m   
+ if (!context) throw 
+new Error('useStudy 
+must be used within 
+StudyPÔÇª
+    [90m   | [39m   
+                     
+[31m^[39m
+    [90m222| [39m   
+ [35mreturn[39m 
+context[33m;[39m
+    [90m223| 
+[39m}[33m;[39m
+[90m [2mÔØ»[22m 
+DayDetails src/feature
+s/calendar/components/
+DayDetails.tsx:[2m63:
+51[22m[39m
+[90m [2mÔØ»[22m Obj
+ect.react_stack_bottom
+_frame node_modules/re
+act-dom/cjs/react-dom-
+client.development.js:
+[2m25904:20[22m[39m
+[90m [2mÔØ»[22m 
+renderWithHooks node_m
+odules/react-dom/cjs/r
+eact-dom-client.develo
+pment.js:[2m7662:22[
+22m[39m
+[90m [2mÔØ»[22m upd
+ateFunctionComponent n
+ode_modules/react-dom/
+cjs/react-dom-client.d
+evelopment.js:[2m1016
+6:19[22m[39m
+[90m [2mÔØ»[22m 
+beginWork node_modules
+/react-dom/cjs/react-d
+om-client.development.
+js:[2m11778:18[22m[
+39m
+[90m [2mÔØ»[22m 
+runWithFiberInDEV node
+_modules/react-dom/cjs
+/react-dom-client.deve
+lopment.js:[2m874:13
+[22m[39m
+[90m [2mÔØ»[22m 
+performUnitOfWork node
+_modules/react-dom/cjs
+/react-dom-client.deve
+lopment.js:[2m17641:2
+2[22m[39m
+[90m [2mÔØ»[22m 
+workLoopSync node_modu
+les/react-dom/cjs/reac
+t-dom-client.developme
+nt.js:[2m17469:41[22
+m[39m
+[90m [2mÔØ»[22m 
+renderRootSync node_mo
+dules/react-dom/cjs/re
+act-dom-client.develop
+ment.js:[2m17450:11[
+22m[39m
+
+[31m[2mÔÄ»ÔÄ»ÔÄ»ÔÄ»Ô
+Ä»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ
+»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»
+ÔÄ»ÔÄ»ÔÄ»ÔÄ»ÔÄ»[1/3]ÔÄ
+»[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m3 failed[39m[22m[90m (3)[39m
+[2m   Start at [22m 14:10:14
+[2m   Duration [22m 6.61s[2m (transform 559ms, setup 283ms, import 4.05s, tests 42ms, environment 1.96s)[22m
+

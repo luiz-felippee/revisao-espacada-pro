@@ -1,0 +1,97 @@
+﻿node.exe : (node:18380) 
+ESLintIgnoreWarning: The 
+".eslintignore" file is no 
+longer supported. Switch 
+to using the "ignores" 
+property in 
+"eslint.config.js": https:/
+/eslint.org/docs/latest/use
+/configure/migration-guide#
+ignoring-files
+No linha:1 caractere:1
++ & "C:\Program 
+Files\nodejs/node.exe" "C:\
+Users\luizf\AppData\Roaming
+\ ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~
+    + CategoryInfo         
+     : NotSpecified: ((no  
+  de:18380) ES...#ignori   
+ ng-files:String) [], R    
+emoteException
+    + FullyQualifiedErrorI 
+   d : NativeCommandError
+ 
+(Use `node 
+--trace-warnings ...` to 
+show where the warning was 
+created)
+
+C:\Users\luizf\antigraty\study-panel\src\context\AudioProvider.tsx
+   1:38  error    'useCallback' is defined but never used                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+   2:29  error    'AudioContextType' is defined but never used                                                                                                                                                                                    @typescript-eslint/no-unused-vars
+  87:11  warning  The 'playAudio' function makes the dependencies of useEffect Hook (at line 115) change on every render. Move it inside the useEffect callback. Alternatively, wrap the definition of 'playAudio' in its own useCallback() Hook  react-hooks/exhaustive-deps
+
+C:\Users\luizf\antigraty\study-panel\src\context\ConfirmProvider.tsx
+  2:10  error  'createPortal' is defined but never used        @typescript-eslint/no-unused-vars
+  5:10  error  'ConfirmationModal' is defined but never used   @typescript-eslint/no-unused-vars
+  6:52  error  'ConfirmContextType' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\luizf\antigraty\study-panel\src\context\GamificationProvider.tsx
+  1:38  error  'useCallback' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\luizf\antigraty\study-panel\src\context\GoalProvider.tsx
+   7:28  error  'GoalContextType' is defined but never used                                                                                     @typescript-eslint/no-unused-vars
+  96:14  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\luizf\antigraty\study-panel\src\context\PomodoroProvider.tsx
+    1:59  error    'useContext' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-unused-vars
+    2:51  error    'PomodoroContextType' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-unused-vars
+   35:21  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\luizf\antigraty\study-panel\src\context\PomodoroProvider.tsx:35:21
+  33 |                 // Only restore if saved less than 24h ago
+  34 |                 if (Date.now() - parsed.timestamp < 24 * 60 * 60 * 1000) {
+> 35 |                     setMode(parsed.mode);
+     |                     ^^^^^^^ Avoid calling setState() directly within an effect
+  36 |                     setTimeLeft(parsed.timeLeft);
+  37 |                     setIsActive(parsed.isActive);
+  38 |                     setCycles(parsed.cycles);  react-hooks/set-state-in-effect
+  108:17  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\luizf\antigraty\study-panel\src\context\PomodoroProvider.tsx:108:17
+  106 |         } else if (timeLeft === 0) {
+  107 |             if (mode === 'focus' && isActive) {
+> 108 |                 setIsActive(false);
+      |                 ^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  109 |                 playSound();
+  110 |                 setIsWidgetVisible(true);
+  111 |             } else if (mode !== 'focus') {                                                                                 react-hooks/set-state-in-effect
+  117:8   warning  React Hook useEffect has missing dependencies: 'mode' and 'playSound'. Either include them or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         react-hooks/exhaustive-deps
+
+C:\Users\luizf\antigraty\study-panel\src\context\TaskProvider.tsx
+  99:14  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\luizf\antigraty\study-panel\src\context\ThemeProvider.tsx
+  149:8   warning  React Hook useEffect has a missing dependency: 'themeActions'. Either include it or remove the dependency array                 react-hooks/exhaustive-deps
+  158:14  error    Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+C:\Users\luizf\antigraty\study-panel\src\context\ToastProvider.tsx
+  45:14  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+Ô£û 18 problems (15 errors, 3 warnings)
+

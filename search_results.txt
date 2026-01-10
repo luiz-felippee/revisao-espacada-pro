@@ -1,0 +1,45 @@
+
+src\config\gamification.ts:36
+:export const 
+ACHIEVEMENTS_LIST: 
+Omit<Achievement, 
+'unlockedAt'>[] = [
+src\features\analytics\compon
+ents\AchievementsList.tsx:2:i
+mport { ACHIEVEMENTS_LIST } 
+from '../../../config/gamific
+ation';
+src\features\analytics\compon
+ents\AchievementsList.tsx:25:
+                        {unlo
+ckedAchievements.length} de 
+{ACHIEVEMENTS_LIST.length} 
+desbloqueadas
+src\features\analytics\compon
+ents\AchievementsList.tsx:31:
+                {ACHIEVEMENTS
+_LIST.map((config) => {
+src\features\dashboard\compon
+ents\AchievementsSummaryWidge
+t.tsx:3:import { 
+ACHIEVEMENTS_LIST } from '../
+../../config/gamification';
+src\features\dashboard\compon
+ents\AchievementsSummaryWidge
+t.tsx:14:    const 
+totalCount = 
+ACHIEVEMENTS_LIST.length;
+src\services\GamificationServ
+ice.ts:3:import { 
+ACHIEVEMENTS_LIST } from 
+'../config/gamification';
+src\services\GamificationServ
+ice.ts:101:        ACHIEVEMEN
+TS_LIST.forEach(config => {
+src\services\GamificationServ
+ice.ts:300:        
+ACHIEVEMENTS_LIST.filter(a 
+=> a.condition.type === 
+'xp').forEach(a => {
+
+

@@ -1,0 +1,28 @@
+
+src\components\analytics\Cons
+istencyHeatmap.tsx:13:import 
+{ Activity } from 
+'lucide-react';
+src\features\goals\components
+\GoalDetailsModal.tsx:2:impor
+t { Target, CheckCircle2, 
+Clock, Calendar, Trophy, 
+ArrowRight, Activity } from 
+'lucide-react';
+src\features\tasks\components
+\TaskDetailsModal.tsx:2:impor
+t { CheckSquare, Clock, 
+Calendar, Trophy, 
+PlayCircle, Activity, 
+FileText } from 
+'lucide-react';
+src\features\themes\component
+s\ThemeDetailsModal.tsx:2:imp
+ort { BrainCircuit, Clock, 
+Calendar, Trophy, 
+ArrowRight, Activity, 
+BookOpen, Layers, 
+CheckCircle2 } from 
+'lucide-react';
+
+

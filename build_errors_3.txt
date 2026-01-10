@@ -1,0 +1,8 @@
+﻿
+> study-panel@0.0.0 build
+> tsc -b && vite build
+
+src/features/calendar/Calendar.tsx(173,25): error TS2322: Type '{ key: string; date: Date; events: { reviews: any[]; intros: any[]; projected: any[]; tasks: any[]; goals: any[]; }; onCompleteReview: (subthemeId: string, reviewNumber?: number | undefined, type?: "review" | "intro" | undefined, difficulty?: "medium" | ... 2 more ... | undefined, summary?: string | undefined) => Pr...' is not assignable to type 'IntrinsicAttributes & DayDetailsProps'.
+  Property 'onToggleTask' does not exist on type 'IntrinsicAttributes & DayDetailsProps'.
+src/features/dashboard/CalendarWidget.tsx(215,25): error TS2322: Type '{ events: { reviews: CalendarReviewItem[]; tasks: CalendarTaskItem[]; goals: CalendarGoalItem[]; projected: any[]; }; date: Date; ... 6 more ...; onDeleteGoal: (goalId: string) => void; }' is not assignable to type 'IntrinsicAttributes & DayDetailsProps'.
+  Property 'onToggleTask' does not exist on type 'IntrinsicAttributes & DayDetailsProps'.

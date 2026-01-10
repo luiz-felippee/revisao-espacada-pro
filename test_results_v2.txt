@@ -1,0 +1,23 @@
+﻿
+[1m[46m RUN [49m[22m [36mv4.0.16 [39m[90mC:/Users/luizf/antigraty/study-panel[39m
+
+ [31mÔØ»[39m src/services/SRSService.test.ts [2m([22m[2m7 tests[22m[2m | [22m[31m2 failed[39m[2m)[22m[32m 44[2mms[22m[39m
+       [32mÔ£ô[39m should activate the first queued subtheme if nothing was introduced today[32m 11[2mms[22m[39m
+[31m       [31m├ù[31m should NOT activate anything if a subtheme was already introduced today[39m[32m 21[2mms[22m[39m
+       [32mÔ£ô[39m should calculate correct intervals [1, 3, 10, 18, 33][32m 1[2mms[22m[39m
+       [32mÔ£ô[39m should handle leap years correctly (Feb 2024)[32m 5[2mms[22m[39m
+       [32mÔ£ô[39m should only activate one subtheme per day even across multiple themes[32m 1[2mms[22m[39m
+       [32mÔ£ô[39m should mark review as completed[32m 1[2mms[22m[39m
+[31m       [31m├ù[31m should NOT complete future reviews[39m[32m 3[2mms[22m[39m
+ [32mÔ£ô[39m src/services/GamificationService.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32mÔ£ô[39m src/features/calendar/components/__tests__/DayDetails.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 739[2mms[22m[39m
+     [33m[2mÔ£ô[22m[39m calls onDeleteTask when delete button is clicked [33m 593[2mms[22m[39m
+ [32mÔ£ô[39m src/__tests__/startup.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32mÔ£ô[39m src/features/dashboard/__tests__/MissionItem.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 519[2mms[22m[39m
+     [33m[2mÔ£ô[22m[39m shows completed status when isDone is true [33m 323[2mms[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[31m2 failed[39m[22m[2m | [22m[1m[32m22 passed[39m[22m[90m (24)[39m
+[2m   Start at [22m 01:52:09
+[2m   Duration [22m 10.17s[2m (transform 788ms, setup 1.34s, import 10.72s, tests 1.34s, environment 6.46s)[22m
+

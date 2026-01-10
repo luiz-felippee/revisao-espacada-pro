@@ -1,0 +1,28 @@
+﻿
+[1m[46m RUN [49m[22m [36mv4.0.16 [39m[90mC:/Users/luizf/antigraty/study-panel[39m
+
+[90mstdout[2m | src/features/calendar/components/__tests__/DayDetails.test.tsx[2m > [22m[2mDayDetails[2m > [22m[2mrenders empty state message when no events
+[22m[39m[36m<body>[39m
+  [36m<div>[39m
+    [36m<div[39m
+      [33mclass[39m=[32m"text-center py-8 text-slate-500"[39m
+    [36m>[39m
+      [36m<p>[39m
+        [0mNada agendado para este dia.[0m
+      [36m</p>[39m
+      [36m<p[39m
+        [33mclass[39m=[32m"text-sm"[39m
+      [36m>[39m
+        [0mAproveite para descansar ou adiantar estudos![0m
+      [36m</p>[39m
+    [36m</div>[39m
+  [36m</div>[39m
+[36m</body>[39m
+
+ [32mÔ£ô[39m src/features/calendar/components/__tests__/DayDetails.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 370[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m   Start at [22m 14:18:13
+[2m   Duration [22m 4.49s[2m (transform 276ms, setup 191ms, import 2.39s, tests 370ms, environment 1.26s)[22m
+

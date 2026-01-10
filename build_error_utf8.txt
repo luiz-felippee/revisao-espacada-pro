@@ -1,0 +1,10 @@
+﻿
+> study-panel@0.0.0 build
+> tsc -b && vite build
+
+src/features/calendar/components/DayDetails.tsx(631,62): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+src/features/dashboard/CalendarWidget.tsx(235,25): error TS2322: Type '{ reviews: { themeTitle: string; subthemeTitle: string; type: string; status: "completed" | "pending"; date: string; number: number; completedAt?: string; completedBy?: string; summary?: string; }[]; tasks: { ...; }[]; goals: { ...; }[]; projected: ProjectedReview[]; }' is not assignable to type '{ reviews: CalendarReviewItem[]; tasks: Task[]; goals: CalendarGoalItem[]; intros?: CalendarIntroItem[] | undefined; projected?: { ...; }[] | undefined; }'.
+  Types of property 'reviews' are incompatible.
+    Type '{ themeTitle: string; subthemeTitle: string; type: string; status: "completed" | "pending"; date: string; number: number; completedAt?: string | undefined; completedBy?: string | undefined; summary?: string | undefined; }[]' is not assignable to type 'CalendarReviewItem[]'.
+      Property 'id' is missing in type '{ themeTitle: string; subthemeTitle: string; type: string; status: "completed" | "pending"; date: string; number: number; completedAt?: string; completedBy?: string; summary?: string; }' but required in type 'CalendarReviewItem'.

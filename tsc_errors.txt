@@ -1,0 +1,18 @@
+﻿src/context/GamificationProvider.tsx(71,29): error TS2353: Object literal may only specify known properties, and 'gamification' does not exist in type 'PartialDbPayload'.
+src/context/GamificationProvider.tsx(107,21): error TS2353: Object literal may only specify known properties, and 'gamification' does not exist in type 'PartialDbPayload'.
+src/features/calendar/Calendar.tsx(111,9): error TS2554: Expected 3-4 arguments, but got 2.
+src/features/calendar/Calendar.tsx(275,65): error TS2554: Expected 3-4 arguments, but got 2.
+src/features/calendar/components/DayDetails.tsx(81,9): error TS2554: Expected 3-4 arguments, but got 2.
+src/features/dashboard/hooks/useMissionLogic.ts(326,9): error TS2554: Expected 3-4 arguments, but got 2.
+src/features/dashboard/TodayMissionModal.tsx(281,55): error TS2339: Property 'priority' does not exist on type 'Subtheme & { dueReview: Review; themeTitle: string; }'.
+src/features/dashboard/TodayMissionModal.tsx(281,83): error TS2339: Property 'priority' does not exist on type 'Subtheme & { dueReview: Review; themeTitle: string; }'.
+src/features/lists/GoalList.tsx(300,37): error TS2554: Expected 3-4 arguments, but got 2.
+src/features/tasks/components/TaskDetailsModal.tsx(46,9): error TS2554: Expected 3-4 arguments, but got 2.
+src/features/themes/components/SubthemeItem.tsx(160,41): error TS2554: Expected 3-4 arguments, but got 2.
+src/lib/sentry.ts(57,13): error TS2322: Type 'BrowserTracing' is not assignable to type 'Integration'.
+  Types of property 'setupOnce' are incompatible.
+    Type '(_: (callback: EventProcessor) => void, getCurrentHub: () => Hub) => void' is not assignable to type '() => void'.
+      Target signature provides too few arguments. Expected 2 or more, but got 0.
+src/lib/sentry.ts(59,48): error TS2339: Property 'reactRouterV6Instrumentation' does not exist on type 'typeof import("C:/Users/luizf/antigraty/study-panel/node_modules/@sentry/react/build/types/index")'.
+src/lib/sentry.ts(240,19): error TS2339: Property 'startTransaction' does not exist on type 'typeof import("C:/Users/luizf/antigraty/study-panel/node_modules/@sentry/react/build/types/index")'.
+src/services/SyncQueueService.ts(73,36): error TS2503: Cannot find namespace 'NodeJS'.
