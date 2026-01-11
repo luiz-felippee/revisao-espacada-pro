@@ -62,7 +62,7 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0 }: MobileBotto
                 document.body
             )}
 
-            <nav className="fixed bottom-0 left-0 right-0 h-20 bg-slate-950/80 backdrop-blur-2xl border-t border-white/5 z-50 lg:hidden flex items-center justify-around px-4 pb-[env(safe-area-inset-bottom,12px)]">
+            <nav className="fixed bottom-0 left-0 right-0 h-20 bg-slate-950/80 backdrop-blur-2xl border-t border-white/5 z-50 lg:hidden grid grid-cols-5 items-center px-4 pb-[env(safe-area-inset-bottom,12px)]">
                 {menuItems.map((item) => {
                     if (item.special) {
                         return (
@@ -72,7 +72,7 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0 }: MobileBotto
                                     showFeedback('Nova Missão');
                                     onOpenMission?.();
                                 }}
-                                className="relative flex flex-col items-center justify-center -mt-8 active:scale-95 transition-all group w-14 touch-manipulation"
+                                className="relative flex flex-col items-center justify-center -mt-8 active:scale-95 transition-all group col-start-3 col-span-1 touch-manipulation"
                                 aria-label="Abrir Missão"
                             >
                                 <div className="w-12 h-12 xs:w-14 xs:h-14 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-[0_0_20px_rgba(59,130,246,0.5)] border-4 border-slate-950 ring-1 ring-white/10 group-hover:scale-110 transition-transform duration-300 relative">
