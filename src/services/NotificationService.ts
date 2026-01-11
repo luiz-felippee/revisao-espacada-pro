@@ -1,4 +1,4 @@
-yexport class NotificationService {
+export class NotificationService {
     static async requestPermission() {
         if (!('Notification' in window)) {
             console.warn('Este navegador não suporta notificações desktop');
