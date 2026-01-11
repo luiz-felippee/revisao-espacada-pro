@@ -85,8 +85,6 @@ export class ErrorBoundary extends Component<Props, State> {
                 return this.props.fallback;
             }
 
-            const isDev = import.meta.env.DEV;
-
             // Default error UI
             return (
                 <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
@@ -141,49 +139,51 @@ export class ErrorBoundary extends Component<Props, State> {
                                     <Copy className="w-5 h-5" />
                                     Copiar Erro
                                 </button>
-                            </div>
+                            </div >
 
                             {/* Error Details (Tempoary Debug for Production) */}
-                            {this.state.error && (
-                                <details className="mt-6">
-                                    <summary className="cursor-pointer text-slate-400 hover:text-white flex items-center gap-2 font-bold">
-                                        <Bug className="w-4 h-4" />
-                                        Detalhes do Erro (Dev)
-                                    </summary>
-                                    <div className="mt-4 p-4 bg-slate-900/50 rounded-lg border border-slate-700">
-                                        <div className="mb-3">
-                                            <p className="text-red-400 font-bold text-sm mb-1">Mensagem:</p>
-                                            <p className="text-white text-sm">{this.state.error.message}</p>
+                            {
+                                this.state.error && (
+                                    <details className="mt-6">
+                                        <summary className="cursor-pointer text-slate-400 hover:text-white flex items-center gap-2 font-bold">
+                                            <Bug className="w-4 h-4" />
+                                            Detalhes do Erro (Dev)
+                                        </summary>
+                                        <div className="mt-4 p-4 bg-slate-900/50 rounded-lg border border-slate-700">
+                                            <div className="mb-3">
+                                                <p className="text-red-400 font-bold text-sm mb-1">Mensagem:</p>
+                                                <p className="text-white text-sm">{this.state.error.message}</p>
+                                            </div>
+
+                                            {this.state.error.stack && (
+                                                <div>
+                                                    <p className="text-red-400 font-bold text-sm mb-1">Stack Trace:</p>
+                                                    <pre className="text-xs text-slate-300 overflow-auto max-h-64 whitespace-pre-wrap">
+                                                        {this.state.error.stack}
+                                                    </pre>
+                                                </div>
+                                            )}
+
+                                            {this.state.errorInfo?.componentStack && (
+                                                <div className="mt-3">
+                                                    <p className="text-red-400 font-bold text-sm mb-1">Component Stack:</p>
+                                                    <pre className="text-xs text-slate-300 overflow-auto max-h-64 whitespace-pre-wrap">
+                                                        {this.state.errorInfo.componentStack}
+                                                    </pre>
+                                                </div>
+                                            )}
                                         </div>
-
-                                        {this.state.error.stack && (
-                                            <div>
-                                                <p className="text-red-400 font-bold text-sm mb-1">Stack Trace:</p>
-                                                <pre className="text-xs text-slate-300 overflow-auto max-h-64 whitespace-pre-wrap">
-                                                    {this.state.error.stack}
-                                                </pre>
-                                            </div>
-                                        )}
-
-                                        {this.state.errorInfo?.componentStack && (
-                                            <div className="mt-3">
-                                                <p className="text-red-400 font-bold text-sm mb-1">Component Stack:</p>
-                                                <pre className="text-xs text-slate-300 overflow-auto max-h-64 whitespace-pre-wrap">
-                                                    {this.state.errorInfo.componentStack}
-                                                </pre>
-                                            </div>
-                                        )}
-                                    </div>
-                                </details>
-                            )}
+                                    </details>
+                                )
+                            }
 
                             {/* Help Text */}
                             <p className="text-slate-500 text-xs text-center mt-6">
                                 Se o problema persistir, entre em contato com o suporte.
                             </p>
-                        </div>
-                    </div>
-                </div>
+                        </div >
+                    </div >
+                </div >
             );
         }
 

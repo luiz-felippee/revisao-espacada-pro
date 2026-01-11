@@ -5,13 +5,15 @@ import { useNotifications } from '../hooks/useNotifications';
 export const NotificationPermissionBanner: React.FC = () => {
     const { isSupported, hasPermission, requestPermission } = useNotifications();
     const [isVisible, setIsVisible] = useState(false);
-    const [isDismissed, setIsDismissed] = useState(false);
+    const [isDismissed, setIsDismissed] = useState(() => {
+        // Initialize from localStorage to avoid synchronous setState in effect
+        const dismissed = localStorage.getItem('notification_banner_dismissed');
+        return dismissed === 'true' || !isSupported;
+    });
 
     useEffect(() => {
-        // Check if user has already dismissed or granted permission
-        const dismissed = localStorage.getItem('notification_banner_dismissed');
-        if (dismissed || hasPermission || !isSupported) {
-            setIsDismissed(true);
+        // Check if should show banner
+        if (isDismissed || hasPermission) {
             return;
         }
 
@@ -21,7 +23,7 @@ export const NotificationPermissionBanner: React.FC = () => {
         }, 5000);
 
         return () => clearTimeout(timer);
-    }, [hasPermission, isSupported]);
+    }, [hasPermission, isDismissed]);
 
     const handleAllow = async () => {
         const granted = await requestPermission();

@@ -23,12 +23,21 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
     useEffect(() => {
         const fetchTasks = async () => {
             if (user) {
+                logger.info(`[TaskProvider] Fetching tasks for user: ${user.id}`);
+
                 const { data, error } = await supabase
                     .from('tasks')
                     .select('*')
                     .eq('user_id', user.id);
 
-                if (data && !error) {
+                if (error) {
+                    logger.error('[TaskProvider] Failed to fetch tasks:', error);
+                    return;
+                }
+
+                if (data) {
+                    logger.info(`[TaskProvider] Fetched ${data.length} tasks from Supabase`);
+
                     const normalized = data.map(t => ({
                         ...t,
                         startDate: t.start_date,
@@ -57,13 +66,20 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
                                 });
                             }
                         }
+                        if (pendingDeletes.size > 0) {
+                            logger.info(`[TaskProvider] Found ${pendingDeletes.size} pending deletions in queue`);
+                        }
                     } catch (e) {
-                        logger.error("Error reading sync queue for protection", e);
+                        logger.error("[TaskProvider] Error reading sync queue for protection", e);
                     }
 
                     // 🚫 NUCLEAR PROTECTION: Filter permanent blacklist
                     // This is the FINAL line of defense against zombie resurrection
                     const nonBlacklisted = filterBlacklisted(normalized, 'task');
+                    const blacklistedCount = normalized.length - nonBlacklisted.length;
+                    if (blacklistedCount > 0) {
+                        logger.warn(`[TaskProvider] Filtered ${blacklistedCount} blacklisted tasks`);
+                    }
                     // ----------------------------------
 
                     taskActions.setTasks(prevTasks => {
@@ -81,11 +97,18 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
                         });
 
                         // 2. Preserve Local-Only (Optimistic)
+                        const localOnlyCount = prevTasks.filter(localTask => !processedIds.has(localTask.id)).length;
                         prevTasks.forEach(localTask => {
                             if (!processedIds.has(localTask.id)) {
                                 finalTasks.push(localTask);
                             }
                         });
+
+                        if (localOnlyCount > 0) {
+                            logger.info(`[TaskProvider] Preserved ${localOnlyCount} local-only tasks (unsynced)`);
+                        }
+
+                        logger.info(`[TaskProvider] Final task count: ${finalTasks.length} (${processedIds.size} from server, ${localOnlyCount} local-only)`);
 
                         return finalTasks;
                     });

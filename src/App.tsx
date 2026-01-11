@@ -1,5 +1,5 @@
-import { useState, useEffect, lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { useState, lazy, Suspense } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AuthProvider } from './context/AuthProvider';
 import { useAuth } from './context/AuthContext';
@@ -21,6 +21,7 @@ import { GlobalSearch } from './components/GlobalSearch';
 import { NotificationPermissionBanner } from './components/NotificationPermissionBanner';
 import { OnboardingTour } from './components/onboarding/OnboardingTour';
 import { PWAPrompt } from './components/PWAPrompt';
+import { SyncStatusIndicator } from './components/SyncStatusIndicator';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 
@@ -88,6 +89,9 @@ function AppContent() {
 
           {/* Onboarding Tour */}
           <OnboardingTour />
+
+          {/* Sync Status Indicator */}
+          <SyncStatusIndicator />
 
           {/* PWA Install Prompt */}
           {showPWAPrompt && (
