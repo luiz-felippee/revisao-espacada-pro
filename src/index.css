@@ -49,6 +49,18 @@
     textarea {
       font-size: 16px !important;
     }
+
+    /* Hide scrollbar but maintain scroll functionality on mobile */
+    ::-webkit-scrollbar {
+      width: 0px;
+      height: 0px;
+      display: none;
+    }
+
+    * {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
   }
 
   ::selection {
