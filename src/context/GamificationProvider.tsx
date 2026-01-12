@@ -134,6 +134,33 @@ export const GamificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
     const dismissAchievement = () => setNewlyUnlocked(null);
 
+    const claimDailyReward = (): { claimed: boolean, xpAmount: number } => {
+        const result = GamificationService.claimDailyReward(gamification);
+
+        if (result.claimed) {
+            // Play sounds and show feedback
+            playXPSound();
+            showToast(`+${result.xpAmount} XP (Recompensa Diária)`, "success");
+
+            // Update state
+            setGamification(result.newState);
+
+            // Sync to Supabase
+            if (user && hasLoaded) {
+                SyncQueueService.enqueue({
+                    type: 'UPDATE',
+                    table: 'profiles',
+                    data: {
+                        id: user.id,
+                        gamification: result.newState
+                    } as any
+                });
+            }
+        }
+
+        return { claimed: result.claimed, xpAmount: result.xpAmount };
+    };
+
     const resetGamification = async () => {
         const initialState = GamificationService.getInitialState();
         setGamification(initialState);
@@ -149,7 +176,8 @@ export const GamificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
             awardXP,
             updateStats,
             dismissAchievement,
-            resetGamification
+            resetGamification,
+            claimDailyReward
         }}>
             {children}
         </GamificationContext.Provider>

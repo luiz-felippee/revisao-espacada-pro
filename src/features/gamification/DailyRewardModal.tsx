@@ -6,7 +6,7 @@ import { Flame, Gift, X } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export const DailyRewardModal: React.FC = () => {
-    const { gamification, awardXP } = useGamification();
+    const { gamification, claimDailyReward } = useGamification();
     const [isOpen, setIsOpen] = useState(false);
 
     useEffect(() => {
@@ -14,11 +14,10 @@ export const DailyRewardModal: React.FC = () => {
 
         const today = new Date().toISOString().split('T')[0];
         const lastLogin = gamification.streak.lastLoginDate;
-        const claimedKey = `daily_reward_${today}`;
-        const isClaimed = localStorage.getItem(claimedKey);
+        const lastRewardDate = gamification.streak.lastDailyRewardDate;
 
-        // Verify if streak is active for today and not claimed
-        if (lastLogin === today && !isClaimed) {
+        // Verificar se acessou hoje e ainda não reivindicou
+        if (lastLogin === today && lastRewardDate !== today) {
             // Small delay to ensure UI is ready and it's not jarring
             const timer = setTimeout(() => setIsOpen(true), 1500);
             return () => clearTimeout(timer);
@@ -26,18 +25,20 @@ export const DailyRewardModal: React.FC = () => {
     }, [gamification.streak]);
 
     const handleClaim = () => {
-        confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 },
-            colors: ['#F59E0B', '#EF4444', '#10B981']
-        });
+        const result = claimDailyReward();
 
-        awardXP(50);
-
-        const today = new Date().toISOString().split('T')[0];
-        localStorage.setItem(`daily_reward_${today}`, 'true');
-        setIsOpen(false);
+        if (result.claimed) {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#F59E0B', '#EF4444', '#10B981']
+            });
+            setIsOpen(false);
+        } else {
+            // Já foi reivindicado (não deveria chegar aqui, mas é uma proteção)
+            setIsOpen(false);
+        }
     };
 
     if (!isOpen) return null;

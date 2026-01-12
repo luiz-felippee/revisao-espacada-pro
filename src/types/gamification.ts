@@ -17,6 +17,7 @@ export interface GameStreak {
     current: number;
     max: number;
     lastLoginDate: string | null; // YYYY-MM-DD
+    lastDailyRewardDate?: string | null; // YYYY-MM-DD - última vez que reivindicou a recompensa diária
 }
 
 export interface Achievement {

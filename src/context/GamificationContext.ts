@@ -8,6 +8,7 @@ export interface GamificationContextType {
     updateStats: (updates: Partial<GameStats>) => void;
     dismissAchievement: () => void;
     resetGamification: () => Promise<void>;
+    claimDailyReward: () => { claimed: boolean, xpAmount: number };
 }
 
 export const GamificationContext = createContext<GamificationContextType | undefined>(undefined);

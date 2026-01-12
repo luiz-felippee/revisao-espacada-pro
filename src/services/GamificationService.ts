@@ -315,4 +315,56 @@ export class GamificationService {
             newUnlock: allUnlocks.length > 0 ? allUnlocks[0] : null
         };
     }
+
+    /**
+     * Reivindica a recompensa diária de XP.
+     * 
+     * Garante que a recompensa só pode ser reivindicada uma vez por dia,
+     * independentemente do dispositivo usado (sincronizado via banco de dados).
+     * 
+     * @param state - Estado atual da gamificação
+     * @returns Objeto com novo estado, XP concedido, e se a reivindicação foi bem-sucedida
+     * 
+     * @example
+     * ```typescript
+     * const { newState, claimed, xpAmount } = GamificationService.claimDailyReward(state);
+     * 
+     * if (claimed) {
+     *   console.log(`✅ Recompensa reivindicada: +${xpAmount} XP`);
+     * } else {
+     *   console.log('❌ Recompensa já reivindicada hoje');
+     * }
+     * ```
+     */
+    static claimDailyReward(state: GamificationState): { newState: GamificationState, claimed: boolean, xpAmount: number } {
+        const today = this.getToday();
+        const lastRewardDate = state.streak.lastDailyRewardDate;
+
+        // Verificar se já reivindicou hoje
+        if (lastRewardDate === today) {
+            return { newState: state, claimed: false, xpAmount: 0 };
+        }
+
+        // Validar se o usuário realmente acessou hoje (streak deve estar atualizado)
+        if (state.streak.lastLoginDate !== today) {
+            return { newState: state, claimed: false, xpAmount: 0 };
+        }
+
+        // Recompensa = 50 XP base
+        const xpAmount = 50;
+
+        // Dar XP via awardXP (que já valida streak e processa conquistas)
+        const { newState: stateWithXP, newUnlock } = this.awardXP(state, xpAmount);
+
+        // Atualizar a data da última recompensa
+        const updatedState: GamificationState = {
+            ...stateWithXP,
+            streak: {
+                ...stateWithXP.streak,
+                lastDailyRewardDate: today
+            }
+        };
+
+        return { newState: updatedState, claimed: true, xpAmount };
+    }
 }
