@@ -75,6 +75,7 @@ export interface Goal {
     completionHistory?: string[]; // Dates (YYYY-MM-DD) when this was completed
     sessions?: SessionLog[]; // History of focus sessions
     relatedThemeId?: string; // Links this goal to a Theme (Project Parent)
+    notificationTime?: string; // HH:mm
     summary?: string; // User written summary/notes
     summaries?: SummaryEntry[]; // Detailed history with timestamps and goal progress
     // Newly added optional fields for detailed tracking
@@ -169,6 +170,7 @@ export interface Subtheme {
     difficulty?: 'easy' | 'medium' | 'hard' | 'module' | 'beginner' | 'intermediate' | 'advanced';
     text_content?: string; // Rich text content for flashcards/notes
     sessions?: SessionLog[]; // History of focus sessions
+    notificationTime?: string; // HH:mm
     summaries?: SummaryEntry[]; // Detailed history with review numbers and timestamps
     order_index?: number; // Ordering
     // Newly added optional fields for description and alternative text content naming

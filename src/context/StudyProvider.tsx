@@ -24,7 +24,7 @@ const StudyContextFacade: React.FC<{ children: React.ReactNode }> = ({ children 
     const { user } = useAuth();
 
     // Hooks de domínio extraídos para Clean Code (SRP)
-    useNotificationWatcher(themeCtx.themes);
+    useNotificationWatcher({ themes: themeCtx.themes, tasks: taskCtx.tasks, goals: goalCtx.goals });
 
     const {
         logTime,
