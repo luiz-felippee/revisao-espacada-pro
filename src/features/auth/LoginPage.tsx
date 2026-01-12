@@ -180,6 +180,19 @@ export const LoginPage = () => {
                     <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-xl rounded-3xl border border-white/10 shadow-2xl" />
 
                     <div className="relative p-8 md:p-12">
+                        {/* Logo - Mobile Only */}
+                        <div className="md:hidden flex items-center gap-3 justify-center mb-8">
+                            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/30 ring-1 ring-white/20">
+                                <span className="text-2xl">⚡</span>
+                            </div>
+                            <div className="text-left">
+                                <h1 className="text-xl font-bold text-white leading-tight">Revisão</h1>
+                                <p className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400 uppercase tracking-wide">
+                                    Espaçada PRO
+                                </p>
+                            </div>
+                        </div>
+
                         <div className="text-center mb-10">
                             <h2 className="text-3xl font-bold text-white mb-2">
                                 {isLogin ? 'Bem-vindo de volta' : 'Criar nova conta'}
