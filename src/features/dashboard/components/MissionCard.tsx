@@ -209,6 +209,18 @@ export const MissionCard: React.FC<MissionCardProps> = ({
                         )}>
                             {title}
                         </h3>
+                        {/* Duration Badge */}
+                        {duration && duration > 0 && (
+                            <div className={cn(
+                                "flex items-center gap-1.5 px-2.5 py-1 rounded-lg font-bold text-xs whitespace-nowrap transition-all",
+                                isCompleted
+                                    ? "bg-slate-700/50 text-slate-400 border border-slate-600/30"
+                                    : "bg-blue-500/10 text-blue-400 border border-blue-500/30 shadow-sm"
+                            )}>
+                                <Clock className="w-3.5 h-3.5" />
+                                <span>{duration} min</span>
+                            </div>
+                        )}
                     </div>
 
                     {/* Subtitle / Status */}
