@@ -249,9 +249,9 @@ export const MissionCard: React.FC<MissionCardProps> = ({
                         )}>
                             <Clock className="w-3 h-3 flex-shrink-0" />
                             <span className="whitespace-nowrap">
-                                {startDate ? format(new Date(startDate), 'dd/MM', { locale: ptBR }) : '--/--'}
+                                {startDate ? format(new Date(startDate + 'T00:00:00'), 'dd/MM', { locale: ptBR }) : '--/--'}
                                 {startDate && endDate && ' • '}
-                                {endDate ? format(new Date(endDate), 'dd/MM', { locale: ptBR }) : ''}
+                                {endDate ? format(new Date(endDate + 'T00:00:00'), 'dd/MM', { locale: ptBR }) : ''}
                             </span>
                         </div>
                     )}
