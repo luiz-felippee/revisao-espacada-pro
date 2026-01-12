@@ -72,11 +72,12 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0 }: MobileBotto
                                     showFeedback('Nova Missão');
                                     onOpenMission?.();
                                 }}
-                                className="relative flex flex-col items-center justify-center -mt-8 active:scale-95 transition-all group col-start-4 col-span-1 touch-manipulation"
+                                className="absolute left-1/2 -translate-x-1/2 bottom-4 flex flex-col items-center justify-center active:scale-95 transition-all group touch-manipulation"
                                 aria-label="Abrir Missão"
+                                style={{ zIndex: 10 }}
                             >
-                                <div className="w-12 h-12 xs:w-14 xs:h-14 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-[0_0_20px_rgba(59,130,246,0.5)] border-4 border-slate-950 ring-1 ring-white/10 group-hover:scale-110 transition-transform duration-300 relative">
-                                    <item.icon className="w-5 h-5 xs:w-6 xs:h-6 text-white drop-shadow-md" />
+                                <div className="w-14 h-14 xs:w-16 xs:h-16 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-[0_0_25px_rgba(59,130,246,0.6)] border-4 border-slate-950 ring-2 ring-white/20 group-hover:scale-110 transition-transform duration-300 relative">
+                                    <item.icon className="w-6 h-6 xs:w-7 xs:h-7 text-white drop-shadow-md" />
                                     {missionCount > 0 && (
                                         <div className="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-black min-w-[16px] h-[16px] flex items-center justify-center rounded-full shadow-lg border border-slate-950">
                                             {missionCount}
