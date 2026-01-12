@@ -5,6 +5,7 @@ import type { LucideIcon } from 'lucide-react';
 
 interface RealisticKPICardProps {
     title: string;
+    shortTitle?: string; // Título curto para mobile (se não fornecido, usa primeira palavra)
     value: string;
     icon: LucideIcon;
     gradient: string;
@@ -14,7 +15,10 @@ interface RealisticKPICardProps {
     isAction?: boolean;
 }
 
-export const RealisticKPICard = React.memo(({ title, value, icon: Icon, gradient, shadowColor, onClick, alert, isAction }: RealisticKPICardProps) => {
+export const RealisticKPICard = React.memo(({ title, shortTitle, value, icon: Icon, gradient, shadowColor, onClick, alert, isAction }: RealisticKPICardProps) => {
+
+    // Se shortTitle não for fornecido, usa a primeira palavra do título
+    const mobileTitle = shortTitle || title.split(' ')[0];
 
     // Map shadow color names to actual Tailwind classes for dynamic interpolation (simplified)
     const shadowClass = React.useMemo(() => ({
@@ -66,7 +70,10 @@ export const RealisticKPICard = React.memo(({ title, value, icon: Icon, gradient
             <div className="relative z-10 flex flex-nowrap items-center justify-between gap-4 max-[380px]:gap-2">
                 <div className="min-w-0 flex-1">
                     <p className="text-slate-500 text-[10px] max-[380px]:text-[9px] font-black uppercase tracking-[0.2em] max-[380px]:tracking-wider mb-2 flex items-center gap-2 truncate">
-                        {title}
+                        {/* Mobile: Primeira palavra */}
+                        <span className="md:hidden">{mobileTitle}</span>
+                        {/* Desktop: Título completo */}
+                        <span className="hidden md:inline">{title}</span>
                         {alert && <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping flex-shrink-0" />}
                     </p>
 
