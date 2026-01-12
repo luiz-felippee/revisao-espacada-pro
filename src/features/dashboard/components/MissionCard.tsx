@@ -390,7 +390,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({
                                         className={cn(
                                             "w-full h-full rounded-full transition-all cursor-help",
                                             seg <= currentLevel ? "bg-emerald-500" : "bg-slate-800",
-                                            reviewInfo?.status === 'pending' && new Date(reviewInfo.date) <= new Date() ? "bg-emerald-500/50" : ""
+                                            reviewInfo?.status === 'pending' && new Date(reviewInfo.date + 'T00:00:00') <= new Date() ? "bg-emerald-500/50" : ""
                                         )}
                                     />
                                     {/* Custom Premium Tooltip */}
