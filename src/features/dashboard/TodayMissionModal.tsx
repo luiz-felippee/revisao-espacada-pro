@@ -21,7 +21,7 @@ const TaskDetailsModal = React.lazy(() => import('../tasks/components/TaskDetail
 const GoalDetailsModal = React.lazy(() => import('../goals/components/GoalDetailsModal').then(m => ({ default: m.GoalDetailsModal })));
 
 // Draggable Item Wrapper
-const DraggableMissionItem = ({ item, children }: { item: { id: string }, children: React.ReactNode }) => {
+const DraggableMissionItem = ({ item, children, showDragHandle = true }: { item: { id: string }, children: React.ReactNode, showDragHandle?: boolean }) => {
     const dragControls = useDragControls();
 
     return (
@@ -33,15 +33,17 @@ const DraggableMissionItem = ({ item, children }: { item: { id: string }, childr
             style={{ listStyle: 'none' }} // Remove list dots
         >
             <div className="flex items-center gap-2">
-                {/* Drag Handle */}
-                <div
-                    onPointerDown={dragControls.start}
-                    className="cursor-grab active:cursor-grabbing p-1.5 -ml-2 text-slate-600 hover:text-slate-400 transition-colors touch-none select-none flex items-center justify-center shrink-0"
-                >
-                    <GripVertical className="w-5 h-5" />
-                </div>
+                {/* Drag Handle - só aparece quando showDragHandle é true */}
+                {showDragHandle && (
+                    <div
+                        onPointerDown={dragControls.start}
+                        className="cursor-grab active:cursor-grabbing p-1.5 -ml-2 text-purple-500 hover:text-purple-400 transition-colors touch-none select-none flex items-center justify-center shrink-0 animate-pulse"
+                    >
+                        <GripVertical className="w-5 h-5" />
+                    </div>
+                )}
                 {/* Content */}
-                <div className="flex-1 min-w-0">
+                <div className={cn("flex-1 min-w-0", !showDragHandle && "ml-0")}>
                     {children}
                 </div>
             </div>
@@ -229,6 +231,15 @@ export const TodayMissionModal: React.FC<TodayMissionModalProps> = ({ isOpen, on
     const [selectedDate, setSelectedDate] = React.useState(new Date());
     const today = format(selectedDate, 'yyyy-MM-dd'); // This represents the VIEWED date
     const isToday = isDateToday(selectedDate);
+
+    // Verificar se hoje é domingo (0 = domingo no JavaScript Date.getDay())
+    const isSunday = new Date().getDay() === 0;
+
+    // Estado para controlar se o modo de reorganização está ativo
+    const [isReorganizeMode, setIsReorganizeMode] = React.useState(false);
+
+    // Apenas permitir reorganização aos domingos
+    const canReorganize = isSunday;
 
     // Strict Date Locking Logic
     const realTodayStr = format(new Date(), 'yyyy-MM-dd');
@@ -644,6 +655,67 @@ export const TodayMissionModal: React.FC<TodayMissionModalProps> = ({ isOpen, on
                             style={{ width: `${score}%` }}
                         />
                     </div>
+
+                    {/* Banner de Reorganização Dominical */}
+                    {canReorganize && (
+                        <div className="mb-4">
+                            <div className={cn(
+                                "p-4 rounded-2xl border transition-all duration-300",
+                                isReorganizeMode
+                                    ? "bg-purple-500/10 border-purple-500/30"
+                                    : "bg-slate-800/40 border-slate-700/50"
+                            )}>
+                                <div className="flex items-center justify-between gap-3">
+                                    <div className="flex items-center gap-3 flex-1">
+                                        <div className={cn(
+                                            "w-10 h-10 rounded-xl flex items-center justify-center transition-colors",
+                                            isReorganizeMode
+                                                ? "bg-purple-500/20"
+                                                : "bg-purple-500/10"
+                                        )}>
+                                            <GripVertical className={cn(
+                                                "w-5 h-5",
+                                                isReorganizeMode ? "text-purple-400" : "text-purple-500/60"
+                                            )} />
+                                        </div>
+                                        <div className="flex-1">
+                                            <h3 className={cn(
+                                                "text-sm font-bold transition-colors",
+                                                isReorganizeMode ? "text-purple-300" : "text-slate-300"
+                                            )}>
+                                                🗓️ Reorganização Dominical
+                                            </h3>
+                                            <p className="text-xs text-slate-500">
+                                                {isReorganizeMode
+                                                    ? "Arraste as atividades para reorganizar"
+                                                    : "Ative para reorganizar suas atividades"}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={() => setIsReorganizeMode(!isReorganizeMode)}
+                                        className={cn(
+                                            "px-4 py-2 rounded-xl font-bold text-sm transition-all",
+                                            isReorganizeMode
+                                                ? "bg-purple-500 text-white hover:bg-purple-600"
+                                                : "bg-slate-700 text-slate-300 hover:bg-slate-600"
+                                        )}
+                                    >
+                                        {isReorganizeMode ? "Concluir" : "Reorganizar"}
+                                    </button>
+                                </div>
+
+                                {isReorganizeMode && (
+                                    <div className="mt-3 pt-3 border-t border-purple-500/20">
+                                        <div className="flex items-center gap-2 text-xs text-purple-400">
+                                            <GripVertical className="w-4 h-4" />
+                                            <span>Use as alças de arraste para reordenar</span>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 {/* OVERDUE MISSIONS SECTION */}
@@ -798,7 +870,7 @@ export const TodayMissionModal: React.FC<TodayMissionModalProps> = ({ isOpen, on
                                     }
 
                                     return (
-                                        <DraggableMissionItem key={habit.id} item={habit}>
+                                        <DraggableMissionItem key={habit.id} item={habit} showDragHandle={isReorganizeMode}>
                                             <MissionCard
                                                 id={habit.id}
                                                 title={habit.title}
@@ -858,7 +930,7 @@ export const TodayMissionModal: React.FC<TodayMissionModalProps> = ({ isOpen, on
                                     const isCompleted = item.dueReview.status === 'completed' || isItemOptimistic;
 
                                     return (
-                                        <DraggableMissionItem key={item.id} item={item}>
+                                        <DraggableMissionItem key={item.id} item={item} showDragHandle={isReorganizeMode}>
                                             <MissionCard
                                                 id={item.id}
                                                 title={item.title}
@@ -926,7 +998,7 @@ export const TodayMissionModal: React.FC<TodayMissionModalProps> = ({ isOpen, on
                                     }
 
                                     return (
-                                        <DraggableMissionItem key={task.id} item={task}>
+                                        <DraggableMissionItem key={task.id} item={task} showDragHandle={isReorganizeMode}>
                                             <MissionCard
                                                 id={task.id}
                                                 title={task.title}
