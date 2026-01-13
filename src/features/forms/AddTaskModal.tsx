@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Target } from 'lucide-react';
 import { z } from 'zod';
 import { Modal } from '../../components/ui/Modal';
 import { Input } from '../../components/ui/Input';
@@ -298,21 +299,24 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({ isOpen, onClose, tas
 
                             <div className="h-px bg-white/5 w-full" />
 
-                            {/* Details Grid: Duration & Priority */}
-                            {/* Details Grid: Duration & Priority */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                                <div className="space-y-1.5 flex flex-col">
-                                    <label className="text-[10px] uppercase font-bold text-slate-500 pl-1">Duração (Min)</label>
-                                    <div className="h-[42px] flex items-center">
-                                        <DurationStepper value={duration} onChange={setDuration} step={5} />
+                            {/* Classificação: Duration & Priority */}
+                            <div className="space-y-4 pt-2">
+                                <div className="flex items-center justify-between border-b border-white/5 pb-2">
+                                    <div className="flex items-center gap-2 text-blue-300 text-xs font-bold uppercase tracking-wider">
+                                        <Target className="w-3 h-3" /> Classificação
                                     </div>
-                                </div>
-                                <div className="space-y-1.5 flex flex-col">
-                                    <label className="text-[10px] uppercase font-bold text-slate-500 pl-1">Prioridade</label>
-                                    <div className="h-[42px] flex items-center w-full">
-                                        <div className="w-full">
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-[10px] uppercase font-bold text-slate-500 shrink-0">Prioridade</span>
+                                        <div className="w-[160px] sm:w-[200px]">
                                             <PrioritySelector value={priority} onChange={setPriority} label="" />
                                         </div>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-1.5 flex flex-col max-w-[200px]">
+                                    <label className="text-[10px] uppercase font-bold text-slate-500 pl-1">Duração (Min)</label>
+                                    <div className="bg-slate-950/60 rounded-lg border border-white/5 p-1 h-10 flex items-center">
+                                        <DurationStepper value={duration} onChange={setDuration} step={5} min={0} />
                                     </div>
                                 </div>
                             </div>

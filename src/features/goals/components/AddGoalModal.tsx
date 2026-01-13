@@ -143,11 +143,20 @@ export const AddGoalModal: React.FC<AddGoalModalProps> = (props) => {
                             <div className="h-px bg-white/5 w-full" />
 
                             {/* Detalhes Técnicos */}
-                            <div className="space-y-3">
-                                <div className="flex items-center gap-2 text-purple-300 text-xs font-bold uppercase tracking-wider">
-                                    <Target className="w-3 h-3" /> Classificação
+                            <div className="space-y-4">
+                                <div className="flex items-center justify-between border-b border-white/5 pb-2">
+                                    <div className="flex items-center gap-2 text-purple-300 text-xs font-bold uppercase tracking-wider">
+                                        <Target className="w-3 h-3" /> Classificação
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-[10px] uppercase font-bold text-slate-500 shrink-0">Prioridade</span>
+                                        <div className="w-[160px] sm:w-[200px]">
+                                            <PrioritySelector value={priority} onChange={setPriority} label="" />
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="grid grid-cols-2 gap-4">
+
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div className="space-y-1.5">
                                         <label className="text-[10px] uppercase font-bold text-slate-500 pl-1">Categoria</label>
                                         <Input
@@ -157,22 +166,15 @@ export const AddGoalModal: React.FC<AddGoalModalProps> = (props) => {
                                             className="bg-slate-950/60 border-white/5 h-10 text-xs"
                                         />
                                     </div>
-                                    <div className="space-y-1.5">
-                                        <label className="text-[10px] uppercase font-bold text-slate-500 pl-1">Prioridade</label>
-                                        {/* Wrapper para ajustar altura visual se necessário */}
-                                        <div className="h-10">
-                                            <PrioritySelector value={priority} onChange={setPriority} />
-                                        </div>
-                                    </div>
 
                                     <div className="space-y-1.5">
                                         <label className="text-[10px] uppercase font-bold text-slate-500 pl-1">Duração (Min)</label>
-                                        <div className="bg-slate-950/60 rounded-lg border border-white/5 p-1">
+                                        <div className="bg-slate-950/60 rounded-lg border border-white/5 p-1 h-10 flex items-center">
                                             <DurationStepper value={duration} onChange={setDuration} step={5} min={0} />
                                         </div>
                                     </div>
 
-                                    <div className="space-y-1.5">
+                                    <div className="space-y-1.5 sm:col-span-2">
                                         <label className="text-[10px] uppercase font-bold text-slate-500 pl-1">Tema Vinculado</label>
                                         <select
                                             value={relatedThemeId}
