@@ -299,45 +299,54 @@ export const AddThemeModal: React.FC<AddThemeModalProps> = ({ isOpen, onClose, t
                             <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
                                 <div className="bg-slate-900/40 rounded-xl border border-slate-800/50 p-4 space-y-4">
 
-                                    {/* Priority & Category */}
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="space-y-1">
-                                            <label className="text-[10px] uppercase font-bold text-slate-500 pl-1">Prioridade</label>
-                                            <PrioritySelector value={priority} onChange={setPriority} />
+                                    {/* Classificação Section */}
+                                    <div className="space-y-4">
+                                        <div className="flex items-center justify-between border-b border-white/5 pb-2">
+                                            <div className="flex items-center gap-2 text-purple-300 text-xs font-bold uppercase tracking-wider">
+                                                <Plus className="w-3 h-3" /> Classificação
+                                            </div>
+                                            <div className="flex items-center gap-3">
+                                                <span className="text-[10px] uppercase font-bold text-slate-500 shrink-0">Prioridade</span>
+                                                <div className="w-[160px] sm:w-[200px]">
+                                                    <PrioritySelector value={priority} onChange={setPriority} label="" />
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="space-y-1">
-                                            <label className="text-[10px] uppercase font-bold text-slate-500 pl-1">Tipo</label>
-                                            <select
-                                                value={category}
-                                                onChange={(e) => setCategory(e.target.value as 'study' | 'project')}
-                                                className="w-full h-9 bg-slate-950/50 border border-slate-800/50 rounded-lg text-xs px-3 focus:border-blue-500/50 outline-none transition-all"
-                                            >
-                                                <option value="study">Tema</option>
-                                                <option value="project">Projeto</option>
-                                            </select>
-                                        </div>
-                                    </div>
 
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                            <div className="space-y-1.5">
+                                                <label className="text-[10px] uppercase font-bold text-slate-500 pl-1">Tipo de Registro</label>
+                                                <select
+                                                    value={category}
+                                                    onChange={(e) => setCategory(e.target.value as 'study' | 'project')}
+                                                    className="w-full h-10 bg-slate-950/60 border border-white/5 rounded-lg text-xs px-3 focus:border-blue-500/50 outline-none transition-all text-slate-300"
+                                                >
+                                                    <option value="study">Tema de Estudo</option>
+                                                    <option value="project">Projeto / Trabalho</option>
+                                                </select>
+                                            </div>
 
-                                    {/* Dates & Notification Grid */}
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="space-y-1">
-                                            <label className="text-[10px] uppercase font-bold text-slate-500 pl-1">Início da Trilha</label>
-                                            <DatePicker
-                                                value={startDate}
-                                                onChange={setStartDate}
-                                                placeholder="Início"
-                                                className="w-full"
-                                            />
-                                        </div>
-                                        <div className="space-y-1">
-                                            <label className="text-[10px] uppercase font-bold text-slate-500 pl-1">Horário (Notificação)</label>
-                                            <input
-                                                type="time"
-                                                value={notificationTime}
-                                                onChange={(e) => setNotificationTime(e.target.value)}
-                                                className="w-full h-9 bg-slate-950/50 border border-slate-800/50 rounded-lg text-xs px-3 focus:border-blue-500/50 outline-none transition-all text-white placeholder-slate-600"
-                                            />
+                                            <div className="space-y-1.5">
+                                                <label className="text-[10px] uppercase font-bold text-slate-500 pl-1">Horário (Notificação)</label>
+                                                <div className="relative">
+                                                    <input
+                                                        type="time"
+                                                        value={notificationTime}
+                                                        onChange={(e) => setNotificationTime(e.target.value)}
+                                                        className="w-full h-10 bg-slate-950/60 border border-white/5 rounded-lg text-xs px-3 focus:border-blue-500/50 outline-none transition-all text-white placeholder-slate-600"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-1.5 sm:col-span-2">
+                                                <label className="text-[10px] uppercase font-bold text-slate-500 pl-1">Início da Trilha</label>
+                                                <DatePicker
+                                                    value={startDate}
+                                                    onChange={setStartDate}
+                                                    placeholder="Início"
+                                                    className="w-full h-10 bg-slate-950/60"
+                                                />
+                                            </div>
                                         </div>
                                     </div>
 
