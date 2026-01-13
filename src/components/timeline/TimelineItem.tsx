@@ -36,63 +36,63 @@ export const TimelineItem: React.FC<TimelineItemProps> = ({ item, index }) => {
         const configs = {
             review: {
                 icon: RotateCcw,
-                gradient: 'from-purple-600 via-purple-500 to-indigo-500',
-                bgGradient: 'from-purple-500/10 to-indigo-500/5',
-                borderColor: 'border-purple-500/30',
-                textColor: 'text-purple-400',
-                iconBg: 'bg-gradient-to-br from-purple-500/20 to-indigo-500/20',
+                gradient: 'from-violet-600 via-purple-500 to-fuchsia-500',
+                bgGradient: 'from-violet-500/15 to-fuchsia-500/10',
+                borderColor: 'border-violet-500/40',
+                textColor: 'text-violet-300',
+                iconBg: 'bg-gradient-to-br from-violet-500/25 to-fuchsia-500/20',
                 badge: item.number ? `${item.number}ª Revisão` : 'Revisão',
-                shadowColor: 'shadow-purple-500/20',
+                shadowColor: 'shadow-violet-500/30',
             },
             progress: {
                 icon: Target,
-                gradient: 'from-blue-600 via-blue-500 to-cyan-500',
-                bgGradient: 'from-blue-500/10 to-cyan-500/5',
-                borderColor: 'border-blue-500/30',
-                textColor: 'text-blue-400',
-                iconBg: 'bg-gradient-to-br from-blue-500/20 to-cyan-500/20',
+                gradient: 'from-sky-600 via-blue-500 to-cyan-500',
+                bgGradient: 'from-sky-500/15 to-cyan-500/10',
+                borderColor: 'border-sky-500/40',
+                textColor: 'text-sky-300',
+                iconBg: 'bg-gradient-to-br from-sky-500/25 to-cyan-500/20',
                 badge: 'Progresso',
-                shadowColor: 'shadow-blue-500/20',
+                shadowColor: 'shadow-sky-500/30',
             },
             goal: {
                 icon: Target,
-                gradient: 'from-emerald-600 via-emerald-500 to-teal-500',
-                bgGradient: 'from-emerald-500/10 to-teal-500/5',
-                borderColor: 'border-emerald-500/30',
-                textColor: 'text-emerald-400',
-                iconBg: 'bg-gradient-to-br from-emerald-500/20 to-teal-500/20',
+                gradient: 'from-emerald-600 via-green-500 to-teal-500',
+                bgGradient: 'from-emerald-500/15 to-teal-500/10',
+                borderColor: 'border-emerald-500/40',
+                textColor: 'text-emerald-300',
+                iconBg: 'bg-gradient-to-br from-emerald-500/25 to-teal-500/20',
                 badge: 'Meta',
-                shadowColor: 'shadow-emerald-500/20',
+                shadowColor: 'shadow-emerald-500/30',
             },
             session: {
                 icon: Clock,
-                gradient: 'from-orange-600 via-orange-500 to-amber-500',
-                bgGradient: 'from-orange-500/10 to-amber-500/5',
-                borderColor: 'border-orange-500/30',
-                textColor: 'text-orange-400',
-                iconBg: 'bg-gradient-to-br from-orange-500/20 to-amber-500/20',
+                gradient: 'from-orange-600 via-amber-500 to-yellow-500',
+                bgGradient: 'from-orange-500/15 to-yellow-500/10',
+                borderColor: 'border-orange-500/40',
+                textColor: 'text-orange-300',
+                iconBg: 'bg-gradient-to-br from-orange-500/25 to-yellow-500/20',
                 badge: 'Sessão de Foco',
-                shadowColor: 'shadow-orange-500/20',
+                shadowColor: 'shadow-orange-500/30',
             },
             completion: {
                 icon: CheckCircle2,
-                gradient: 'from-green-600 via-green-500 to-emerald-500',
-                bgGradient: 'from-green-500/10 to-emerald-500/5',
-                borderColor: 'border-green-500/30',
-                textColor: 'text-green-400',
-                iconBg: 'bg-gradient-to-br from-green-500/20 to-emerald-500/20',
+                gradient: 'from-lime-600 via-green-500 to-emerald-600',
+                bgGradient: 'from-lime-500/15 to-emerald-500/10',
+                borderColor: 'border-lime-500/40',
+                textColor: 'text-lime-300',
+                iconBg: 'bg-gradient-to-br from-lime-500/25 to-emerald-500/20',
                 badge: 'Conclusão',
-                shadowColor: 'shadow-green-500/20',
+                shadowColor: 'shadow-lime-500/30',
             },
             note: {
                 icon: StickyNote,
-                gradient: 'from-yellow-600 via-yellow-500 to-amber-500',
-                bgGradient: 'from-yellow-500/10 to-amber-500/5',
-                borderColor: 'border-yellow-500/30',
-                textColor: 'text-yellow-400',
-                iconBg: 'bg-gradient-to-br from-yellow-500/20 to-amber-500/20',
+                gradient: 'from-amber-600 via-yellow-500 to-orange-500',
+                bgGradient: 'from-amber-500/15 to-orange-500/10',
+                borderColor: 'border-amber-500/40',
+                textColor: 'text-amber-300',
+                iconBg: 'bg-gradient-to-br from-amber-500/25 to-orange-500/20',
                 badge: 'Nota',
-                shadowColor: 'shadow-yellow-500/20',
+                shadowColor: 'shadow-amber-500/30',
             },
         };
         return configs[type];
@@ -100,6 +100,9 @@ export const TimelineItem: React.FC<TimelineItemProps> = ({ item, index }) => {
 
     const config = getItemConfig(item.type);
     const Icon = config.icon;
+
+    // Use entityTitle from metadata if available, otherwise use title
+    const displayTitle = item.metadata?.entityTitle || item.title || 'Atividade sem título';
 
     return (
         <motion.div
@@ -137,7 +140,7 @@ export const TimelineItem: React.FC<TimelineItemProps> = ({ item, index }) => {
 
                 {/* Título da Atividade */}
                 <h3 className={`text-xl font-bold ${config.textColor} mb-2 line-clamp-2 leading-tight`}>
-                    {item.title || 'Atividade sem título'}
+                    {displayTitle}
                 </h3>
 
                 {/* Descrição */}

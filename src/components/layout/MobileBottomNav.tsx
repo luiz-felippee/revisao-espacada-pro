@@ -62,7 +62,7 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0 }: MobileBotto
                 document.body
             )}
 
-            <nav className="fixed bottom-0 left-0 right-0 h-20 bg-slate-950/80 backdrop-blur-2xl border-t border-white/5 z-50 lg:hidden grid grid-cols-6 gap-3 items-center px-4 pb-[env(safe-area-inset-bottom,12px)]">
+            <nav className="fixed bottom-0 left-0 right-0 h-20 bg-slate-950/80 backdrop-blur-2xl border-t border-white/5 z-50 lg:hidden grid grid-cols-6 gap-4 items-center px-5 pb-[env(safe-area-inset-bottom,12px)]">
                 {menuItems.map((item) => {
                     if (item.special) {
                         return (
