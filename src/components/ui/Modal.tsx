@@ -58,7 +58,7 @@ export const Modal: React.FC<ModalProps> = ({
             role="presentation"
         >
             <div
-                className={`relative w-full ${maxWidthClass} bg-slate-950/90 border border-slate-800 rounded-2xl sm:rounded-3xl shadow-2xl animate-in zoom-in-95 duration-200 flex flex-col max-h-[90vh] sm:max-h-[90vh] overflow-hidden ${className || ''}`}
+                className={`relative w-full ${maxWidthClass} bg-slate-950/90 border border-slate-800 rounded-2xl sm:rounded-3xl shadow-2xl animate-in zoom-in-95 duration-200 flex flex-col max-h-[95vh] sm:max-h-[90vh] overflow-hidden ${className || ''}`}
                 onClick={e => e.stopPropagation()}
                 role="dialog"
                 aria-modal="true"

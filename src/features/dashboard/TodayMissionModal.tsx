@@ -611,8 +611,8 @@ export const TodayMissionModal: React.FC<TodayMissionModalProps> = ({ isOpen, on
     };
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} title={null}>
-            <div className="space-y-5 px-4 mt-6 relative min-h-[500px]">
+        <Modal isOpen={isOpen} onClose={onClose} title={null} maxWidth="lg">
+            <div className="space-y-5 px-1 sm:px-4 mt-8 pb-10 relative">
                 {/* Header Section */}
                 <div className="space-y-4">
                     <div className="flex items-center justify-between px-2">
