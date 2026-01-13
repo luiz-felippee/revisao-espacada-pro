@@ -92,7 +92,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate, onOpenSummaryM
             <motion.div variants={containerVariants} className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                 <motion.div variants={itemVariants}>
                     <RealisticKPICard
-                        title="Dias Seguidos"
+                        title="Dias"
                         value={gamification?.streak?.current?.toString() || "0"}
                         icon={TrendingUp}
                         gradient="from-purple-600 to-indigo-600"
@@ -102,7 +102,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate, onOpenSummaryM
                 </motion.div>
                 <motion.div variants={itemVariants}>
                     <RealisticKPICard
-                        title="Metas Ativas"
+                        title="Metas"
                         value={activeGoals.toString()}
                         icon={Target}
                         gradient="from-emerald-500 to-teal-600"
@@ -112,7 +112,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate, onOpenSummaryM
                 </motion.div>
                 <motion.div variants={itemVariants}>
                     <RealisticKPICard
-                        title="Revisões Hoje"
+                        title="Revisões"
                         value={dueReviews.toString()}
                         icon={CheckCircle2}
                         gradient="from-blue-500 to-cyan-500"
