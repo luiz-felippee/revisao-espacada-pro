@@ -62,42 +62,38 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0 }: MobileBotto
                 document.body
             )}
 
-            <nav className="fixed bottom-0 left-0 right-0 h-20 bg-slate-950/80 backdrop-blur-2xl border-t border-white/5 z-50 lg:hidden grid grid-cols-6 gap-4 items-center px-5 pb-[env(safe-area-inset-bottom,12px)]">
+            <nav className="fixed bottom-0 left-0 right-0 h-20 bg-slate-950/80 backdrop-blur-2xl border-t border-white/5 z-50 lg:hidden grid grid-cols-6 gap-2 xs:gap-4 items-center px-2 xs:px-4 pb-[env(safe-area-inset-bottom,12px)]">
                 {menuItems.map((item) => {
                     if (item.special) {
                         return (
-                            <button
-                                key={item.id}
-                                onClick={() => {
-                                    showFeedback('Nova Missão');
-                                    onOpenMission?.();
-                                }}
-                                className="absolute left-1/2 -translate-x-1/2 bottom-4 flex flex-col items-center justify-center active:scale-95 transition-all group touch-manipulation"
-                                aria-label="Abrir Missão"
-                                style={{ zIndex: 10 }}
-                            >
-                                <div className="w-14 h-14 xs:w-16 xs:h-16 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-[0_0_25px_rgba(59,130,246,0.6)] border-4 border-slate-950 ring-2 ring-white/20 group-hover:scale-110 transition-transform duration-300 relative">
-                                    <item.icon className="w-6 h-6 xs:w-7 xs:h-7 text-white drop-shadow-md" />
-                                    {missionCount > 0 && (
-                                        <div className="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-black min-w-[16px] h-[16px] flex items-center justify-center rounded-full shadow-lg border border-slate-950">
-                                            {missionCount}
-                                        </div>
-                                    )}
-                                </div>
-                                <span className="text-[9px] xs:text-[10px] font-bold text-blue-400 uppercase tracking-tighter mt-1 hidden xs:block">Missão</span>
-                            </button>
+                            <React.Fragment key={item.id}>
+                                {/* Espaçador invisível para reservar o lugar no grid e manter a proporção */}
+                                <div className="flex-1 min-w-0 h-1" aria-hidden="true" />
+
+                                <button
+                                    onClick={() => {
+                                        showFeedback('Nova Missão');
+                                        onOpenMission?.();
+                                    }}
+                                    className="absolute left-1/2 -translate-x-1/2 bottom-4 flex flex-col items-center justify-center active:scale-95 transition-all group touch-manipulation"
+                                    aria-label="Abrir Missão"
+                                    style={{ zIndex: 10 }}
+                                >
+                                    <div className="w-14 h-14 xs:w-16 xs:h-16 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-[0_0_25px_rgba(59,130,246,0.6)] border-4 border-slate-950 ring-2 ring-white/20 group-hover:scale-110 transition-transform duration-300 relative">
+                                        <item.icon className="w-6 h-6 xs:w-7 xs:h-7 text-white drop-shadow-md" />
+                                        {missionCount > 0 && (
+                                            <div className="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-black min-w-[16px] h-[16px] flex items-center justify-center rounded-full shadow-lg border border-slate-950">
+                                                {missionCount}
+                                            </div>
+                                        )}
+                                    </div>
+                                    <span className="text-[9px] xs:text-[10px] font-bold text-blue-400 uppercase tracking-tighter mt-1 hidden xs:block">Missão</span>
+                                </button>
+                            </React.Fragment>
                         );
                     }
 
                     const isActive = activeTab === item.id;
-
-                    // Get index of current item (excluding special button)
-                    const normalItems = menuItems.filter(m => !m.special);
-                    const itemIndex = normalItems.findIndex(m => m.id === item.id);
-
-                    // Add margin to buttons adjacent to center button (index 2 and 3 in normal items = before and after center)
-                    const isBeforeCenter = itemIndex === 2; // summaries
-                    const isAfterCenter = itemIndex === 3; // tasks
 
                     return (
                         <button
@@ -107,10 +103,8 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0 }: MobileBotto
                                 navigate(`/${item.id}`);
                             }}
                             className={cn(
-                                "relative flex flex-col items-center justify-center gap-0.5 xs:gap-1 flex-1 max-w-[3.5rem] h-12 transition-all active:scale-90 touch-manipulation",
-                                isActive ? "text-blue-400" : "text-slate-500 hover:text-slate-300",
-                                isBeforeCenter && "mr-6 xs:mr-8",
-                                isAfterCenter && "ml-6 xs:ml-8"
+                                "relative flex flex-col items-center justify-center gap-0.5 xs:gap-1 flex-1 min-w-0 h-14 transition-all active:scale-90 touch-manipulation mx-auto",
+                                isActive ? "text-blue-400" : "text-slate-500 hover:text-slate-300"
                             )}
                             aria-label={item.label}
                             role="tab"
@@ -122,12 +116,12 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0 }: MobileBotto
                                     className="absolute top-0 w-6 h-1 bg-blue-500 rounded-full"
                                     initial={false}
                                     transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                                    style={{ top: -12 }}
+                                    style={{ top: -8 }}
                                 />
                             )}
 
                             <div className={cn(
-                                "p-2.5 rounded-xl transition-all duration-300",
+                                "p-2 rounded-xl transition-all duration-300",
                                 isActive ? "bg-blue-500/10" : ""
                             )}>
                                 <item.icon className={cn(
@@ -137,7 +131,7 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0 }: MobileBotto
                             </div>
 
                             <span className={cn(
-                                "text-[9px] xs:text-[10px] font-bold uppercase tracking-tighter transition-all duration-300 line-clamp-1 max-w-full",
+                                "text-[8px] xs:text-[9px] font-bold uppercase tracking-tighter transition-all duration-300 line-clamp-1 max-w-full px-1",
                                 isActive && "text-blue-400"
                             )}>
                                 {item.label}
