@@ -165,7 +165,7 @@ export const SummariesPage: React.FC = () => {
                     {/* Entity Boxes - Main Categories */}
                     <div className="bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 rounded-[2.5rem] p-8 mb-8 shadow-2xl">
                         <h3 className="text-sm font-bold text-slate-500 uppercase tracking-widest mb-6 px-2">Categorias de Histórico</h3>
-                        <div className="grid grid-cols-2 lg:grid-cols-5 gap-6">
+                        <div className="grid grid-cols-2 lg:grid-cols-5 gap-8">
                             {entityButtons.map((btn) => {
                                 const count = counts[btn.type as keyof typeof counts] || (btn.type === 'all' ? counts.all : 0);
                                 const isActive = entityFilter === btn.type;

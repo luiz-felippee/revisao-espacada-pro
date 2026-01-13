@@ -167,8 +167,8 @@ export const MissionList = ({
             )}
 
             {/* Scrollable List */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-6 custom-scrollbar max-h-[60vh] select-none">
-                <div className="space-y-6">
+            <div className="flex-1 overflow-y-auto p-4 space-y-10 custom-scrollbar max-h-[60vh] select-none">
+                <div className="space-y-10">
                     {[
                         { title: 'Hábitos & Rotina', rawItems: allHabits, type: 'habit' },
                         { title: 'Revisões & Estudos', rawItems: allReviews, type: 'review' },
@@ -180,7 +180,7 @@ export const MissionList = ({
                         const sortedItems = sortItems(group.rawItems, group.type);
 
                         return (
-                            <div key={group.title} className="space-y-3">
+                            <div key={group.title} className="space-y-4">
                                 <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest pl-2 border-l-2 border-slate-800 flex items-center justify-between">
                                     {group.title}
                                     <span className="text-[9px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded-full">{group.rawItems.length}</span>
@@ -189,7 +189,7 @@ export const MissionList = ({
                                 <Reorder.Group
                                     values={sortedItems.map(i => i.id || i.subthemeId)}
                                     onReorder={(newOrder) => handleReorder(group.type, newOrder)}
-                                    className="space-y-4"
+                                    className="space-y-6"
                                     axis="y"
                                 >
                                     {sortedItems.map((item: any) => {

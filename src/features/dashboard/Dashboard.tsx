@@ -89,7 +89,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate, onOpenSummaryM
             />
 
             {/* KPI Cards (Realistic 3D Glass) */}
-            <motion.div variants={containerVariants} className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            <motion.div variants={containerVariants} className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
                 <motion.div variants={itemVariants}>
                     <RealisticKPICard
                         title="Dias"

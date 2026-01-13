@@ -30,11 +30,13 @@ export const Timeline: React.FC<TimelineProps> = ({
                     {/* Timeline Line */}
                     <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-purple-500/20 via-blue-500/20 to-transparent" />
 
-                    <AnimatePresence mode="popLayout">
-                        {items.map((item, index) => (
-                            <TimelineItem key={item.id} item={item} index={index} />
-                        ))}
-                    </AnimatePresence>
+                    <div className="relative space-y-6">
+                        <AnimatePresence mode="popLayout">
+                            {items.map((item, index) => (
+                                <TimelineItem key={item.id} item={item} index={index} />
+                            ))}
+                        </AnimatePresence>
+                    </div>
                 </>
             )}
         </div>
