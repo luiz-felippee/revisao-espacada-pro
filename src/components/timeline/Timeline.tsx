@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { Calendar } from 'lucide-react';
 import { TimelineItem } from './TimelineItem';
@@ -13,8 +13,17 @@ export const Timeline: React.FC<TimelineProps> = ({
     items,
     emptyMessage = 'Nenhum evento ainda'
 }) => {
+    const [isIPhone, setIsIPhone] = useState(false);
+
+    useEffect(() => {
+        // Detect if device is iPhone
+        const userAgent = window.navigator.userAgent.toLowerCase();
+        const isIOS = /iphone|ipod/.test(userAgent);
+        setIsIPhone(isIOS);
+    }, []);
+
     return (
-        <div className="relative">
+        <div className={`relative ${isIPhone ? 'pt-3 md:pt-0' : ''}`}>
             {items.length === 0 ? (
                 <div className="text-center py-16">
                     <div className="w-20 h-20 rounded-full bg-slate-700/50 flex items-center justify-center mx-auto mb-4">
