@@ -144,14 +144,17 @@ export const AddGoalModal: React.FC<AddGoalModalProps> = (props) => {
 
                             {/* Detalhes Técnicos */}
                             <div className="space-y-4">
-                                <div className="flex items-center justify-between border-b border-white/5 pb-2">
-                                    <div className="flex items-center gap-2 text-purple-300 text-xs font-bold uppercase tracking-wider">
-                                        <Target className="w-3 h-3" /> Classificação
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                        <span className="text-[10px] uppercase font-bold text-slate-500 shrink-0">Prioridade</span>
-                                        <div className="w-[160px] sm:w-[200px]">
-                                            <PrioritySelector value={priority} onChange={setPriority} label="" />
+                                {/* Header - Mobile: Stacked, Desktop: Side by side */}
+                                <div className="border-b border-white/5 pb-3">
+                                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                                        <div className="flex items-center gap-2 text-purple-300 text-xs font-bold uppercase tracking-wider">
+                                            <Target className="w-3 h-3" /> Classificação
+                                        </div>
+                                        <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                                            <span className="text-[10px] uppercase font-bold text-slate-500">Prioridade</span>
+                                            <div className="w-full sm:w-[200px]">
+                                                <PrioritySelector value={priority} onChange={setPriority} label="" />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
