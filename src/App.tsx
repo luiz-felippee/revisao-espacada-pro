@@ -70,7 +70,7 @@ function AppContent() {
   // Hooks de infraestrutura extraídos para Clean Code
   useKeyboardShortcuts(() => setIsSearchOpen(true));
   useGuestReset(user?.id);
-  const { showPWAPrompt, handlePWAInstall, handlePWADismiss } = usePWAInstall();
+  const { showPWAPrompt, handlePWAInstall, handlePWADismiss, platform } = usePWAInstall();
 
   // If not logged in, show Login Page directly (Personal Use Mode)
   if (!user) {
@@ -98,6 +98,7 @@ function AppContent() {
             <PWAPrompt
               onInstall={handlePWAInstall}
               onDismiss={handlePWADismiss}
+              platform={platform}
             />
           )}
 
