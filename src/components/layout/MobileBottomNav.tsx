@@ -24,9 +24,9 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0 }: MobileBotto
     const menuItems = [
         { id: 'dashboard', icon: LayoutDashboard, label: 'Painel' },
         { id: 'calendar', icon: CalendarIcon, label: 'Agenda' },
-        { id: 'summaries', icon: FileText, label: 'Resumos' }, // Added
-        { id: 'mission-trigger', icon: Target, label: 'Missão', special: true }, // Added center item
-        { id: 'tasks', icon: List, label: 'Tarefas' }, // Changed Icon to List to differentiate
+        { id: 'summaries', icon: FileText, label: 'Resumos' },
+        { id: 'mission-trigger', icon: Target, label: 'Missão', special: true },
+        { id: 'tasks', icon: List, label: 'Tarefas' },
         { id: 'goals', icon: Target, label: 'Metas' },
     ];
 
@@ -67,8 +67,8 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0 }: MobileBotto
             )}
 
             <nav className="fixed bottom-0 left-0 right-0 h-20 bg-slate-950/80 backdrop-blur-2xl border-t border-white/5 z-50 lg:hidden flex items-center justify-between px-2 xs:px-4 pb-[env(safe-area-inset-bottom,12px)]">
-                {/* Grupo Esquerda (Painel, Agenda, Resumos) */}
-                <div className="flex items-center justify-center flex-[1.2] gap-0.5 xs:gap-1">
+                {/* Grupo Esquerda (Painel, Agenda, Resumos) - flex-1 garante centralização do botão do meio na tela */}
+                <div className="flex-1 flex items-center justify-around">
                     {leftItems.map((item) => {
                         const isActive = activeTab === item.id;
                         return (
@@ -79,14 +79,14 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0 }: MobileBotto
                                     navigate(`/${item.id}`);
                                 }}
                                 className={cn(
-                                    "relative flex flex-col items-center justify-center gap-0.5 min-w-0 h-14 transition-all active:scale-90 touch-manipulation flex-1",
+                                    "relative flex flex-col items-center justify-center gap-1 flex-1 min-w-0 h-16 transition-all active:scale-90 touch-manipulation",
                                     isActive ? "text-blue-400" : "text-slate-500 hover:text-slate-300"
                                 )}
                             >
                                 {isActive && (
                                     <motion.div
                                         layoutId="nav-bg"
-                                        className="absolute top-0 w-6 h-1 bg-blue-500 rounded-full"
+                                        className="absolute top-0 w-8 h-1 bg-blue-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]"
                                         initial={false}
                                         transition={{ type: "spring", stiffness: 500, damping: 30 }}
                                         style={{ top: -8 }}
@@ -94,16 +94,16 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0 }: MobileBotto
                                 )}
                                 <div className={cn(
                                     "p-1.5 rounded-xl transition-all duration-300",
-                                    isActive ? "bg-blue-500/10" : ""
+                                    isActive ? "bg-blue-500/10" : "group-hover:bg-white/5"
                                 )}>
                                     <item.icon className={cn(
                                         "w-5 h-5 xs:w-6 xs:h-6 transition-all duration-300",
-                                        isActive && "scale-110"
+                                        isActive && "scale-110 drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]"
                                     )} />
                                 </div>
                                 <span className={cn(
-                                    "text-[7px] xs:text-[9px] font-bold uppercase tracking-tighter transition-all duration-300 line-clamp-1 max-w-full px-0.5 text-center",
-                                    isActive && "text-blue-400"
+                                    "text-[7px] xs:text-[9px] font-bold uppercase tracking-tighter transition-all duration-300 line-clamp-1 max-w-full px-0.5",
+                                    isActive && "text-blue-400 text-[8px] xs:text-[10px]"
                                 )}>
                                     {item.label}
                                 </span>
@@ -112,32 +112,35 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0 }: MobileBotto
                     })}
                 </div>
 
-                {/* Centro (Missão) com Respiro Proporcional */}
-                <div className="w-16 xs:w-20 relative flex-shrink-0 flex items-center justify-center">
+                {/* Espaçador Central para alinhar o Botão Flutuante */}
+                <div className="w-16 xs:w-20 relative flex-shrink-0">
                     {specialItem && (
                         <button
                             onClick={() => {
                                 showFeedback('Nova Missão');
                                 onOpenMission?.();
                             }}
-                            className="absolute bottom-4 flex flex-col items-center justify-center active:scale-95 transition-all group touch-manipulation"
+                            className="absolute left-1/2 -translate-x-1/2 -top-6 flex flex-col items-center justify-center active:scale-95 transition-all group touch-manipulation"
                             style={{ zIndex: 10 }}
                         >
-                            <div className="w-14 h-14 xs:w-16 xs:h-16 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-[0_0_25px_rgba(59,130,246,0.6)] border-4 border-slate-950 ring-2 ring-white/20 group-hover:scale-110 transition-transform duration-300 relative">
+                            <div className="w-14 h-14 xs:w-16 xs:h-16 rounded-full bg-gradient-to-br from-blue-500 via-indigo-600 to-blue-700 flex items-center justify-center shadow-[0_4px_25px_rgba(59,130,246,0.6)] border-4 border-slate-950 ring-2 ring-blue-400/20 group-hover:scale-110 transition-transform duration-300 relative">
                                 <specialItem.icon className="w-6 h-6 xs:w-7 xs:h-7 text-white drop-shadow-md" />
                                 {missionCount > 0 && (
-                                    <div className="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-black min-w-[16px] h-[16px] flex items-center justify-center rounded-full shadow-lg border border-slate-950">
+                                    <div className="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-black min-w-[18px] h-[18px] flex items-center justify-center rounded-full shadow-lg border-2 border-slate-950">
                                         {missionCount}
                                     </div>
                                 )}
+                                <div className="absolute inset-0 rounded-full bg-blue-400/10 animate-pulse -z-10" />
                             </div>
-                            <span className="text-[9px] xs:text-[10px] font-bold text-blue-400 uppercase tracking-tighter mt-1 hidden xs:block">Missão</span>
+                            <span className="text-[9px] xs:text-[10px] font-black text-blue-400 uppercase tracking-widest mt-2 drop-shadow-lg">
+                                Missão
+                            </span>
                         </button>
                     )}
                 </div>
 
-                {/* Grupo Direita (Tarefas, Metas) */}
-                <div className="flex items-center justify-center flex-1 gap-0.5 xs:gap-1">
+                {/* Grupo Direita (Tarefas, Metas) - flex-1 deve ter o mesmo peso do grupo da esquerda para centralização perfeita */}
+                <div className="flex-1 flex items-center justify-around">
                     {rightItems.map((item) => {
                         const isActive = activeTab === item.id;
                         return (
@@ -148,14 +151,14 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0 }: MobileBotto
                                     navigate(`/${item.id}`);
                                 }}
                                 className={cn(
-                                    "relative flex flex-col items-center justify-center gap-0.5 min-w-0 h-14 transition-all active:scale-90 touch-manipulation flex-1",
+                                    "relative flex flex-col items-center justify-center gap-1 flex-1 min-w-0 h-16 transition-all active:scale-90 touch-manipulation",
                                     isActive ? "text-blue-400" : "text-slate-500 hover:text-slate-300"
                                 )}
                             >
                                 {isActive && (
                                     <motion.div
                                         layoutId="nav-bg"
-                                        className="absolute top-0 w-6 h-1 bg-blue-500 rounded-full"
+                                        className="absolute top-0 w-8 h-1 bg-blue-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]"
                                         initial={false}
                                         transition={{ type: "spring", stiffness: 500, damping: 30 }}
                                         style={{ top: -8 }}
@@ -163,16 +166,16 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0 }: MobileBotto
                                 )}
                                 <div className={cn(
                                     "p-1.5 rounded-xl transition-all duration-300",
-                                    isActive ? "bg-blue-500/10" : ""
+                                    isActive ? "bg-blue-500/10" : "group-hover:bg-white/5"
                                 )}>
                                     <item.icon className={cn(
                                         "w-5 h-5 xs:w-6 xs:h-6 transition-all duration-300",
-                                        isActive && "scale-110"
+                                        isActive && "scale-110 drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]"
                                     )} />
                                 </div>
                                 <span className={cn(
-                                    "text-[7px] xs:text-[9px] font-bold uppercase tracking-tighter transition-all duration-300 line-clamp-1 max-w-full px-0.5 text-center",
-                                    isActive && "text-blue-400"
+                                    "text-[7px] xs:text-[9px] font-bold uppercase tracking-tighter transition-all duration-300 line-clamp-1 max-w-full px-0.5",
+                                    isActive && "text-blue-400 text-[8px] xs:text-[10px]"
                                 )}>
                                     {item.label}
                                 </span>
