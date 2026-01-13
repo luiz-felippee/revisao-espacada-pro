@@ -41,6 +41,10 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0 }: MobileBotto
         }, 3000);
     };
 
+    const leftItems = menuItems.filter(i => !i.special && ['dashboard', 'calendar', 'summaries'].includes(i.id));
+    const rightItems = menuItems.filter(i => !i.special && ['tasks', 'goals'].includes(i.id));
+    const specialItem = menuItems.find(i => i.special);
+
     return (
         <>
             {createPortal(
@@ -62,83 +66,120 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0 }: MobileBotto
                 document.body
             )}
 
-            <nav className="fixed bottom-0 left-0 right-0 h-20 bg-slate-950/80 backdrop-blur-2xl border-t border-white/5 z-50 lg:hidden grid grid-cols-6 gap-2 xs:gap-4 items-center px-2 xs:px-4 pb-[env(safe-area-inset-bottom,12px)]">
-                {menuItems.map((item) => {
-                    if (item.special) {
+            <nav className="fixed bottom-0 left-0 right-0 h-20 bg-slate-950/80 backdrop-blur-2xl border-t border-white/5 z-50 lg:hidden flex items-center justify-between px-2 xs:px-4 pb-[env(safe-area-inset-bottom,12px)]">
+                {/* Grupo Esquerda (Painel, Agenda, Resumos) */}
+                <div className="flex items-center justify-center flex-[1.2] gap-0.5 xs:gap-1">
+                    {leftItems.map((item) => {
+                        const isActive = activeTab === item.id;
                         return (
-                            <React.Fragment key={item.id}>
-                                {/* Espaçador invisível para reservar o lugar no grid e manter a proporção */}
-                                <div className="flex-1 min-w-0 h-1" aria-hidden="true" />
-
-                                <button
-                                    onClick={() => {
-                                        showFeedback('Nova Missão');
-                                        onOpenMission?.();
-                                    }}
-                                    className="absolute left-1/2 -translate-x-1/2 bottom-4 flex flex-col items-center justify-center active:scale-95 transition-all group touch-manipulation"
-                                    aria-label="Abrir Missão"
-                                    style={{ zIndex: 10 }}
-                                >
-                                    <div className="w-14 h-14 xs:w-16 xs:h-16 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-[0_0_25px_rgba(59,130,246,0.6)] border-4 border-slate-950 ring-2 ring-white/20 group-hover:scale-110 transition-transform duration-300 relative">
-                                        <item.icon className="w-6 h-6 xs:w-7 xs:h-7 text-white drop-shadow-md" />
-                                        {missionCount > 0 && (
-                                            <div className="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-black min-w-[16px] h-[16px] flex items-center justify-center rounded-full shadow-lg border border-slate-950">
-                                                {missionCount}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <span className="text-[9px] xs:text-[10px] font-bold text-blue-400 uppercase tracking-tighter mt-1 hidden xs:block">Missão</span>
-                                </button>
-                            </React.Fragment>
+                            <button
+                                key={item.id}
+                                onClick={() => {
+                                    showFeedback(item.label);
+                                    navigate(`/${item.id}`);
+                                }}
+                                className={cn(
+                                    "relative flex flex-col items-center justify-center gap-0.5 min-w-0 h-14 transition-all active:scale-90 touch-manipulation flex-1",
+                                    isActive ? "text-blue-400" : "text-slate-500 hover:text-slate-300"
+                                )}
+                            >
+                                {isActive && (
+                                    <motion.div
+                                        layoutId="nav-bg"
+                                        className="absolute top-0 w-6 h-1 bg-blue-500 rounded-full"
+                                        initial={false}
+                                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                                        style={{ top: -8 }}
+                                    />
+                                )}
+                                <div className={cn(
+                                    "p-1.5 rounded-xl transition-all duration-300",
+                                    isActive ? "bg-blue-500/10" : ""
+                                )}>
+                                    <item.icon className={cn(
+                                        "w-5 h-5 xs:w-6 xs:h-6 transition-all duration-300",
+                                        isActive && "scale-110"
+                                    )} />
+                                </div>
+                                <span className={cn(
+                                    "text-[7px] xs:text-[9px] font-bold uppercase tracking-tighter transition-all duration-300 line-clamp-1 max-w-full px-0.5 text-center",
+                                    isActive && "text-blue-400"
+                                )}>
+                                    {item.label}
+                                </span>
+                            </button>
                         );
-                    }
+                    })}
+                </div>
 
-                    const isActive = activeTab === item.id;
-
-                    return (
+                {/* Centro (Missão) com Respiro Proporcional */}
+                <div className="w-16 xs:w-20 relative flex-shrink-0 flex items-center justify-center">
+                    {specialItem && (
                         <button
-                            key={item.id}
                             onClick={() => {
-                                showFeedback(item.label);
-                                navigate(`/${item.id}`);
+                                showFeedback('Nova Missão');
+                                onOpenMission?.();
                             }}
-                            className={cn(
-                                "relative flex flex-col items-center justify-center gap-0.5 xs:gap-1 flex-1 min-w-0 h-14 transition-all active:scale-90 touch-manipulation mx-auto",
-                                isActive ? "text-blue-400" : "text-slate-500 hover:text-slate-300"
-                            )}
-                            aria-label={item.label}
-                            role="tab"
-                            aria-selected={isActive}
+                            className="absolute bottom-4 flex flex-col items-center justify-center active:scale-95 transition-all group touch-manipulation"
+                            style={{ zIndex: 10 }}
                         >
-                            {isActive && (
-                                <motion.div
-                                    layoutId="nav-bg"
-                                    className="absolute top-0 w-6 h-1 bg-blue-500 rounded-full"
-                                    initial={false}
-                                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                                    style={{ top: -8 }}
-                                />
-                            )}
-
-                            <div className={cn(
-                                "p-2 rounded-xl transition-all duration-300",
-                                isActive ? "bg-blue-500/10" : ""
-                            )}>
-                                <item.icon className={cn(
-                                    "w-5 h-5 xs:w-6 xs:h-6 transition-all duration-300",
-                                    isActive && "scale-110"
-                                )} />
+                            <div className="w-14 h-14 xs:w-16 xs:h-16 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-[0_0_25px_rgba(59,130,246,0.6)] border-4 border-slate-950 ring-2 ring-white/20 group-hover:scale-110 transition-transform duration-300 relative">
+                                <specialItem.icon className="w-6 h-6 xs:w-7 xs:h-7 text-white drop-shadow-md" />
+                                {missionCount > 0 && (
+                                    <div className="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-black min-w-[16px] h-[16px] flex items-center justify-center rounded-full shadow-lg border border-slate-950">
+                                        {missionCount}
+                                    </div>
+                                )}
                             </div>
-
-                            <span className={cn(
-                                "text-[8px] xs:text-[9px] font-bold uppercase tracking-tighter transition-all duration-300 line-clamp-1 max-w-full px-1",
-                                isActive && "text-blue-400"
-                            )}>
-                                {item.label}
-                            </span>
+                            <span className="text-[9px] xs:text-[10px] font-bold text-blue-400 uppercase tracking-tighter mt-1 hidden xs:block">Missão</span>
                         </button>
-                    );
-                })}
+                    )}
+                </div>
+
+                {/* Grupo Direita (Tarefas, Metas) */}
+                <div className="flex items-center justify-center flex-1 gap-0.5 xs:gap-1">
+                    {rightItems.map((item) => {
+                        const isActive = activeTab === item.id;
+                        return (
+                            <button
+                                key={item.id}
+                                onClick={() => {
+                                    showFeedback(item.label);
+                                    navigate(`/${item.id}`);
+                                }}
+                                className={cn(
+                                    "relative flex flex-col items-center justify-center gap-0.5 min-w-0 h-14 transition-all active:scale-90 touch-manipulation flex-1",
+                                    isActive ? "text-blue-400" : "text-slate-500 hover:text-slate-300"
+                                )}
+                            >
+                                {isActive && (
+                                    <motion.div
+                                        layoutId="nav-bg"
+                                        className="absolute top-0 w-6 h-1 bg-blue-500 rounded-full"
+                                        initial={false}
+                                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                                        style={{ top: -8 }}
+                                    />
+                                )}
+                                <div className={cn(
+                                    "p-1.5 rounded-xl transition-all duration-300",
+                                    isActive ? "bg-blue-500/10" : ""
+                                )}>
+                                    <item.icon className={cn(
+                                        "w-5 h-5 xs:w-6 xs:h-6 transition-all duration-300",
+                                        isActive && "scale-110"
+                                    )} />
+                                </div>
+                                <span className={cn(
+                                    "text-[7px] xs:text-[9px] font-bold uppercase tracking-tighter transition-all duration-300 line-clamp-1 max-w-full px-0.5 text-center",
+                                    isActive && "text-blue-400"
+                                )}>
+                                    {item.label}
+                                </span>
+                            </button>
+                        );
+                    })}
+                </div>
             </nav>
         </>
     );
