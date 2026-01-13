@@ -90,6 +90,15 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0 }: MobileBotto
                     }
 
                     const isActive = activeTab === item.id;
+
+                    // Get index of current item (excluding special button)
+                    const normalItems = menuItems.filter(m => !m.special);
+                    const itemIndex = normalItems.findIndex(m => m.id === item.id);
+
+                    // Add margin to buttons adjacent to center button (index 2 and 3 in normal items = before and after center)
+                    const isBeforeCenter = itemIndex === 2; // summaries
+                    const isAfterCenter = itemIndex === 3; // tasks
+
                     return (
                         <button
                             key={item.id}
@@ -99,7 +108,9 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0 }: MobileBotto
                             }}
                             className={cn(
                                 "relative flex flex-col items-center justify-center gap-0.5 xs:gap-1 flex-1 max-w-[3.5rem] h-12 transition-all active:scale-90 touch-manipulation",
-                                isActive ? "text-blue-400" : "text-slate-500 hover:text-slate-300"
+                                isActive ? "text-blue-400" : "text-slate-500 hover:text-slate-300",
+                                isBeforeCenter && "mr-6 xs:mr-8",
+                                isAfterCenter && "ml-6 xs:ml-8"
                             )}
                             aria-label={item.label}
                             role="tab"
@@ -119,12 +130,15 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0 }: MobileBotto
                                 "p-2.5 rounded-xl transition-all duration-300",
                                 isActive ? "bg-blue-500/10" : ""
                             )}>
-                                <item.icon className={cn("w-5 h-5 relative z-10 transition-transform duration-300", isActive && "scale-110")} />
+                                <item.icon className={cn(
+                                    "w-5 h-5 xs:w-6 xs:h-6 transition-all duration-300",
+                                    isActive && "scale-110"
+                                )} />
                             </div>
 
                             <span className={cn(
-                                "text-[8px] xs:text-[9px] font-bold uppercase tracking-widest transition-colors leading-none hidden xs:block",
-                                isActive ? "text-blue-400" : "text-slate-500"
+                                "text-[9px] xs:text-[10px] font-bold uppercase tracking-tighter transition-all duration-300 line-clamp-1 max-w-full",
+                                isActive && "text-blue-400"
                             )}>
                                 {item.label}
                             </span>
