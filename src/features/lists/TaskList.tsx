@@ -74,52 +74,37 @@ export const TaskList = () => {
             {/* Ambient Background Glows - Matching Goals Style */}
             <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-blue-500/10 rounded-full blur-[120px] pointer-events-none" />
 
-            {/* Header Section Premium */}
+            {/* Header Section Premium - Matching Goals Layout exactly */}
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-6 relative z-10 pt-4 md:pt-8 shrink-0">
                 <div className="space-y-2">
                     <h2 className="text-3xl md:text-5xl font-black text-white tracking-tighter text-glow drop-shadow-xl text-center md:text-left">Minhas Tarefas</h2>
                     <p className="text-slate-400 text-sm font-medium tracking-wide text-center md:text-left">Gerencie sua rotina e mantenha o foco no que importa.</p>
                 </div>
 
-                {/* Desktop Centered Button (Hidden on Mobile) */}
-                <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 bottom-0">
-                    <button
-                        onClick={() => setIsAddModalOpen(true)}
-                        className="px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white rounded-2xl font-bold shadow-xl shadow-blue-900/30 active:scale-95 transition-all flex items-center gap-3 ring-1 ring-white/10 backdrop-blur-md mb-2"
-                    >
-                        <span className="text-2xl leading-none font-light pb-0.5">+</span>
-                        Nova Tarefa
-                    </button>
-                </div>
-
-                {/* Mobile Button / Action Area */}
-                <div className="md:hidden flex justify-center w-full">
-                    <button
-                        onClick={() => setIsAddModalOpen(true)}
-                        className="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-2xl font-bold shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2"
-                    >
-                        <span className="text-xl">+</span>
-                        Nova Tarefa
-                    </button>
-                </div>
+                <button
+                    onClick={() => setIsAddModalOpen(true)}
+                    className="px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white rounded-2xl font-bold shadow-xl shadow-blue-900/30 active:scale-95 transition-all flex items-center gap-3 ring-1 ring-white/10 backdrop-blur-md"
+                >
+                    <span className="text-2xl leading-none font-light pb-0.5">+</span>
+                    Nova Tarefa
+                </button>
             </div>
 
-            <div className="flex-1 min-h-0 relative px-4">
+            <div className="flex-1 min-h-0 relative px-4 z-10">
                 {sortedItems.length === 0 ? (
-                    <div className="glass-card text-center py-20 rounded-3xl relative overflow-hidden group border border-slate-800/50 border-dashed bg-slate-900/30">
-                        <div className="relative z-10">
-                            <div className="w-16 h-16 bg-slate-800/50 rounded-full flex items-center justify-center mx-auto mb-4 ring-1 ring-white/10 shadow-xl shadow-black/20 group-hover:scale-110 transition-transform duration-500">
-                                <CheckSquare className="w-8 h-8 text-slate-500 group-hover:text-blue-400 transition-colors" />
-                            </div>
-                            <h3 className="text-xl font-bold text-white mb-2">Tudo em dia!</h3>
-                            <p className="text-slate-500 max-w-xs mx-auto mb-6 text-sm">Nenhuma tarefa pendente. Aproveite para adicionar novos objetivos.</p>
-                            <button
-                                onClick={() => setIsAddModalOpen(true)}
-                                className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-lg font-bold transition-all hover:scale-105 shadow-lg shadow-blue-500/25 ring-1 ring-white/20 text-sm"
-                            >
-                                Criar Primeira Tarefa
-                            </button>
+                    <div className="flex flex-col items-center justify-center h-[500px] text-center px-4">
+                        <div className="w-32 h-32 bg-slate-900/30 backdrop-blur-md rounded-full flex items-center justify-center mb-8 ring-1 ring-white/10 shadow-2xl relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent skew-x-12 opacity-50" />
+                            <CheckSquare className="w-12 h-12 text-slate-600 drop-shadow-lg" />
                         </div>
+                        <h3 className="text-3xl font-bold text-white mb-3 text-glow">Nenhuma tarefa encontrada</h3>
+                        <p className="text-slate-400 max-w-sm mb-10 leading-relaxed">Tudo em dia! Que tal adicionar novos desafios para hoje?</p>
+                        <button
+                            onClick={() => setIsAddModalOpen(true)}
+                            className="px-10 py-4 bg-slate-800/50 hover:bg-white/10 border border-slate-800/50 text-white rounded-2xl font-bold transition-all shadow-lg backdrop-blur-sm"
+                        >
+                            Criar Nova Tarefa
+                        </button>
                     </div>
                 ) : (
                     <div className="h-full">
