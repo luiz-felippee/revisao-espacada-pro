@@ -22,6 +22,7 @@ import { NotificationPermissionBanner } from './components/NotificationPermissio
 import { OnboardingTour } from './components/onboarding/OnboardingTour';
 import { PWAPrompt } from './components/PWAPrompt';
 import { SyncStatusIndicator } from './components/SyncStatusIndicator';
+import { SyncHealthMonitor } from './components/SyncHealthMonitor';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 
@@ -138,6 +139,9 @@ function AppContent() {
               </AnimatePresence>
             </main>
           </MainLayout>
+
+          {/* Sync Health Monitor - Diagnóstico Visual */}
+          <SyncHealthMonitor />
         </PomodoroProvider>
       </ProjectProvider>
     </StudyProvider>
