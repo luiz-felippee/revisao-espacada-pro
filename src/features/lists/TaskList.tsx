@@ -71,18 +71,37 @@ export const TaskList = () => {
 
     return (
         <div className="space-y-6 h-full flex flex-col overflow-hidden">
-            <div className="flex flex-col md:flex-row md:items-center justify-between shrink-0 mb-4 px-4 gap-4 pt-4 md:pt-0">
-                <h2 className="text-2xl font-bold text-slate-100 text-center md:text-left">Minhas Tarefas</h2>
-                <button
-                    onClick={() => setIsAddModalOpen(true)}
-                    className="group relative px-4 py-2 bg-slate-900 rounded-lg font-bold text-white shadow-lg hover:scale-[1.02] active:scale-95 transition-all duration-300 overflow-hidden ring-1 ring-white/10"
-                >
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 opacity-80 group-hover:opacity-100 transition-opacity" />
-                    <span className="relative flex items-center gap-1.5 text-sm">
-                        <span className="text-lg leading-none font-light mb-0.5">+</span>
+            {/* Ambient Background Glows - Matching Goals Style */}
+            <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-blue-500/10 rounded-full blur-[120px] pointer-events-none" />
+
+            {/* Header Section Premium */}
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-6 relative z-10 pt-4 md:pt-8 shrink-0">
+                <div className="space-y-2">
+                    <h2 className="text-3xl md:text-5xl font-black text-white tracking-tighter text-glow drop-shadow-xl text-center md:text-left">Minhas Tarefas</h2>
+                    <p className="text-slate-400 text-sm font-medium tracking-wide text-center md:text-left">Gerencie sua rotina e mantenha o foco no que importa.</p>
+                </div>
+
+                {/* Desktop Centered Button (Hidden on Mobile) */}
+                <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 bottom-0">
+                    <button
+                        onClick={() => setIsAddModalOpen(true)}
+                        className="px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white rounded-2xl font-bold shadow-xl shadow-blue-900/30 active:scale-95 transition-all flex items-center gap-3 ring-1 ring-white/10 backdrop-blur-md mb-2"
+                    >
+                        <span className="text-2xl leading-none font-light pb-0.5">+</span>
                         Nova Tarefa
-                    </span>
-                </button>
+                    </button>
+                </div>
+
+                {/* Mobile Button / Action Area */}
+                <div className="md:hidden flex justify-center w-full">
+                    <button
+                        onClick={() => setIsAddModalOpen(true)}
+                        className="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-2xl font-bold shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2"
+                    >
+                        <span className="text-xl">+</span>
+                        Nova Tarefa
+                    </button>
+                </div>
             </div>
 
             <div className="flex-1 min-h-0 relative px-4">

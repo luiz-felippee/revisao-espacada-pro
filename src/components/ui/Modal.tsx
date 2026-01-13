@@ -80,7 +80,7 @@ export const Modal: React.FC<ModalProps> = ({
                 {title === null && (
                     <button
                         onClick={onClose}
-                        className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-500/20 rounded-full transition-colors absolute top-2 right-2 z-[110] touch-manipulation group"
+                        className="p-3 text-slate-400 hover:text-red-500 hover:bg-red-500/20 rounded-full transition-colors absolute top-6 right-4 z-[110] touch-manipulation group"
                         aria-label="Fechar modal"
                     >
                         <X className="w-6 h-6 group-hover:scale-110 transition-transform" aria-hidden="true" />
