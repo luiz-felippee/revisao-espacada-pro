@@ -73,15 +73,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay pointer-events-none" />
                 {!zenMode && <div className="absolute top-0 left-0 w-full h-96 bg-blue-600/10 blur-[100px] pointer-events-none" />}
 
-                {/* Close button for tablets only */}
-                <button
-                    onClick={onCloseSidebar}
-                    className="absolute top-4 right-4 p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all lg:hidden z-50"
-                    aria-label="Fechar Menu"
-                >
-                    <LogOut className="w-5 h-5 rotate-180" />
-                </button>
-
                 {/* App Brand */}
                 <div
                     onClick={() => onTabChange('dashboard')}
