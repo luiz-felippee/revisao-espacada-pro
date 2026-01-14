@@ -190,31 +190,33 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
 
             {/* Main Content */}
             <div className="flex-1 flex flex-col h-full overflow-hidden relative">
-                {/* Header */}
-                <Header
-                    isPWA={isPWA}
-                    isIOS={isIOS}
-                    safeAreaTopClass={safeAreaTopClass}
-                    isHeaderVisible={isHeaderVisible}
-                    isMobileMenuOpen={isMobileMenuOpen}
-                    setIsMobileMenuOpen={setIsMobileMenuOpen}
-                    zenMode={zenMode}
-                    toggleZenMode={toggleZenMode}
-                    setIsMissionModalOpen={modals.actions.setIsMissionModalOpen} // Use action from hook
-                    setIsSummaryModalOpen={setIsSummaryModalOpen}
-                    setIsTaskModalOpen={modals.actions.setIsTaskModalOpen} // Use action from hook
-                    isSidebarOpen={modals.state.isSidebarOpen}
-                    setIsSidebarOpen={modals.actions.setIsSidebarOpen}
-                    setIsThemeModalOpen={modals.actions.setIsThemeModalOpen}
-                    syncStatus={syncStatus}
-                    clearSyncQueue={clearSyncQueue}
-                    time={time}
-                    user={user}
-                    onTabChange={onTabChange}
-                    logout={logout}
-                    missionCount={missionCount}
-                    projectCount={projectCount}
-                />
+                {/* Header - Hidden on Mobile, Visible on Desktop */}
+                <div className="hidden md:block">
+                    <Header
+                        isPWA={isPWA}
+                        isIOS={isIOS}
+                        safeAreaTopClass={safeAreaTopClass}
+                        isHeaderVisible={isHeaderVisible}
+                        isMobileMenuOpen={isMobileMenuOpen}
+                        setIsMobileMenuOpen={setIsMobileMenuOpen}
+                        zenMode={zenMode}
+                        toggleZenMode={toggleZenMode}
+                        setIsMissionModalOpen={modals.actions.setIsMissionModalOpen} // Use action from hook
+                        setIsSummaryModalOpen={setIsSummaryModalOpen}
+                        setIsTaskModalOpen={modals.actions.setIsTaskModalOpen} // Use action from hook
+                        isSidebarOpen={modals.state.isSidebarOpen}
+                        setIsSidebarOpen={modals.actions.setIsSidebarOpen}
+                        setIsThemeModalOpen={modals.actions.setIsThemeModalOpen}
+                        syncStatus={syncStatus}
+                        clearSyncQueue={clearSyncQueue}
+                        time={time}
+                        user={user}
+                        onTabChange={onTabChange}
+                        logout={logout}
+                        missionCount={missionCount}
+                        projectCount={projectCount}
+                    />
+                </div>
 
                 {/* Modals */}
                 <LayoutModals
@@ -231,7 +233,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
                     ref={mainRef}
                     className={cn(
                         "flex-1 overflow-y-scroll custom-scrollbar overscroll-none px-4 md:px-8 relative",
-                        isPWA && isIOS ? "pt-20 pb-32" : "pt-18 pb-24 md:pb-8", // Aligned with h-18 header
+                        isPWA && isIOS ? "pt-20 pb-32" : "pt-4 md:pt-18 pb-24 md:pb-8", // No header padding on mobile, full header on desktop
                         safeAreaBottomClass // Ensure content doesn't get cut by home bar
                     )}
                 >
