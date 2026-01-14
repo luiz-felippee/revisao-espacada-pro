@@ -329,8 +329,8 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({ isOpen, onClose, tas
                         <div className="bg-slate-900/20 border border-white/5 rounded-2xl p-4 space-y-4">
                             <div className="flex flex-col sm:flex-row gap-6">
                                 <div className="flex-1 space-y-4">
-                                    <div className="flex gap-4">
-                                        <div className="space-y-1.5 flex-1">
+                                    <div className="space-y-4">
+                                        <div className="space-y-1.5">
                                             <ColorPicker value={color} onChange={setColor} disabledColors={taskToEdit ? usedColors.filter(c => c !== taskToEdit!.color) : usedColors} label="Cor do Card" />
                                         </div>
                                         <div className="space-y-1.5">
