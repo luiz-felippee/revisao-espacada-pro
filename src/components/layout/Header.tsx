@@ -271,11 +271,11 @@ export const Header: React.FC<HeaderProps> = ({
 
             {/* Mobile Menu Overlay - Keeps access to profile/logout if needed */}
             {isMobileMenuOpen && (
-                <div className="fixed inset-0 z-[100] md:hidden overflow-y-auto bg-slate-950/95 backdrop-blur-3xl animate-in fade-in duration-300">
+                <div className="fixed inset-0 z-[100] md:hidden overflow-y-auto bg-slate-950/95 backdrop-blur-3xl animate-in fade-in duration-300" style={{ paddingTop: 'max(env(safe-area-inset-top), 1rem)' }}>
                     {/* Noise Texture */}
                     <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay pointer-events-none fixed" />
 
-                    <div className="relative z-10 p-6 min-h-screen flex flex-col">
+                    <div className="relative z-10 px-6 pt-4 pb-6 min-h-screen flex flex-col">
                         {/* Header: Brand & Close */}
                         <div className="flex items-center justify-between mb-8">
                             <div className="flex items-center gap-3">

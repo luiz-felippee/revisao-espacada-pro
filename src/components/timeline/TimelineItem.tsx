@@ -113,39 +113,39 @@ export const TimelineItem: React.FC<TimelineItemProps> = ({ item, index }) => {
             className="relative group mb-8 hover:translate-x-2 transition-transform duration-300"
         >
             {/* Card com Glassmorphism */}
-            <div className={`relative p-6 rounded-2xl bg-gradient-to-br ${config.bgGradient} backdrop-blur-xl border ${config.borderColor} shadow-xl ${config.shadowColor} hover:shadow-2xl hover:scale-[1.01] transition-all duration-300 overflow-hidden`}>
+            <div className={`relative p-8 rounded-2xl bg-gradient-to-br ${config.bgGradient} backdrop-blur-xl border ${config.borderColor} shadow-xl ${config.shadowColor} hover:shadow-2xl hover:scale-[1.01] transition-all duration-300 overflow-hidden`}>
                 {/* Glow Effect */}
                 <div className={`absolute inset-0 bg-gradient-to-r ${config.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300 blur-xl`} />
 
                 {/* Header com Badge e Horário */}
-                <div className="relative flex items-start justify-between mb-5">
-                    <div className="flex items-center gap-3">
+                <div className="relative flex items-start justify-between mb-8 gap-4">
+                    <div className="flex items-center gap-4">
                         {/* Icon */}
-                        <div className={`w-12 h-12 rounded-xl ${config.iconBg} border ${config.borderColor} flex items-center justify-center shadow-lg ${config.shadowColor} group-hover:scale-110 transition-transform duration-300`}>
-                            <Icon className={`w-6 h-6 ${config.textColor}`} />
+                        <div className={`w-14 h-14 rounded-xl ${config.iconBg} border ${config.borderColor} flex items-center justify-center shadow-lg ${config.shadowColor} group-hover:scale-110 transition-transform duration-300`}>
+                            <Icon className={`w-7 h-7 ${config.textColor}`} />
                         </div>
 
                         {/* Badge */}
-                        <div className={`px-4 py-1.5 rounded-xl bg-gradient-to-r ${config.gradient} text-white shadow-lg font-bold text-xs uppercase tracking-wider`}>
+                        <div className={`px-5 py-2 rounded-xl bg-gradient-to-r ${config.gradient} text-white shadow-lg font-bold text-sm uppercase tracking-wider`}>
                             {config.badge}
                         </div>
                     </div>
 
                     {/* Time */}
-                    <div className="flex items-center gap-2 text-slate-400">
-                        <Clock className="w-4 h-4" />
-                        <span className="font-semibold text-sm">{formatTime(item.timestamp)}</span>
+                    <div className="flex items-center gap-3 text-slate-400">
+                        <Clock className="w-5 h-5" />
+                        <span className="font-semibold text-base">{formatTime(item.timestamp)}</span>
                     </div>
                 </div>
 
                 {/* Título da Atividade */}
-                <h3 className={`text-xl font-bold ${config.textColor} mb-3 line-clamp-2 leading-tight`}>
+                <h3 className={`text-2xl font-bold ${config.textColor} mb-5 line-clamp-2 leading-tight`}>
                     {displayTitle}
                 </h3>
 
                 {/* Descrição */}
                 {item.description && (
-                    <p className="text-slate-300 text-sm mb-5 line-clamp-2 leading-relaxed">
+                    <p className="text-slate-300 text-base mb-8 line-clamp-2 leading-relaxed">
                         {item.description}
                     </p>
                 )}

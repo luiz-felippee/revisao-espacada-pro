@@ -163,10 +163,11 @@ export const SyncHealthMonitor: React.FC = () => {
         return (
             <button
                 onClick={() => setIsOpen(true)}
-                className="fixed bottom-24 right-4 z-50 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center gap-2 transition-all"
+                className="fixed bottom-24 right-4 z-[9999] px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-2xl shadow-2xl flex items-center gap-3 transition-all hover:scale-105 animate-pulse"
+                style={{ boxShadow: '0 0 30px rgba(59, 130, 246, 0.5)' }}
             >
-                <AlertCircle className="w-5 h-5" />
-                <span className="hidden sm:inline">Diagnóstico</span>
+                <AlertCircle className="w-6 h-6" />
+                <span className="font-bold text-lg">🔧 Diagnóstico</span>
             </button>
         );
     }
@@ -199,10 +200,10 @@ export const SyncHealthMonitor: React.FC = () => {
                         <div
                             key={index}
                             className={`p-4 rounded-xl border ${result.status === 'success'
-                                    ? 'bg-green-500/10 border-green-500/30'
-                                    : result.status === 'warning'
-                                        ? 'bg-yellow-500/10 border-yellow-500/30'
-                                        : 'bg-red-500/10 border-red-500/30'
+                                ? 'bg-green-500/10 border-green-500/30'
+                                : result.status === 'warning'
+                                    ? 'bg-yellow-500/10 border-yellow-500/30'
+                                    : 'bg-red-500/10 border-red-500/30'
                                 }`}
                         >
                             <div className="flex items-start gap-3">

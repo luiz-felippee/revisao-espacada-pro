@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Correção RLS - Supabase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+        }
+        
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .step {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .step h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .step p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        
+        .sql-box {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            line-height: 1.6;
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 20px 0;
+            position: relative;
+        }
+        
+        .copy-btn {
+            position: sticky;
+            top: 10px;
+            right: 10px;
+            float: right;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+            z-index: 10;
+        }
+        
+        .copy-btn:hover {
+            background: #5568d3;
+            transform: scale(1.05);
+        }
+        
+        .copy-btn.copied {
+            background: #4caf50;
+        }
+        
+        .open-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .open-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .warning strong {
+            color: #856404;
+        }
+        
+        .success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .keyword { color: #569cd6; }
+        .string { color: #ce9178; }
+        .comment { color: #6a9955; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Correção de Políticas RLS</h1>
+        <p class="subtitle">Siga os 3 passos abaixo para corrigir o problema de sincronização</p>
+        
+        <div class="warning">
+            <strong>⚠️ Importante:</strong> Sem essas políticas, seus dados ficam apenas no navegador e são perdidos ao trocar de dispositivo!
+        </div>
+        
+        <div class="step">
+            <h3>📋 Passo 1: Copiar o código SQL</h3>
+            <p>Clique no botão "Copiar SQL" abaixo:</p>
+            <div class="sql-box" id="sqlCode">
+<button class="copy-btn" onclick="copiarSQL()">📋 Copiar SQL</button><span class="comment">-- CORREÇÃO CRÍTICA: Políticas RLS faltantes</span>
+
+<span class="comment">-- TASKS</span>
+<span class="keyword">DROP POLICY IF EXISTS</span> <span class="string">"Users can insert own tasks"</span> <span class="keyword">ON</span> tasks;
+<span class="keyword">CREATE POLICY</span> <span class="string">"Users can insert own tasks"</span> <span class="keyword">ON</span> tasks <span class="keyword">FOR INSERT WITH CHECK</span> (auth.uid() = user_id);
+
+<span class="keyword">DROP POLICY IF EXISTS</span> <span class="string">"Users can delete own tasks"</span> <span class="keyword">ON</span> tasks;
+<span class="keyword">CREATE POLICY</span> <span class="string">"Users can delete own tasks"</span> <span class="keyword">ON</span> tasks <span class="keyword">FOR DELETE USING</span> (auth.uid() = user_id);
+
+<span class="comment">-- GOALS</span>
+<span class="keyword">DROP POLICY IF EXISTS</span> <span class="string">"Users can insert own goals"</span> <span class="keyword">ON</span> goals;
+<span class="keyword">CREATE POLICY</span> <span class="string">"Users can insert own goals"</span> <span class="keyword">ON</span> goals <span class="keyword">FOR INSERT WITH CHECK</span> (auth.uid() = user_id);
+
+<span class="keyword">DROP POLICY IF EXISTS</span> <span class="string">"Users can delete own goals"</span> <span class="keyword">ON</span> goals;
+<span class="keyword">CREATE POLICY</span> <span class="string">"Users can delete own goals"</span> <span class="keyword">ON</span> goals <span class="keyword">FOR DELETE USING</span> (auth.uid() = user_id);
+
+<span class="comment">-- THEMES</span>
+<span class="keyword">DROP POLICY IF EXISTS</span> <span class="string">"Users can insert own themes"</span> <span class="keyword">ON</span> themes;
+<span class="keyword">CREATE POLICY</span> <span class="string">"Users can insert own themes"</span> <span class="keyword">ON</span> themes <span class="keyword">FOR INSERT WITH CHECK</span> (auth.uid() = user_id);
+
+<span class="keyword">DROP POLICY IF EXISTS</span> <span class="string">"Users can delete own themes"</span> <span class="keyword">ON</span> themes;
+<span class="keyword">CREATE POLICY</span> <span class="string">"Users can delete own themes"</span> <span class="keyword">ON</span> themes <span class="keyword">FOR DELETE USING</span> (auth.uid() = user_id);
+
+<span class="comment">-- SUBTHEMES</span>
+<span class="keyword">DROP POLICY IF EXISTS</span> <span class="string">"Users can insert own subthemes"</span> <span class="keyword">ON</span> subthemes;
+<span class="keyword">CREATE POLICY</span> <span class="string">"Users can insert own subthemes"</span> <span class="keyword">ON</span> subthemes <span class="keyword">FOR INSERT WITH CHECK</span> (auth.uid() = user_id);
+
+<span class="keyword">DROP POLICY IF EXISTS</span> <span class="string">"Users can delete own subthemes"</span> <span class="keyword">ON</span> subthemes;
+<span class="keyword">CREATE POLICY</span> <span class="string">"Users can delete own subthemes"</span> <span class="keyword">ON</span> subthemes <span class="keyword">FOR DELETE USING</span> (auth.uid() = user_id);
+            </div>
+        </div>
+        
+        <div class="step">
+            <h3>🌐 Passo 2: Abrir o Supabase Dashboard</h3>
+            <p>Clique no botão abaixo para abrir o dashboard do Supabase:</p>
+            <a href="https://app.supabase.com" target="_blank" class="open-btn">
+                🚀 Abrir Supabase Dashboard
+            </a>
+        </div>
+        
+        <div class="step">
+            <h3>⚡ Passo 3: Executar o SQL</h3>
+            <p><strong>No dashboard do Supabase:</strong></p>
+            <ol style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                <li>Selecione seu projeto</li>
+                <li>No menu lateral, clique em <strong>"SQL Editor"</strong></li>
+                <li>Cole o código SQL que você copiou no Passo 1</li>
+                <li>Clique no botão <strong>"RUN"</strong> (ou pressione Ctrl+Enter)</li>
+            </ol>
+        </div>
+        
+        <div class="success">
+            <strong>✅ Pronto!</strong> Após executar o SQL, recarregue seu aplicativo e tente criar uma nova tarefa. Agora ela será salva no banco de dados!
+        </div>
+    </div>
+    
+    <script>
+        function copiarSQL() {
+            const sqlElement = document.getElementById('sqlCode');
+            const text = sqlElement.innerText.replace('📋 Copiar SQL', '').trim();
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '✅ Copiado!';
+                btn.classList.add('copied');
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.classList.remove('copied');
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
