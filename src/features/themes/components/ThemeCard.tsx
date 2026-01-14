@@ -35,7 +35,8 @@ export const ThemeCard = ({ theme, completionDate, queuedSubthemesMap, onEdit, o
                 <div
                     className="absolute inset-0 opacity-20 pointer-events-none"
                     style={{
-                        background: `radial-gradient(circle at top left, ${themeColor}, transparent 70%)`
+                        background: `radial-gradient(circle at top left, var(--theme-color, ${themeColor}), transparent 70%)`,
+                        ['--theme-color' as any]: themeColor
                     }}
                 />
 
@@ -46,7 +47,10 @@ export const ThemeCard = ({ theme, completionDate, queuedSubthemesMap, onEdit, o
                             {/* Icon Box */}
                             <div
                                 className="w-16 h-16 rounded-2xl border border-white/10 flex items-center justify-center shrink-0 bg-gradient-to-br from-white/5 to-white/0 shadow-lg"
-                                style={{ boxShadow: `0 8px 32px -8px ${themeColor}40` }}
+                                style={{
+                                    boxShadow: `0 8px 32px -8px var(--theme-color-40, ${themeColor}40)`,
+                                    ['--theme-color-40' as any]: `${themeColor}40`
+                                }}
                             >
                                 {theme.imageUrl ? (
                                     <img

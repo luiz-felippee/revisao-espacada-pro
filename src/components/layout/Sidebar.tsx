@@ -35,7 +35,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
     const menuItems = [
         { id: 'dashboard', label: 'Painel', icon: LayoutDashboard },
-        { id: 'calendar', label: 'Calendário', icon: CalendarIcon },
+        { id: 'calendar', label: 'Agenda', icon: CalendarIcon },
         { id: 'summaries', label: 'Resumos', icon: FileText },
         { id: 'tasks', label: 'Tarefas', icon: CheckSquare },
         { id: 'goals', label: 'Metas', icon: Target },

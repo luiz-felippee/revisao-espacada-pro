@@ -56,10 +56,12 @@ export const UpcomingReviewsSidebar: React.FC<UpcomingReviewsSidebarProps> = ({
                                 <div
                                     key={`${item.id}-${item.number}-${idx}`}
                                     style={{
-                                        borderColor: isProjected ? undefined : `${themeColor}40`, // 25% opacity
+                                        borderColor: isProjected ? undefined : `var(--theme-color-40, ${themeColor}40)`,
                                         background: isProjected
                                             ? undefined
-                                            : `linear-gradient(to right, ${themeColor}08, transparent)` // 5% opacity from left
+                                            : `linear-gradient(to right, var(--theme-color-08, ${themeColor}08), transparent)`,
+                                        ['--theme-color-40' as any]: `${themeColor}40`,
+                                        ['--theme-color-08' as any]: `${themeColor}08`
                                     }}
                                     className={cn(
                                         "relative p-3 rounded-xl border transition-all group hover:scale-[1.02] overflow-hidden",

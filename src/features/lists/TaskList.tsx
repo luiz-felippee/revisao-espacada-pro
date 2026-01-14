@@ -10,10 +10,8 @@ import { parseLocalDate } from '../../utils/dateHelpers';
 import { AddTaskModal } from '../forms/AddTaskModal';
 import { TaskDetailsModal } from '../tasks/components/TaskDetailsModal';
 import type { Task } from '../../types';
-import * as ReactWindow from 'react-window';
+import { List } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
-
-const List = (ReactWindow as any).VariableSizeList || (ReactWindow as any).default?.VariableSizeList;
 
 export const TaskList = () => {
     const { tasks, toggleTask, deleteTask, startFocus, goals, toggleGoalItem } = useStudy();
@@ -111,12 +109,12 @@ export const TaskList = () => {
                         <AutoSizer>
                             {({ height, width }) => (
                                 <List
-                                    ref={listRef}
-                                    height={height}
-                                    width={width}
-                                    itemCount={sortedItems.length}
-                                    itemSize={(index: number) => (sortedItems[index].imageUrl ? 230 : 130) + 12} // Height + gap
-                                    itemData={{
+                                    listRef={listRef}
+                                    style={{ height, width }}
+                                    rowCount={sortedItems.length}
+                                    rowHeight={(index: number) => (sortedItems[index].imageUrl ? 230 : 130) + 12}
+                                    rowComponent={Row}
+                                    rowProps={{
                                         items: sortedItems,
                                         linkedItemId,
                                         isActive,
@@ -129,9 +127,7 @@ export const TaskList = () => {
                                         confirm,
                                         startAudio
                                     }}
-                                >
-                                    {Row}
-                                </List>
+                                />
                             )}
                         </AutoSizer>
                     </div>
@@ -158,7 +154,7 @@ export const TaskList = () => {
 };
 
 // Row Component for Virtualization
-const Row = ({ index, style, data }: any) => {
+const Row = ({ index, style, ariaAttributes, ...rowProps }: any) => {
     const {
         items,
         linkedItemId,
@@ -171,7 +167,7 @@ const Row = ({ index, style, data }: any) => {
         setEditingTask,
         setSelectedDetailedTask,
         startAudio
-    } = data;
+    } = rowProps;
 
     const item = items[index];
     const isLinked = linkedItemId === item.id;

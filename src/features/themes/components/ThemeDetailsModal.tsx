@@ -53,7 +53,7 @@ export const ThemeDetailsModal: React.FC<ThemeDetailsModalProps> = ({ isOpen, on
             text: 'text-blue-400',
             bg: 'bg-blue-500/10',
             border: 'border-blue-500/20',
-            gradient: `from-[${themeColor}] to-purple-600`
+            gradient: 'from-blue-600 to-purple-600' // Using safe default instead of template
         };
 
     const getNextReviewDate = (sub: Subtheme) => {
@@ -82,8 +82,10 @@ export const ThemeDetailsModal: React.FC<ThemeDetailsModalProps> = ({ isOpen, on
                                 "bg-gradient-to-br"
                             )}
                             style={{
-                                background: isCompleted ? undefined : `linear-gradient(to bottom right, ${themeColor}, #6366f1)`,
-                                borderColor: `${themeColor}50`
+                                background: isCompleted ? undefined : `linear-gradient(to bottom right, var(--theme-color, ${themeColor}), #6366f1)`,
+                                borderColor: isCompleted ? undefined : `var(--theme-color-50, ${themeColor}50)`,
+                                ['--theme-color' as any]: themeColor,
+                                ['--theme-color-50' as any]: `${themeColor}50`
                             }}
                         >
 
@@ -142,8 +144,8 @@ export const ThemeDetailsModal: React.FC<ThemeDetailsModalProps> = ({ isOpen, on
                                 )}
                                 style={{
                                     width: `${progress}%`,
-                                    background: isCompleted ? undefined : `linear-gradient(to right, ${themeColor}, #a855f7)`,
-                                    backgroundColor: isCompleted ? '#10b981' : undefined
+                                    background: isCompleted ? '#10b981' : `linear-gradient(to right, var(--theme-color, ${themeColor}), #a855f7)`,
+                                    ['--theme-color' as any]: themeColor
                                 }}
                             >
 

@@ -1,9 +1,10 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { LayoutDashboard, Calendar as CalendarIcon, Target, List, FileText } from 'lucide-react';
+import { LayoutDashboard, BookOpen, Target, List, FileText } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { MobileThemesModal } from '../../features/themes/components/MobileThemesModal';
 
 interface MobileBottomNavProps {
     // kept for compatibility if needed, but ignored
@@ -24,7 +25,7 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0, hasOverdueTas
 
     const menuItems = [
         { id: 'dashboard', icon: LayoutDashboard, label: 'Painel' },
-        { id: 'calendar', icon: CalendarIcon, label: 'Agenda' },
+        { id: 'themes', icon: BookOpen, label: 'Temas' },
         { id: 'summaries', icon: FileText, label: 'Resumos' },
         { id: 'mission-trigger', icon: Target, label: 'Missão', special: true },
         { id: 'tasks', icon: List, label: 'Tarefas' },
@@ -33,6 +34,7 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0, hasOverdueTas
 
     const [activeFeedback, setActiveFeedback] = React.useState<string | null>(null);
     const feedbackTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+    const [isThemesModalOpen, setIsThemesModalOpen] = React.useState(false);
 
     const showFeedback = (label: string) => {
         if (feedbackTimeoutRef.current) clearTimeout(feedbackTimeoutRef.current);
@@ -42,7 +44,7 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0, hasOverdueTas
         }, 3000);
     };
 
-    const leftItems = menuItems.filter(i => !i.special && ['dashboard', 'calendar', 'summaries'].includes(i.id));
+    const leftItems = menuItems.filter(i => !i.special && ['dashboard', 'themes', 'summaries'].includes(i.id));
     const rightItems = menuItems.filter(i => !i.special && ['tasks', 'goals'].includes(i.id));
     const specialItem = menuItems.find(i => i.special);
 
@@ -77,7 +79,12 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0, hasOverdueTas
                                 key={item.id}
                                 onClick={() => {
                                     showFeedback(item.label);
-                                    navigate(`/${item.id}`);
+                                    // Se for themes no mobile, abre modal ao invés de navegar
+                                    if (item.id === 'themes') {
+                                        setIsThemesModalOpen(true);
+                                    } else {
+                                        navigate(`/${item.id}`);
+                                    }
                                 }}
                                 className={cn(
                                     "relative flex flex-col items-center justify-center gap-1 flex-1 min-w-0 h-16 transition-all active:scale-90 touch-manipulation",
@@ -190,6 +197,12 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0, hasOverdueTas
                     })}
                 </div>
             </nav>
+
+            {/* Mobile Themes Modal */}
+            <MobileThemesModal
+                isOpen={isThemesModalOpen}
+                onClose={() => setIsThemesModalOpen(false)}
+            />
         </>
     );
 };
