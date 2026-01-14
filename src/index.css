@@ -156,6 +156,17 @@
     -webkit-tap-highlight-color: transparent;
   }
 
+  /* Garante que todos os botões tenham conteúdo centralizado */
+  button {
+    text-align: center;
+    justify-content: center;
+  }
+
+  button:not(.no-auto-center) {
+    display: inline-flex;
+    align-items: center;
+  }
+
   /* Focus visible improvements */
   *:focus-visible {
     @apply outline-none ring-2 ring-primary-500 ring-offset-2 ring-offset-slate-950;
