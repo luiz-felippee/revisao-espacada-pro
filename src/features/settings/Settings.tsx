@@ -10,6 +10,7 @@ import { BackupSection } from '../../components/settings/BackupSection';
 import { SyncHealthMonitor } from '../../components/SyncHealthMonitor';
 import { NotificationSettings } from './components/NotificationSettings';
 import { useOnboarding } from '../../hooks/useOnboarding';
+import { ThemeSettings } from './components/ThemeSettings';
 
 export const Settings = () => {
     const { user, profile, updateProfile } = useAuth();
@@ -203,6 +204,13 @@ export const Settings = () => {
                             Atualizar Timer
                         </button>
                     </div>
+                </Card>
+            </section>
+
+            {/* Theme Settings Section */}
+            <section className="space-y-4">
+                <Card className="bg-slate-900/50 border-slate-800">
+                    <ThemeSettings />
                 </Card>
             </section>
 
