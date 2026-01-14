@@ -52,13 +52,22 @@ export const Modal: React.FC<ModalProps> = ({
 
     return createPortal(
         <div
-            className={`fixed inset-0 z-[100] flex items-center justify-center p-2 sm:p-4 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200 ${wrapperClassName || ''}`}
-            style={{ touchAction: 'none' }}
+            className={`fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200 ${wrapperClassName || ''}`}
+            style={{
+                touchAction: 'none',
+                paddingTop: 'max(env(safe-area-inset-top, 0px), 0.5rem)', // Respeita safe area no topo
+                paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 0.5rem)', // Respeita safe area no fundo
+                paddingLeft: 'max(env(safe-area-inset-left, 0px), 0.5rem)',
+                paddingRight: 'max(env(safe-area-inset-right, 0px), 0.5rem)'
+            }}
             onClick={onClose}
             role="presentation"
         >
             <div
-                className={`relative w-full ${maxWidthClass} bg-slate-950/90 border border-slate-800 rounded-2xl sm:rounded-3xl shadow-2xl animate-in zoom-in-95 duration-200 flex flex-col max-h-[95vh] sm:max-h-[90vh] overflow-hidden ${className || ''}`}
+                className={`relative w-full ${maxWidthClass} bg-slate-950/90 border border-slate-800 rounded-2xl sm:rounded-3xl shadow-2xl animate-in zoom-in-95 duration-200 flex flex-col overflow-hidden ${className || ''}`}
+                style={{
+                    maxHeight: 'calc(95vh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))'
+                }}
                 onClick={e => e.stopPropagation()}
                 role="dialog"
                 aria-modal="true"
