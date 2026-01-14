@@ -2,18 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { usePomodoroContext } from '../../context/PomodoroContext';
 import { useStudy } from '../../context/StudyContext';
-import { User, Timer, Save, Trash2, ShieldAlert, RefreshCw, AlertCircle } from 'lucide-react';
+import { User, Timer, Save, Trash2, ShieldAlert, RefreshCw, AlertCircle, Compass } from 'lucide-react';
 import { Card } from '../../components/ui/Card';
 import { ConfirmationModal } from '../../components/ui/ConfirmationModal';
 import { ImageUpload } from '../../components/forms/ImageUpload';
 import { BackupSection } from '../../components/settings/BackupSection';
 import { SyncHealthMonitor } from '../../components/SyncHealthMonitor';
 import { NotificationSettings } from './components/NotificationSettings';
+import { useOnboarding } from '../../hooks/useOnboarding';
 
 export const Settings = () => {
     const { user, profile, updateProfile } = useAuth();
     const { settings, updateSettings } = usePomodoroContext();
     const { resetAccount, resetGamification, themes, tasks, goals, gamification: studyGamification, zenMode } = useStudy();
+    const onboarding = useOnboarding();
 
     // Local state for form inputs
     const [displayName, setDisplayName] = useState('');
@@ -208,6 +210,31 @@ export const Settings = () => {
             <section className="space-y-4">
                 <Card className="bg-slate-900/50 border-slate-800">
                     <NotificationSettings />
+                </Card>
+            </section>
+
+            {/* Tutorial/Onboarding Section */}
+            <section className="space-y-4">
+                <h2 className="text-lg font-bold text-slate-200 flex items-center gap-2">
+                    <Compass className="w-5 h-5 text-purple-400" />
+                    Tutorial Guiado
+                </h2>
+                <Card className="bg-slate-900/50 border-slate-800">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h3 className="font-bold text-slate-200">Rever Tour de Introdução</h3>
+                            <p className="text-sm text-slate-400 mt-1">
+                                Faça um tour guiado pelas principais funcionalidades do sistema.
+                            </p>
+                        </div>
+                        <button
+                            onClick={onboarding.resetOnboarding}
+                            className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2.5 rounded-lg font-bold text-sm transition-all flex items-center gap-2 shadow-lg shadow-purple-500/20"
+                        >
+                            <Compass className="w-4 h-4" />
+                            Iniciar Tutorial
+                        </button>
+                    </div>
                 </Card>
             </section>
 
