@@ -73,61 +73,48 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5 mix-blend-overlay pointer-events-none" />
                 {!zenMode && <div className="absolute top-0 left-0 w-full h-96 bg-blue-600/10 blur-[100px] pointer-events-none" />}
 
+
                 {/* App Brand */}
-                <div
-                    onClick={() => onTabChange('dashboard')}
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault();
-                            onTabChange('dashboard');
-                        }
-                    }}
-                    tabIndex={0}
-                    role="button"
-                    aria-label="Ir para Painel principal"
-                    className="flex items-center gap-4 px-6 py-6 cursor-pointer group select-none relative focus-visible:bg-white/5 outline-none"
-                >
-                    <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:scale-105 transition-transform duration-300 ring-1 ring-white/20">
-                        <span className="text-white font-black text-xl drop-shadow-md" aria-hidden="true">⚡</span>
-                        <div className="absolute inset-0 bg-white/20 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </div>
-                    <div>
-                        <h1 className="font-bold text-slate-100 leading-none text-lg tracking-tight group-hover:text-white transition-colors">
-                            Revisão
-                        </h1>
-                        <span className="text-xs font-bold text-blue-400 uppercase tracking-[0.2em] group-hover:text-blue-300 transition-colors">
-                            Espaçada PRO
-                        </span>
+                <div className="px-6 py-6">
+                    <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                            <span className="text-white font-black text-2xl">⚡</span>
+                        </div>
+                        <div>
+                            <h1 className="font-bold text-white leading-none text-lg">
+                                Revisão
+                            </h1>
+                            <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest">
+                                ESPAÇADA PRO
+                            </span>
+                        </div>
                     </div>
                 </div>
 
-                {/* User Profile Card - Simplified in Zen Mode */}
-                {!zenMode ? (
-                    <div className="px-4 mb-4">
-                        <div className="relative p-4 rounded-2xl bg-white/5 border border-white/5 shadow-xl backdrop-blur-md group overflow-hidden">
-                            <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-
-                            <div className="flex items-center justify-between relative z-10 mb-3">
+                {/* User Profile Card */}
+                {!zenMode && (
+                    <div className="px-4 mb-6">
+                        <div className="relative p-4 rounded-2xl bg-slate-900/60 border border-slate-800/50 backdrop-blur-sm">
+                            <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 bg-gradient-to-br from-slate-700 to-slate-800 rounded-full flex items-center justify-center ring-2 ring-white/10 shadow-inner">
-                                        <span className="text-white font-bold">{user?.name?.[0].toUpperCase()}</span>
+                                    <div className="w-11 h-11 bg-slate-700 rounded-full flex items-center justify-center ring-2 ring-slate-600/50">
+                                        <span className="text-white font-bold text-lg">{user?.name?.[0]?.toUpperCase() || 'U'}</span>
                                     </div>
-                                    <div className="flex flex-col">
-                                        <span className="text-sm font-bold text-white truncate max-w-[100px]">{user?.name}</span>
-                                        <span className="text-[10px] text-emerald-400 font-medium">Online</span>
+                                    <div>
+                                        <span className="text-sm font-semibold text-white block leading-tight">{user?.name || 'Usuário'}</span>
+                                        <span className="text-[11px] text-emerald-400 font-medium">Online</span>
                                     </div>
                                 </div>
-                                <button onClick={logout} className="p-2 text-slate-500 hover:text-red-400 hover:bg-white/5 rounded-lg transition-all" title="Sair" aria-label="Sair">
+                                <button
+                                    onClick={logout}
+                                    className="p-2 text-slate-500 hover:text-red-400 hover:bg-slate-800/50 rounded-lg transition-colors"
+                                    title="Sair"
+                                    aria-label="Sair"
+                                >
                                     <LogOut className="w-4 h-4" />
                                 </button>
                             </div>
                         </div>
-                    </div>
-                ) : (
-                    <div className="px-6 mb-4">
-                        <button onClick={logout} className="flex items-center gap-2 text-slate-600 hover:text-slate-400 transition-colors text-xs uppercase tracking-widest font-bold">
-                            <LogOut className="w-3 H-3" /> Sair
-                        </button>
                     </div>
                 )}
 
@@ -156,7 +143,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                         </button>
                     ))}
                 </nav>
-            </aside>
+            </aside >
         </>
     );
 };
