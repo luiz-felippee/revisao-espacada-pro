@@ -190,7 +190,7 @@ const Row = ({ index, style, data }: any) => {
     const lockReason = isFuture ? `Agendado para ${format(parseLocalDate(itemDate || todayStr), 'dd/MM')}` : "Complete a tarefa anterior primeiro";
 
     return (
-        <div style={style} className="px-1 pr-4">
+        <div style={style} className="px-2 pr-4 py-2">
             <div
                 style={{ height: item.imageUrl ? 230 : 130, '--hover-color': item.color || '#3b82f6' } as React.CSSProperties}
                 className={`border rounded-xl overflow-hidden transition-colors transition-shadow duration-300 group flex flex-col ${isBlocked
@@ -205,14 +205,14 @@ const Row = ({ index, style, data }: any) => {
                         <img src={item.imageUrl} alt={item.title} className="w-full h-full object-cover" />
                     </div>
                 )}
-                <div className="flex items-center gap-4 p-4 flex-1">
+                <div className="flex items-center gap-5 p-6 flex-1">
                     <button
                         onClick={() => {
                             return;
                         }}
                         aria-label={item.status === 'completed' ? `Tarefa ${item.title} concluída` : `Tarefa ${item.title} pendente`}
                         disabled={true}
-                        className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-colors shrink-0 ${isBlocked
+                        className={`w-7 h-7 rounded border-2 flex items-center justify-center transition-colors shrink-0 ${isBlocked
                             ? 'border-slate-600 bg-slate-800/50 cursor-not-allowed'
                             : isLocked
                                 ? 'border-rose-500/50 bg-rose-500/10 cursor-not-allowed'
@@ -238,9 +238,9 @@ const Row = ({ index, style, data }: any) => {
                     </button>
 
                     <div className="flex-1 min-w-0" onClick={() => !isStep && setSelectedDetailedTask(item as Task)}>
-                        <div className="flex items-center gap-2">
-                            {isStep && <Target className="w-3 h-3 text-slate-500" />}
-                            <p className={`font-medium truncate ${isBlocked
+                        <div className="flex items-center gap-3">
+                            {isStep && <Target className="w-4 h-4 text-slate-500" />}
+                            <p className={`text-base font-semibold truncate ${isBlocked
                                 ? 'text-slate-600'
                                 : item.status === 'completed'
                                     ? 'text-slate-500 line-through'
