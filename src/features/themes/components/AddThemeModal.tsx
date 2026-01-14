@@ -336,7 +336,7 @@ export const AddThemeModal: React.FC<AddThemeModalProps> = ({ isOpen, onClose, t
                                                         type="time"
                                                         value={notificationTime}
                                                         onChange={(e) => setNotificationTime(e.target.value)}
-                                                        className="w-full h-10 bg-slate-950/60 border border-white/5 rounded-lg text-xs px-3 focus:border-blue-500/50 outline-none transition-all text-white placeholder-slate-600"
+                                                        className="w-full max-w-[140px] h-10 bg-slate-950/60 border border-white/5 rounded-lg text-xs px-3 focus:border-blue-500/50 outline-none transition-all text-white placeholder-slate-600"
                                                     />
                                                 </div>
                                             </div>
