@@ -254,7 +254,7 @@ export const LoginPage = () => {
 
                             {/* Forgot Password Link - Only shown on login */}
                             {isLogin && (
-                                <div className="flex justify-end -mt-2">
+                                <div className="flex justify-center -mt-2">
                                     <button
                                         type="button"
                                         onClick={() => setShowForgotPassword(true)}
