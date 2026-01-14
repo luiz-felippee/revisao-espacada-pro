@@ -223,6 +223,8 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
                 <MobileHeader
                     time={time}
                     onOpenSidebar={() => modals.actions.setIsSidebarOpen(true)}
+                    onCloseSidebar={() => modals.actions.setIsSidebarOpen(false)}
+                    isSidebarOpen={modals.state.isSidebarOpen}
                 />
 
                 {/* Modals */}
