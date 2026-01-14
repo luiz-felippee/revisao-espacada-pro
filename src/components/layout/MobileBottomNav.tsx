@@ -11,9 +11,10 @@ interface MobileBottomNavProps {
     onTabChange?: (tab: string) => void;
     onOpenMission?: () => void;
     missionCount?: number;
+    hasOverdueTasks?: boolean;
 }
 
-export const MobileBottomNav = ({ onOpenMission, missionCount = 0 }: MobileBottomNavProps) => {
+export const MobileBottomNav = ({ onOpenMission, missionCount = 0, hasOverdueTasks = false }: MobileBottomNavProps) => {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -126,7 +127,12 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0 }: MobileBotto
                             <div className="w-14 h-14 xs:w-16 xs:h-16 rounded-full bg-gradient-to-br from-blue-500 via-indigo-600 to-blue-700 flex items-center justify-center shadow-[0_4px_25px_rgba(59,130,246,0.6)] border-4 border-slate-950 ring-2 ring-blue-400/20 group-hover:scale-110 transition-transform duration-300 relative">
                                 <specialItem.icon className="w-6 h-6 xs:w-7 xs:h-7 text-white drop-shadow-md" />
                                 {missionCount > 0 && (
-                                    <div className="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-black min-w-[18px] h-[18px] flex items-center justify-center rounded-full shadow-lg border-2 border-slate-950">
+                                    <div className={cn(
+                                        "absolute -top-1 -right-1 text-white text-[9px] font-black min-w-[18px] h-[18px] flex items-center justify-center rounded-full shadow-lg border-2 border-slate-950",
+                                        hasOverdueTasks
+                                            ? "bg-orange-500 animate-pulse shadow-orange-500/50"
+                                            : "bg-red-500"
+                                    )}>
                                         {missionCount}
                                     </div>
                                 )}

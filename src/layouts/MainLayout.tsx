@@ -76,6 +76,20 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
         return pendingTasks + pendingGoals + pendingReviews + pendingIntros;
     }, [todayEvents]);
 
+    const hasOverdueTasks = React.useMemo(() => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        // Verifica tarefas pending com data anterior a hoje
+        const overdueTasks = tasks.some(t => {
+            if (t.status !== 'pending') return false;
+            const taskDate = new Date(t.date + 'T00:00:00');
+            return taskDate < today;
+        });
+
+        return overdueTasks;
+    }, [tasks]);
+
     const projectCount = React.useMemo(() => {
         // Count goals that are linked to themes of category 'project'
         const themeProjectIds = themes.filter(t => t.category === 'project').map(t => t.id);
@@ -236,6 +250,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
                         onTabChange={onTabChange}
                         onOpenMission={() => modals.actions.setIsMissionModalOpen(true)}
                         missionCount={missionCount}
+                        hasOverdueTasks={hasOverdueTasks}
                     />
                 </div>
 
