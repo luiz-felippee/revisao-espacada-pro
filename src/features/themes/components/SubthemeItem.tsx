@@ -80,13 +80,21 @@ export const SubthemeItem = ({ sub, themeColor, projectedStart, onOpenNotes, unl
                         style={{ backgroundColor: status.color.replace('text-', ''), boxShadow: `0 0 8px currentColor` }}
                     />
 
-                    <span className={cn(
-                        "flex-1 text-sm font-medium transition-colors truncate",
-                        isExpanded ? "text-white" : "text-slate-400 group-hover:item:text-slate-200",
-                        sub.status === 'completed' && "line-through opacity-50 text-slate-600"
-                    )}>
-                        {sub.title}
-                    </span>
+                    <div className="flex-1 min-w-0 flex flex-col justify-center gap-0.5">
+                        <span className={cn(
+                            "text-sm font-medium transition-colors truncate",
+                            isExpanded ? "text-white" : "text-slate-400 group-hover:item:text-slate-200",
+                            sub.status === 'completed' && "line-through opacity-50 text-slate-600"
+                        )}>
+                            {sub.title}
+                        </span>
+                        {sub.durationMinutes && (
+                            <span className="text-[10px] text-slate-500 font-bold flex items-center gap-1">
+                                <span className="w-1 h-1 rounded-full bg-slate-600" />
+                                {sub.durationMinutes} min estimados
+                            </span>
+                        )}
+                    </div>
 
                     <div className="flex items-center gap-2">
                         {/* Summary History Button (New) */}
