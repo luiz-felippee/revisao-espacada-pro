@@ -10,10 +10,12 @@ interface UseNotificationWatcherProps {
 /**
  * Hook para gerenciar o polling e permissões de notificações.
  * Monitora todas as atividades (themes, tasks, goals) e envia notificações no horário agendado.
+ * Também envia notificações automáticas de revisões e tarefas pendentes.
  */
 export const useNotificationWatcher = ({ themes, tasks, goals }: UseNotificationWatcherProps) => {
-    const { notificationService } = useMemo(() => ({
-        notificationService: import('../services/NotificationService').then(m => m.NotificationService)
+    const { notificationService, reviewNotificationService } = useMemo(() => ({
+        notificationService: import('../services/NotificationService').then(m => m.NotificationService),
+        reviewNotificationService: import('../services/ReviewNotificationService').then(m => m.ReviewNotificationService)
     }), []);
 
     useEffect(() => {
@@ -28,8 +30,14 @@ export const useNotificationWatcher = ({ themes, tasks, goals }: UseNotification
 
         const interval = setInterval(async () => {
             const Service = await notificationService;
+            const ReviewService = await reviewNotificationService;
             const today = new Date().toISOString().split('T')[0];
 
+            // ========== NOTIFICAÇÕES AUTOMÁTICAS DE REVISÕES ==========
+            // Envia notificações em horários específicos (9h, 14h, 19h) se houver revisões pendentes
+            ReviewService.notifyPendingReviews(themes, tasks);
+
+            // ========== NOTIFICAÇÕES BASEADAS EM HORÁRIOS CONFIGURADOS ==========
             // Coletar todas as atividades que precisam ser monitoradas
             const itemsToCheck: any[] = [];
 
@@ -108,5 +116,5 @@ export const useNotificationWatcher = ({ themes, tasks, goals }: UseNotification
         }, 60000); // Verifica a cada minuto
 
         return () => clearInterval(interval);
-    }, [themes, tasks, goals, notificationService]);
+    }, [themes, tasks, goals, notificationService, reviewNotificationService]);
 };

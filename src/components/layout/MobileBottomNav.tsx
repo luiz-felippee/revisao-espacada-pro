@@ -1,7 +1,7 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { LayoutDashboard, BookOpen, Target, List, FileText } from 'lucide-react';
+import { LayoutDashboard, BookOpen, Target, List, Briefcase } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { MobileThemesModal } from '../../features/themes/components/MobileThemesModal';
@@ -26,7 +26,7 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0, hasOverdueTas
     const menuItems = [
         { id: 'dashboard', icon: LayoutDashboard, label: 'Painel' },
         { id: 'themes', icon: BookOpen, label: 'Temas' },
-        { id: 'summaries', icon: FileText, label: 'Resumos' },
+        { id: 'projects', icon: Briefcase, label: 'Projetos' },
         { id: 'mission-trigger', icon: Target, label: 'Missão', special: true },
         { id: 'tasks', icon: List, label: 'Tarefas' },
         { id: 'goals', icon: Target, label: 'Metas' },
@@ -44,7 +44,7 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0, hasOverdueTas
         }, 3000);
     };
 
-    const leftItems = menuItems.filter(i => !i.special && ['dashboard', 'themes', 'summaries'].includes(i.id));
+    const leftItems = menuItems.filter(i => !i.special && ['dashboard', 'themes', 'projects'].includes(i.id));
     const rightItems = menuItems.filter(i => !i.special && ['tasks', 'goals'].includes(i.id));
     const specialItem = menuItems.find(i => i.special);
 

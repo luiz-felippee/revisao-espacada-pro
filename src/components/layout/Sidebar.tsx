@@ -9,6 +9,7 @@ import {
     BarChart2,
     Settings,
     FileText,
+    Briefcase,
     X,
 } from 'lucide-react';
 import { cn } from '../../lib/utils'; // Adjust path based on location
@@ -43,6 +44,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         { id: 'summaries', label: 'Resumos', icon: FileText },
         { id: 'tasks', label: 'Tarefas', icon: CheckSquare },
         { id: 'goals', label: 'Metas', icon: Target },
+        { id: 'projects', label: 'Projetos', icon: Briefcase },
         { id: 'themes', label: 'Temas', icon: BookOpen },
         { id: 'analytics', label: 'Estatísticas', icon: BarChart2 },
         { id: 'settings', label: 'Configurações', icon: Settings },

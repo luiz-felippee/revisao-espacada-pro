@@ -8,6 +8,7 @@ import { ConfirmationModal } from '../../components/ui/ConfirmationModal';
 import { ImageUpload } from '../../components/forms/ImageUpload';
 import { BackupSection } from '../../components/settings/BackupSection';
 import { SyncHealthMonitor } from '../../components/SyncHealthMonitor';
+import { NotificationSettings } from './components/NotificationSettings';
 
 export const Settings = () => {
     const { user, profile, updateProfile } = useAuth();
@@ -200,6 +201,13 @@ export const Settings = () => {
                             Atualizar Timer
                         </button>
                     </div>
+                </Card>
+            </section>
+
+            {/* Notification Settings Section */}
+            <section className="space-y-4">
+                <Card className="bg-slate-900/50 border-slate-800">
+                    <NotificationSettings />
                 </Card>
             </section>
 
