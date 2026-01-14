@@ -18,6 +18,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useCalendarEvents } from '../features/calendar/hooks/useCalendarEvents';
 import { useProjectContext } from '../context/ProjectProvider';
 import { MobileBottomNav } from '../components/layout/MobileBottomNav';
+import { MobileHeader } from '../components/layout/MobileHeader';
 import { InstallPWAHint } from '../components/InstallPWAHint';
 import { GlobalActionBar } from '../components/layout/GlobalActionBar';
 import { PomodoroWidget } from '../features/pomodoro/PomodoroWidget';
@@ -218,6 +219,12 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
                     />
                 </div>
 
+                {/* Mobile Header - Visible only on Mobile */}
+                <MobileHeader
+                    time={time}
+                    onOpenSidebar={() => modals.actions.setIsSidebarOpen(true)}
+                />
+
                 {/* Modals */}
                 <LayoutModals
                     modals={modals}
@@ -233,7 +240,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
                     ref={mainRef}
                     className={cn(
                         "flex-1 overflow-y-scroll custom-scrollbar overscroll-none px-4 md:px-8 relative",
-                        isPWA && isIOS ? "pt-20 pb-32" : "pt-4 md:pt-18 pb-24 md:pb-8", // No header padding on mobile, full header on desktop
+                        isPWA && isIOS ? "pt-20 pb-32" : "pt-16 md:pt-18 pb-24 md:pb-8", // Mobile header (56px) + spacing, full header on desktop
                         safeAreaBottomClass // Ensure content doesn't get cut by home bar
                     )}
                 >
