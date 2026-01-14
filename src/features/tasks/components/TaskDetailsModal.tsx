@@ -49,36 +49,37 @@ export const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({ isOpen, onCl
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} title="" maxWidth="2xl">
-            <div className="relative overflow-hidden p-6 sm:p-8">
+            <div className="relative flex flex-col max-h-[85vh]">
                 {/* Background Decoration */}
                 <div className="absolute top-[-10%] right-[-10%] w-[300px] h-[300px] bg-blue-600/5 rounded-full blur-[100px] pointer-events-none" />
                 <div className="absolute bottom-[-10%] left-[-10%] w-[250px] h-[250px] bg-indigo-600/5 rounded-full blur-[80px] pointer-events-none" />
 
-                <div className="relative z-10 flex flex-col gap-8">
+                {/* Scrollable Content */}
+                <div className="relative z-10 overflow-y-auto px-4 sm:px-6 py-6 space-y-6">
                     {/* Header: Icon, Title, Category */}
-                    <div className="flex items-start gap-6">
+                    <div className="flex items-start gap-4">
                         <div className={cn(
-                            "w-20 h-20 rounded-3xl flex items-center justify-center shrink-0 shadow-2xl border-2 relative overflow-hidden",
+                            "w-16 h-16 sm:w-20 sm:h-20 rounded-3xl flex items-center justify-center shrink-0 shadow-2xl border-2 relative overflow-hidden",
                             "bg-gradient-to-br",
                             isCompleted ? "from-emerald-600 to-emerald-500 border-emerald-400/50" : "from-blue-600 to-indigo-600 border-blue-400/50"
                         )}>
 
-                            <IconRenderer icon={task.icon} size={40} className="text-white drop-shadow-lg relative z-10" fallback={<CheckSquare className="w-10 h-10" />} />
+                            <IconRenderer icon={task.icon} size={32} className="text-white drop-shadow-lg relative z-10 sm:w-10 sm:h-10" fallback={<CheckSquare className="w-8 h-8 sm:w-10 sm:h-10" />} />
                         </div>
 
                         <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 mb-2">
+                            <div className="flex flex-wrap items-center gap-2 mb-2">
                                 <span className={cn(
-                                    "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border",
+                                    "px-2 sm:px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-widest border",
                                     colorScheme.bg, colorScheme.text, colorScheme.border
                                 )}>
                                     TAREFA
                                 </span>
-                                <span className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-slate-800 text-slate-400 border border-slate-800/50">
+                                <span className="px-2 sm:px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-widest bg-slate-800 text-slate-400 border border-slate-800/50">
                                     {task.type === 'day' ? 'ÚNICA' : isPeriod ? 'PERÍODO' : 'RECORRENTE'}
                                 </span>
                                 <span className={cn(
-                                    "px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border",
+                                    "px-2 sm:px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-widest border",
                                     task.priority === 'high' ? 'bg-red-500/10 text-red-400 border-red-500/20' :
                                         task.priority === 'medium' ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' :
                                             'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
@@ -86,7 +87,7 @@ export const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({ isOpen, onCl
                                     {task.priority === 'high' ? 'ALTA' : task.priority === 'medium' ? 'MÉDIA' : 'BAIXA'}
                                 </span>
                             </div>
-                            <h2 className="text-3xl font-black text-white leading-tight break-words">
+                            <h2 className="text-xl sm:text-3xl font-black text-white leading-tight break-words">
                                 {task.title}
                             </h2>
                         </div>
@@ -94,19 +95,19 @@ export const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({ isOpen, onCl
 
                     {/* Progress Bar Display (for Period/Recurring) */}
                     {(isPeriod || isRecurring) && task.progress && (
-                        <div className="bg-slate-900/20 rounded-3xl p-6 shadow-inner">
+                        <div className="bg-slate-900/20 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-inner">
                             <div className="flex justify-between items-end mb-4">
                                 <div className="space-y-1">
                                     <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center gap-2">
-                                        <Trophy className="w-3 h-3" /> Progresso da Missão
+                                        <Trophy className="w-3 h-3" /> Progresso
                                     </span>
-                                    <div className="text-4xl font-black text-white">
+                                    <div className="text-3xl sm:text-4xl font-black text-white">
                                         {task.progress.current}/{task.progress.total}
                                     </div>
                                 </div>
                                 <div className="text-right space-y-1">
-                                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest flex items-center justify-end gap-2">
-                                        Status Atual
+                                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                                        Status
                                     </span>
                                     <div className={cn(
                                         "text-sm font-bold",
@@ -132,50 +133,50 @@ export const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({ isOpen, onCl
                     )}
 
                     {/* Main Stats */}
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                        <div className="bg-slate-900/20 rounded-2xl p-4">
-                            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-2">Início</span>
-                            <div className="text-white font-bold flex items-center gap-2 text-sm">
-                                <Calendar className="w-4 h-4 text-blue-400" />
+                    <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                        <div className="bg-slate-900/20 rounded-xl sm:rounded-2xl p-3 sm:p-4">
+                            <span className="text-[9px] sm:text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-2">Início</span>
+                            <div className="text-white font-bold flex items-center gap-2 text-xs sm:text-sm">
+                                <Calendar className="w-3 h-3 sm:w-4 sm:h-4 text-blue-400" />
                                 {task.startDate || task.date ? format(new Date((task.startDate || task.date) + 'T00:00:00'), 'dd/MM/yy') : '--/--/--'}
                             </div>
                         </div>
-                        <div className="bg-slate-900/20 rounded-2xl p-4">
-                            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-2">Prazo</span>
-                            <div className="text-white font-bold flex items-center gap-2 text-sm">
-                                <Calendar className="w-4 h-4 text-rose-400" />
+                        <div className="bg-slate-900/20 rounded-xl sm:rounded-2xl p-3 sm:p-4">
+                            <span className="text-[9px] sm:text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-2">Prazo</span>
+                            <div className="text-white font-bold flex items-center gap-2 text-xs sm:text-sm">
+                                <Calendar className="w-3 h-3 sm:w-4 sm:h-4 text-rose-400" />
                                 {task.endDate || task.date ? format(new Date((task.endDate || task.date) + 'T00:00:00'), 'dd/MM/yy') : '--/--/--'}
                             </div>
                         </div>
-                        <div className="bg-slate-900/20 rounded-2xl p-4">
-                            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-2">Duração</span>
-                            <div className="text-white font-bold flex items-center gap-2 text-sm">
-                                <Clock className="w-4 h-4 text-amber-400" />
+                        <div className="bg-slate-900/20 rounded-xl sm:rounded-2xl p-3 sm:p-4">
+                            <span className="text-[9px] sm:text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-2">Duração</span>
+                            <div className="text-white font-bold flex items-center gap-2 text-xs sm:text-sm">
+                                <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-amber-400" />
                                 {task.durationMinutes || 25} min
                             </div>
                         </div>
-                        <div className="bg-slate-900/20 rounded-2xl p-4">
-                            <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-2">Total Gasto</span>
-                            <div className="text-white font-bold flex items-center gap-2 text-sm">
-                                <Zap className="w-4 h-4 text-emerald-400" />
+                        <div className="bg-slate-900/20 rounded-xl sm:rounded-2xl p-3 sm:p-4">
+                            <span className="text-[9px] sm:text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-2">Total Gasto</span>
+                            <div className="text-white font-bold flex items-center gap-2 text-xs sm:text-sm">
+                                <Zap className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-400" />
                                 {Math.floor((task.timeSpent || 0) / 60)}h {(task.timeSpent || 0) % 60}m
                             </div>
                         </div>
                     </div>
 
                     {/* Description or Current Summary Note */}
-                    <div className="bg-slate-900/20 rounded-3xl p-6 space-y-4">
-                        <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2 px-1">
+                    <div className="bg-slate-900/20 rounded-2xl sm:rounded-3xl p-4 sm:p-6 space-y-3">
+                        <h3 className="text-xs font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
                             <FileText className="w-4 h-4" /> Notas da Tarefa
                         </h3>
-                        <div className="text-slate-300 text-sm leading-relaxed italic bg-slate-950/50 p-4 rounded-xl border border-slate-800/50">
+                        <div className="text-slate-300 text-sm leading-relaxed italic bg-slate-950/50 p-3 sm:p-4 rounded-xl border border-slate-800/50">
                             {task.summary || "Nenhuma nota específica para esta tarefa ainda."}
                         </div>
                     </div>
 
                     {/* Summary Timeline - Box de Resumo/Histórico */}
-                    <div className="bg-slate-900/40 rounded-[2rem] overflow-hidden">
-                        <div className="p-6 sm:p-8 bg-slate-950/40">
+                    <div className="bg-slate-900/40 rounded-2xl sm:rounded-[2rem] overflow-hidden">
+                        <div className="p-4 sm:p-6 bg-slate-950/40">
                             <SummaryTimeline
                                 summaries={task.summaries || []}
                                 title="Histórico da Tarefa"
@@ -184,21 +185,23 @@ export const TaskDetailsModal: React.FC<TaskDetailsModalProps> = ({ isOpen, onCl
                             />
                         </div>
                     </div>
+                </div>
 
-                    {/* Bottom Action */}
-                    <div className="flex gap-4">
+                {/* Fixed Bottom Actions */}
+                <div className="relative z-10 border-t border-slate-800 bg-slate-950/50 backdrop-blur-sm px-4 sm:px-6 py-4 shrink-0">
+                    <div className="flex gap-3">
                         <button
                             onClick={onClose}
-                            className="flex-1 h-14 bg-white/5 hover:bg-white/10 rounded-2xl font-black text-white uppercase tracking-widest transition-all shadow-xl active:scale-[0.98]"
+                            className="flex-1 h-12 sm:h-14 bg-white/5 hover:bg-white/10 rounded-xl sm:rounded-2xl font-bold text-white uppercase tracking-wider text-sm transition-all shadow-xl active:scale-[0.98]"
                         >
                             Fechar
                         </button>
                         {!isCompleted && (
                             <button
                                 onClick={handleStartFocus}
-                                className="flex-[2] h-14 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 border border-blue-400/20 rounded-2xl font-black text-white uppercase tracking-widest transition-all shadow-xl shadow-blue-500/20 flex items-center justify-center gap-3 active:scale-[0.98]"
+                                className="flex-[2] h-12 sm:h-14 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 border border-blue-400/20 rounded-xl sm:rounded-2xl font-bold text-white uppercase tracking-wider text-sm transition-all shadow-xl shadow-blue-500/20 flex items-center justify-center gap-2 active:scale-[0.98]"
                             >
-                                <PlayCircle className="w-6 h-6" />
+                                <PlayCircle className="w-5 h-5 sm:w-6 sm:h-6" />
                                 Iniciar Foco
                             </button>
                         )}
