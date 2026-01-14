@@ -242,7 +242,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
                     ref={mainRef}
                     className={cn(
                         "flex-1 overflow-y-scroll custom-scrollbar overscroll-none px-4 md:px-8 relative",
-                        isPWA && isIOS ? "pt-20 pb-32" : "pt-16 md:pt-18 pb-24 md:pb-8", // Mobile header (56px) + spacing, full header on desktop
+                        isPWA && isIOS ? "pt-24 pb-32" : "pt-24 md:pt-18 pb-24 md:pb-8", // Mobile header (56px) + extra safety margin, full header on desktop
                         safeAreaBottomClass // Ensure content doesn't get cut by home bar
                     )}
                 >
