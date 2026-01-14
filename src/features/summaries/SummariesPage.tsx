@@ -200,24 +200,23 @@ export const SummariesPage: React.FC = () => {
                     </div>
 
                     {/* Filter Bar & Search */}
-                    <div className="flex flex-col md:flex-row gap-4 items-center">
-                        <div className="flex flex-wrap gap-2 flex-1">
+                    <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center">
+                        <div className="flex flex-wrap gap-2 flex-1 w-full">
                             {filterButtons.map(btn => (
                                 <button
                                     key={btn.type}
                                     onClick={() => setFilterType(filterType === btn.type ? 'all' : btn.type)}
                                     className={`
-                                        px-4 py-2 rounded-full text-xs font-bold transition-all
+                                        px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-[10px] sm:text-xs font-bold transition-all whitespace-nowrap
                                         ${filterType === btn.type
                                             ? 'bg-white text-slate-900 shadow-lg'
-                                            : 'bg-slate-800/50 text-slate-400 border border-white/5 hover:bg-slate-700/50'}
-                                    `}
+                                            : 'bg-slate-800/50 text-slate-400 border border-white/5 hover:bg-slate-700/50'}`}
                                 >
                                     {btn.label}
                                 </button>
                             ))}
                         </div>
-                        <div className="relative w-full md:w-96">
+                        <div className="relative w-full lg:w-96">
                             <input
                                 type="text"
                                 placeholder="Buscar em resumos..."

@@ -41,22 +41,13 @@ export const MobileThemesModal: React.FC<MobileThemesModalProps> = ({ isOpen, on
                 <div className="h-full flex flex-col bg-slate-950">
                     {/* Header - Fixed */}
                     <div className="flex-none bg-gradient-to-b from-slate-900 to-slate-950 border-b border-white/10 p-6 pb-5">
-                        <div className="flex items-center justify-between mb-4">
-                            <div>
-                                <h2 className="text-3xl font-black text-white mb-1 tracking-tight">
-                                    Meus Temas
-                                </h2>
-                                <p className="text-slate-400 text-sm">
-                                    Gerencie suas trilhas de conhecimento
-                                </p>
-                            </div>
-                            <button
-                                onClick={onClose}
-                                className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all"
-                                aria-label="Fechar"
-                            >
-                                <X className="w-5 h-5" />
-                            </button>
+                        <div className="mb-4">
+                            <h2 className="text-3xl font-black text-white mb-1 tracking-tight">
+                                Meus Temas
+                            </h2>
+                            <p className="text-slate-400 text-sm">
+                                Gerencie suas trilhas de conhecimento
+                            </p>
                         </div>
 
                         {/* Add Theme Button */}

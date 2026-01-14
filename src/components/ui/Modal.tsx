@@ -64,7 +64,7 @@ export const Modal: React.FC<ModalProps> = ({
             role="presentation"
         >
             <div
-                className={`relative w-full ${maxWidthClass} bg-slate-950/90 border border-slate-800 rounded-2xl sm:rounded-3xl shadow-2xl animate-in zoom-in-95 duration-200 flex flex-col overflow-hidden ${className || ''}`}
+                className={`relative w-full mx-1 sm:mx-auto ${maxWidthClass} bg-slate-950/90 border border-slate-800 rounded-2xl sm:rounded-3xl shadow-2xl animate-in zoom-in-95 duration-200 flex flex-col overflow-hidden ${className || ''}`}
                 style={{
                     maxHeight: 'calc(95vh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))'
                 }}

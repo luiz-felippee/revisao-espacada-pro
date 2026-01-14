@@ -221,7 +221,7 @@ export const AddThemeModal: React.FC<AddThemeModalProps> = ({ isOpen, onClose, t
     };
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} title="" maxWidth="xl">
+        <Modal isOpen={isOpen} onClose={onClose} title="" maxWidth="2xl">
             <div className="relative overflow-hidden p-5 sm:p-6">
                 {/* Subtle Background Ambiance */}
                 <div className="absolute top-[-20%] right-[-20%] w-[400px] h-[400px] bg-blue-600/5 rounded-full blur-[100px] pointer-events-none" />
@@ -371,7 +371,7 @@ export const AddThemeModal: React.FC<AddThemeModalProps> = ({ isOpen, onClose, t
                                             </button>
                                         </div>
 
-                                        <div className="space-y-2 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar">
+                                        <div className="space-y-2 max-h-[400px] md:max-h-[250px] overflow-y-auto pr-2 custom-scrollbar">
                                             {(() => {
                                                 let itemCounter = 0;
                                                 return subthemes.map((st, index) => {
@@ -503,7 +503,9 @@ export const AddThemeModal: React.FC<AddThemeModalProps> = ({ isOpen, onClose, t
                                         </Button>
                                     </div>
 
-                                    <div className="grid grid-cols-2 gap-4 pt-2">
+
+                                    <div className="space-y-4 pt-2">
+                                        {/* Ícone - Primeira linha */}
                                         <div className="space-y-1">
                                             <label className="text-[10px] uppercase font-bold text-slate-500 pl-1">Ícone</label>
                                             <SymbolPicker
@@ -512,6 +514,8 @@ export const AddThemeModal: React.FC<AddThemeModalProps> = ({ isOpen, onClose, t
                                                 placeholder="📚"
                                             />
                                         </div>
+
+                                        {/* Cor - Segunda linha, largura total */}
                                         <div className="space-y-1">
                                             <label className="text-[10px] uppercase font-bold text-slate-500 pl-1">Cor</label>
                                             <ColorPicker

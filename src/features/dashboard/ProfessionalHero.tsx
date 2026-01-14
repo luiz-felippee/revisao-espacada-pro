@@ -59,7 +59,7 @@ export const ProfessionalHero: React.FC<ProfessionalHeroProps> = ({ onClick }) =
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 pointer-events-none transition-opacity duration-1000" style={{ opacity: isHovered ? 0.3 : 0.1 }} />
             <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2 pointer-events-none transition-opacity duration-1000" style={{ opacity: isHovered ? 0.3 : 0.1 }} />
 
-            <div className="relative z-10 p-5 md:p-10 flex flex-col md:flex-row items-center gap-6 md:gap-16">
+            <div className="relative z-10 pl-8 pr-5 pt-7 pb-5 md:p-10 flex flex-col md:flex-row items-center gap-6 md:gap-16">
 
                 {/* 1. Identity Section */}
                 <div className="flex-1 flex items-center gap-5 md:gap-8">
@@ -95,11 +95,11 @@ export const ProfessionalHero: React.FC<ProfessionalHeroProps> = ({ onClick }) =
                             ) : (
                                 <Trophy className="w-12 h-12 text-blue-400 filter drop-shadow-[0_0_20px_rgba(59,130,246,0.6)]" />
                             )}
+                        </div>
 
-                            {/* Level Badge Hook */}
-                            <div className="absolute top-1 right-1 w-8 h-8 bg-blue-600 rounded-xl flex items-center justify-center text-[11px] font-black text-white shadow-xl border border-white/20 z-30">
-                                {level.level}
-                            </div>
+                        {/* Level Badge - responsive positioning */}
+                        <div className="absolute -top-4 -left-4 md:-top-6 md:-left-6 w-8 h-8 md:w-10 md:h-10 bg-blue-600 rounded-full flex items-center justify-center text-[10px] md:text-sm font-black text-white shadow-xl border-2 border-white/20 z-30">
+                            {level.level}
                         </div>
 
                         {/* XP Notification Dot */}

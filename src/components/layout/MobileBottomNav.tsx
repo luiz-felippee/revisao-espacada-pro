@@ -87,10 +87,16 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0, hasOverdueTas
                                     }
                                 }}
                                 className={cn(
-                                    "relative flex flex-col items-center justify-center gap-1 flex-1 min-w-0 h-16 transition-all active:scale-90 touch-manipulation",
+                                    "relative group flex flex-col items-center justify-center gap-1 flex-1 min-w-0 h-16 transition-all active:scale-90 touch-manipulation",
                                     isActive ? "text-blue-400" : "text-slate-500 hover:text-slate-300"
                                 )}
                             >
+                                {/* Tooltip acima */}
+                                <div className="absolute bottom-full mb-2 px-3 py-1.5 bg-slate-800 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap pointer-events-none">
+                                    {item.label}
+                                    <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800" />
+                                </div>
+
                                 {isActive && (
                                     <motion.div
                                         layoutId="nav-bg"
@@ -131,6 +137,12 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0, hasOverdueTas
                             className="absolute left-1/2 -translate-x-1/2 -top-6 flex flex-col items-center justify-center active:scale-95 transition-all group touch-manipulation"
                             style={{ zIndex: 10 }}
                         >
+                            {/* Tooltip acima */}
+                            <div className="absolute bottom-full mb-2 px-3 py-1.5 bg-slate-800 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap pointer-events-none">
+                                Missão de Hoje
+                                <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800" />
+                            </div>
+
                             <div className="w-14 h-14 xs:w-16 xs:h-16 rounded-full bg-gradient-to-br from-blue-500 via-indigo-600 to-blue-700 flex items-center justify-center shadow-[0_4px_25px_rgba(59,130,246,0.6)] border-4 border-slate-950 ring-2 ring-blue-400/20 group-hover:scale-110 transition-transform duration-300 relative">
                                 <specialItem.icon className="w-6 h-6 xs:w-7 xs:h-7 text-white drop-shadow-md" />
                                 {missionCount > 0 && (
@@ -164,10 +176,16 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0, hasOverdueTas
                                     navigate(`/${item.id}`);
                                 }}
                                 className={cn(
-                                    "relative flex flex-col items-center justify-center gap-1 flex-1 min-w-0 h-16 transition-all active:scale-90 touch-manipulation",
+                                    "relative group flex flex-col items-center justify-center gap-1 flex-1 min-w-0 h-16 transition-all active:scale-90 touch-manipulation",
                                     isActive ? "text-blue-400" : "text-slate-500 hover:text-slate-300"
                                 )}
                             >
+                                {/* Tooltip acima */}
+                                <div className="absolute bottom-full mb-2 px-3 py-1.5 bg-slate-800 text-white text-xs rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 whitespace-nowrap pointer-events-none">
+                                    {item.label}
+                                    <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-800" />
+                                </div>
+
                                 {isActive && (
                                     <motion.div
                                         layoutId="nav-bg"

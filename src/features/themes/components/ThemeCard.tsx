@@ -67,15 +67,15 @@ export const ThemeCard = ({ theme, completionDate, queuedSubthemesMap, onEdit, o
 
                             {/* Title & Badge */}
                             <div className="flex-1 min-w-0">
-                                <h3 className="text-2xl font-bold text-white tracking-tight leading-tight mb-2 drop-shadow-sm truncate">
+                                <h3 className="text-lg sm:text-2xl font-bold text-white tracking-tight leading-tight mb-2 drop-shadow-sm truncate">
                                     {theme.title}
                                 </h3>
-                                <div className="flex items-center gap-2 flex-wrap">
-                                    <span className="inline-flex items-center px-3 py-1 rounded-full bg-black/40 border border-white/5 text-[10px] font-bold text-slate-400 uppercase tracking-widest backdrop-blur-sm">
+                                <div className="grid grid-cols-2 sm:flex sm:items-center gap-1.5 sm:gap-2 sm:flex-wrap">
+                                    <span className="inline-flex items-center justify-center px-2 sm:px-3 py-1 rounded-full bg-black/40 border border-white/5 text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest backdrop-blur-sm whitespace-nowrap">
                                         {totalSubs} {totalSubs === 1 ? 'Módulo' : 'Módulos'}
                                     </span>
                                     {/* Category Badge */}
-                                    <span className={`inline-flex items-center px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wider border ${theme.category === 'project'
+                                    <span className={`inline-flex items-center justify-center px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wider border whitespace-nowrap ${theme.category === 'project'
                                         ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
                                         : 'bg-blue-500/10 text-blue-400 border-blue-500/20'
                                         }`}>
@@ -83,13 +83,13 @@ export const ThemeCard = ({ theme, completionDate, queuedSubthemesMap, onEdit, o
                                     </span>
                                     {/* Start Date */}
                                     {theme.startDate && (
-                                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[9px] font-bold bg-slate-800/60 text-slate-300 border border-slate-600/40">
+                                        <span className="inline-flex items-center justify-center gap-1 px-2 py-0.5 rounded-md text-[9px] font-bold bg-slate-800/60 text-slate-300 border border-slate-600/40 whitespace-nowrap">
                                             Início: {new Date(theme.startDate).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}
                                         </span>
                                     )}
                                     {/* Deadline */}
                                     {theme.deadline && (
-                                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[9px] font-bold bg-slate-800/60 text-slate-300 border border-slate-600/40">
+                                        <span className="inline-flex items-center justify-center gap-1 px-2 py-0.5 rounded-md text-[9px] font-bold bg-slate-800/60 text-slate-300 border border-slate-600/40 whitespace-nowrap">
                                             Fim: {new Date(theme.deadline).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })}
                                         </span>
                                     )}
