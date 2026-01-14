@@ -59,11 +59,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 aria-label="Menu Lateral"
                 className={cn(
                     "flex flex-col w-72 bg-slate-950/80 backdrop-blur-2xl border-r border-white/5 overflow-hidden transition-all duration-500",
-                    // Mobile (<md): always hidden
-                    "hidden",
-                    // Tablet (md-lg): fixed overlay, conditional
-                    isSidebarOpen ? "md:!flex md:fixed md:inset-y-0 md:left-0 md:z-50" : "md:hidden",
-                    // Desktop (lg+): always visible, relative
+                    // Mobile (<md): fixed overlay when open, hidden when closed
+                    isSidebarOpen ? "flex fixed inset-y-0 left-0 z-50" : "hidden",
+                    // Desktop (lg+): always visible, relative (overrides mobile logic)
                     "lg:!flex lg:relative lg:z-20",
                     zenMode && "opacity-30 hover:opacity-100 grayscale"
                 )}
