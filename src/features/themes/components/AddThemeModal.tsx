@@ -5,7 +5,7 @@ import { Modal } from '../../../components/ui/Modal';
 import { Input } from '../../../components/ui/Input';
 import { Button } from '../../../components/ui/Button';
 import { useStudy } from '../../../context/StudyContext';
-import { Plus, Trash2, ArrowDownUp } from 'lucide-react';
+import { Plus, Trash2, ArrowDownUp, ChevronDown } from 'lucide-react';
 import { ImageUpload } from '../../../components/forms/ImageUpload';
 import { ColorPicker } from '../../../components/forms/ColorPicker';
 import { PrioritySelector } from '../../../components/forms/PrioritySelector';
@@ -75,6 +75,7 @@ export const AddThemeModal: React.FC<AddThemeModalProps> = ({ isOpen, onClose, t
 
     const [isAdvancedMode, setIsAdvancedMode] = useState(false);
     const [errors, setErrors] = useState<Record<string, string>>({});
+    const [expandedItems, setExpandedItems] = useState<number[]>([]); // Para mobile expand/collapse
 
     // Initial State Reset
     useEffect(() => {
@@ -381,49 +382,106 @@ export const AddThemeModal: React.FC<AddThemeModalProps> = ({ isOpen, onClose, t
                                                         itemCounter++;
                                                     }
 
+                                                    const isExpanded = expandedItems.includes(index);
+                                                    const toggleExpand = () => {
+                                                        setExpandedItems(prev =>
+                                                            prev.includes(index) ? prev.filter(i => i !== index) : [...prev, index]
+                                                        );
+                                                    };
+
                                                     return (
                                                         <div key={index} className={`flex gap-2 items-start p-2 rounded-lg border transition-all group ${isModule ? 'bg-slate-800/60 border-slate-700/50' : 'bg-slate-950/30 border-slate-800/50 hover:border-white/10'}`}>
-                                                            <span className={`text-[10px] font-mono mt-2.5 w-5 text-right ${isModule ? 'text-blue-400 font-bold' : 'text-slate-600'}`}>
+                                                            <span className={`text-[10px] font-mono mt-2.5 w-5 text-right flex-shrink-0 ${isModule ? 'text-blue-400 font-bold' : 'text-slate-600'}`}>
                                                                 {isModule ? '#' : `${itemCounter}.`}
                                                             </span>
-                                                            <div className="flex-1 space-y-2">
-                                                                <div className="flex gap-2">
-                                                                    <Input
-                                                                        className={`flex-1 h-8 text-xs ${isModule ? 'font-bold text-blue-100 border-blue-500/20 focus:border-blue-500/50 bg-blue-900/10' : 'bg-slate-950/30 border-slate-800/50'}`}
-                                                                        placeholder={isModule ? "Nome do Módulo..." : `Tópico...`}
-                                                                        value={st.title}
-                                                                        onChange={e => handleChangeSubtheme(index, 'title', e.target.value)}
-                                                                    />
-                                                                    <select
-                                                                        value={st.difficulty}
-                                                                        onChange={(e) => handleChangeSubtheme(index, 'difficulty', e.target.value as Difficulty)}
-                                                                        className={`h-8 rounded-lg bg-slate-950/50 border border-slate-800/50 text-[10px] px-2 outline-none focus:border-blue-500/50 cursor-pointer transition-colors w-24 ${DIFFICULTY_COLORS[st.difficulty]}`}
+                                                            <div className="flex-1 space-y-2 min-w-0">
+                                                                {/* Mobile: Título clicável + Expand */}
+                                                                <div className="md:hidden">
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={toggleExpand}
+                                                                        className="w-full text-left flex items-center gap-2"
                                                                     >
-                                                                        <option value="beginner">Iniciante</option>
-                                                                        <option value="intermediate">Intermediário</option>
-                                                                        <option value="advanced">Avançado</option>
-                                                                        <option value="module">📦 Módulo</option>
-                                                                    </select>
-                                                                </div>
-                                                                {!isModule && (
-                                                                    <div className="flex items-center gap-2 pl-1">
-                                                                        <div className="bg-slate-950/50 rounded-md border border-slate-800/50 p-0.5 scale-90 origin-left">
-                                                                            <DurationStepper
-                                                                                value={st.duration}
-                                                                                onChange={(val) => handleChangeSubtheme(index, 'duration', val)}
-                                                                                step={1}
-                                                                                min={0}
+                                                                        <span className={`text-xs flex-1 truncate ${isModule ? 'font-bold text-blue-100' : 'text-white'}`}>
+                                                                            {st.title || (isModule ? "Nome do Módulo..." : `Tópico...`)}
+                                                                        </span>
+                                                                        <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform flex-shrink-0 ${isExpanded ? 'rotate-180' : ''}`} />
+                                                                    </button>
+                                                                    {isExpanded && (
+                                                                        <div className="space-y-2 mt-2 animate-in slide-in-from-top-2 fade-in duration-200">
+                                                                            <Input
+                                                                                className={`flex-1 h-8 text-xs ${isModule ? 'font-bold text-blue-100 border-blue-500/20 focus:border-blue-500/50 bg-blue-900/10' : 'bg-slate-950/30 border-slate-800/50'}`}
+                                                                                placeholder={isModule ? "Nome do Módulo..." : `Tópico...`}
+                                                                                value={st.title}
+                                                                                onChange={e => handleChangeSubtheme(index, 'title', e.target.value)}
                                                                             />
+                                                                            <select
+                                                                                value={st.difficulty}
+                                                                                onChange={(e) => handleChangeSubtheme(index, 'difficulty', e.target.value as Difficulty)}
+                                                                                className={`w-full h-8 rounded-lg bg-slate-950/50 border border-slate-800/50 text-[10px] px-2 outline-none focus:border-blue-500/50 cursor-pointer transition-colors ${DIFFICULTY_COLORS[st.difficulty]}`}
+                                                                            >
+                                                                                <option value="beginner">Iniciante</option>
+                                                                                <option value="intermediate">Intermediário</option>
+                                                                                <option value="advanced">Avançado</option>
+                                                                                <option value="module">📦 Módulo</option>
+                                                                            </select>
+                                                                            {!isModule && (
+                                                                                <div className="flex items-center gap-2">
+                                                                                    <div className="bg-slate-950/50 rounded-md border border-slate-800/50 p-0.5 scale-90 origin-left">
+                                                                                        <DurationStepper
+                                                                                            value={st.duration}
+                                                                                            onChange={(val) => handleChangeSubtheme(index, 'duration', val)}
+                                                                                            step={1}
+                                                                                            min={0}
+                                                                                        />
+                                                                                    </div>
+                                                                                    <span className="text-[10px] text-slate-600">minutos estim.</span>
+                                                                                </div>
+                                                                            )}
                                                                         </div>
-                                                                        <span className="text-[10px] text-slate-600">minutos estim.</span>
+                                                                    )}
+                                                                </div>
+
+                                                                {/* Desktop: Layout normal */}
+                                                                <div className="hidden md:block space-y-2">
+                                                                    <div className="flex gap-2">
+                                                                        <Input
+                                                                            className={`flex-1 h-8 text-xs ${isModule ? 'font-bold text-blue-100 border-blue-500/20 focus:border-blue-500/50 bg-blue-900/10' : 'bg-slate-950/30 border-slate-800/50'}`}
+                                                                            placeholder={isModule ? "Nome do Módulo..." : `Tópico...`}
+                                                                            value={st.title}
+                                                                            onChange={e => handleChangeSubtheme(index, 'title', e.target.value)}
+                                                                        />
+                                                                        <select
+                                                                            value={st.difficulty}
+                                                                            onChange={(e) => handleChangeSubtheme(index, 'difficulty', e.target.value as Difficulty)}
+                                                                            className={`h-8 rounded-lg bg-slate-950/50 border border-slate-800/50 text-[10px] px-2 outline-none focus:border-blue-500/50 cursor-pointer transition-colors w-24 ${DIFFICULTY_COLORS[st.difficulty]}`}
+                                                                        >
+                                                                            <option value="beginner">Iniciante</option>
+                                                                            <option value="intermediate">Intermediário</option>
+                                                                            <option value="advanced">Avançado</option>
+                                                                            <option value="module">📦 Módulo</option>
+                                                                        </select>
                                                                     </div>
-                                                                )}
+                                                                    {!isModule && (
+                                                                        <div className="flex items-center gap-2 pl-1">
+                                                                            <div className="bg-slate-950/50 rounded-md border border-slate-800/50 p-0.5 scale-90 origin-left">
+                                                                                <DurationStepper
+                                                                                    value={st.duration}
+                                                                                    onChange={(val) => handleChangeSubtheme(index, 'duration', val)}
+                                                                                    step={1}
+                                                                                    min={0}
+                                                                                />
+                                                                            </div>
+                                                                            <span className="text-[10px] text-slate-600">minutos estim.</span>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
                                                             </div>
                                                             {subthemes.length > 1 && (
                                                                 <button
                                                                     type="button"
                                                                     onClick={() => handleRemoveSubtheme(index)}
-                                                                    className="p-1.5 mt-0.5 text-slate-600 hover:text-red-400 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
+                                                                    className="p-1.5 mt-0.5 text-slate-600 hover:text-red-400 rounded-lg transition-colors md:opacity-0 md:group-hover:opacity-100 flex-shrink-0"
                                                                 >
                                                                     <Trash2 className="w-3.5 h-3.5" />
                                                                 </button>
