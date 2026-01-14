@@ -98,14 +98,14 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange, label
             <label className="text-sm font-medium text-slate-300 block mb-2">
                 {label}
             </label>
-            <div className="flex flex-wrap gap-2">
+            <div className="grid grid-cols-3 gap-2">
                 {displayColors.map((color) => (
                     <button
                         key={color.value}
                         type="button"
                         onClick={() => onChange(color.value)}
                         className={cn(
-                            "w-8 h-8 rounded-full border-2 transition-all flex items-center justify-center relative group",
+                            "w-10 h-10 rounded-full border-2 transition-all flex items-center justify-center relative group mx-auto",
                             value === color.value
                                 ? "border-white ring-2 ring-blue-500/50 scale-110 z-10"
                                 : "border-transparent hover:border-slate-500 hover:scale-110 hover:z-10"

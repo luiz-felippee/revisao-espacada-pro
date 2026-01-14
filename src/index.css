@@ -167,41 +167,6 @@
     align-items: center;
   }
 
-  /* Mobile: Ícones com texto abaixo, grid que quebra */
-  @media screen and (max-width: 768px) {
-
-    /* Força layout vertical em botões e links com ícones */
-    button,
-    a {
-      flex-direction: column !important;
-      align-items: center !important;
-      text-align: center !important;
-    }
-
-    /* Grid automático para múltiplos ícones */
-    .mobile-icon-grid,
-    nav,
-    [role="navigation"],
-    .icon-container {
-      display: grid !important;
-      grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)) !important;
-      gap: 1rem !important;
-      justify-items: center !important;
-    }
-
-    /* Itens individuais centralizados verticalmente */
-    .mobile-icon-grid>*,
-    nav>*,
-    [role="navigation"]>* {
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      justify-content: center !important;
-      text-align: center !important;
-      gap: 0.5rem !important;
-    }
-  }
-
   /* Focus visible improvements */
   *:focus-visible {
     @apply outline-none ring-2 ring-primary-500 ring-offset-2 ring-offset-slate-950;
