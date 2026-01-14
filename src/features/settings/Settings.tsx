@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { usePomodoroContext } from '../../context/PomodoroContext';
 import { useStudy } from '../../context/StudyContext';
-import { User, Timer, Save, Trash2, ShieldAlert, RefreshCw } from 'lucide-react';
+import { User, Timer, Save, Trash2, ShieldAlert, RefreshCw, AlertCircle } from 'lucide-react';
 import { Card } from '../../components/ui/Card';
 import { ConfirmationModal } from '../../components/ui/ConfirmationModal';
 import { ImageUpload } from '../../components/forms/ImageUpload';
 import { BackupSection } from '../../components/settings/BackupSection';
+import { SyncHealthMonitor } from '../../components/SyncHealthMonitor';
 
 export const Settings = () => {
     const { user, profile, updateProfile } = useAuth();
@@ -23,6 +24,7 @@ export const Settings = () => {
     const [isSaved, setIsSaved] = useState(false);
     const [isDangerModalOpen, setIsDangerModalOpen] = useState(false);
     const [isResetGamificationModalOpen, setIsResetGamificationModalOpen] = useState(false);
+    const [isDiagnosticModalOpen, setIsDiagnosticModalOpen] = useState(false);
 
 
     useEffect(() => {
@@ -201,6 +203,31 @@ export const Settings = () => {
                 </Card>
             </section>
 
+            {/* Sync Diagnostics Section */}
+            <section className="space-y-4">
+                <h2 className="text-lg font-bold text-slate-200 flex items-center gap-2">
+                    <AlertCircle className="w-5 h-5 text-blue-400" />
+                    Diagnóstico de Sincronização
+                </h2>
+                <Card className="bg-slate-900/50 border-slate-800">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h3 className="font-bold text-slate-200">Verificar Sincronização de Dados</h3>
+                            <p className="text-sm text-slate-400 mt-1">
+                                Diagnostique problemas com salvamento e sincronização dos seus dados com o Supabase.
+                            </p>
+                        </div>
+                        <button
+                            onClick={() => setIsDiagnosticModalOpen(true)}
+                            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-bold text-sm transition-all flex items-center gap-2 shadow-lg shadow-blue-500/20"
+                        >
+                            <AlertCircle className="w-4 h-4" />
+                            Executar Diagnóstico
+                        </button>
+                    </div>
+                </Card>
+            </section>
+
             {/* Data Management Section */}
             <section className="space-y-4">
                 <h2 className="text-lg font-bold text-slate-200 flex items-center gap-2">
@@ -285,6 +312,12 @@ export const Settings = () => {
                 description="Você voltará para o Nível 1 com 0 XP. Suas conquistas serão bloqueadas novamente. Seus temas e tarefas NÃO serão apagados."
                 confirmText="Sim, Zerar meu XP"
                 type="danger"
+            />
+
+            {/* Sync Health Monitor Modal */}
+            <SyncHealthMonitor
+                isOpen={isDiagnosticModalOpen}
+                onClose={() => setIsDiagnosticModalOpen(false)}
             />
         </div>
     );
