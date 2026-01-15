@@ -1,13 +1,15 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { FileText, Sparkles, Calendar as CalendarIcon, Filter } from 'lucide-react';
 import { useStudy } from '../../context/StudyContext';
 import { Timeline } from '../../components/timeline';
 import type { SummaryEntry } from '../../types';
+import { Modal } from '../../components/ui/Modal';
 
 export const SummariesPage: React.FC = () => {
     const { goals, themes, tasks } = useStudy();
     const [filterType, setFilterType] = React.useState<SummaryEntry['type'] | 'all'>('all');
     const [searchTerm, setSearchTerm] = React.useState('');
+    const [selectedSummary, setSelectedSummary] = useState<SummaryEntry | null>(null);
 
     // Collect all summaries from all sources
     const allSummaries = useMemo(() => {
@@ -249,9 +251,47 @@ export const SummariesPage: React.FC = () => {
                     <Timeline
                         items={filteredSummaries}
                         emptyMessage={searchTerm ? 'Nenhum resultado encontrado' : 'Suas atividades aparecerão aqui automaticamente'}
+                        onItemClick={setSelectedSummary}
                     />
                 </div>
             </div>
+
+            {/* Read-Only Summary Modal */}
+            <Modal
+                isOpen={!!selectedSummary}
+                onClose={() => setSelectedSummary(null)}
+                maxWidth="md"
+                title=""
+            >
+                <div className="p-6">
+                    <div className="flex items-start gap-4 mb-6">
+                        <div className={`p-3 rounded-xl bg-slate-800/50 border border-slate-700`}>
+                            {selectedSummary?.type === 'session' ? <Sparkles className="w-6 h-6 text-orange-400" /> : <FileText className="w-6 h-6 text-blue-400" />}
+                        </div>
+                        <div>
+                            <h3 className="text-lg font-bold text-white leading-tight">
+                                {selectedSummary?.title || 'Detalhes do Resumo'}
+                            </h3>
+                            <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">
+                                {selectedSummary?.type === 'session' ? 'Sessão de Foco' : 'Atividade'}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="bg-slate-900/50 rounded-xl p-4 border border-slate-800/50 max-h-[60vh] overflow-y-auto custom-scrollbar">
+                        <p className="text-slate-300 text-sm md:text-base leading-relaxed whitespace-pre-wrap">
+                            {selectedSummary?.description || 'Nenhum detalhe adicional disponível.'}
+                        </p>
+                    </div>
+
+                    <button
+                        onClick={() => setSelectedSummary(null)}
+                        className="mt-6 w-full py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl font-bold transition-colors"
+                    >
+                        Fechar
+                    </button>
+                </div>
+            </Modal>
 
             {/* Custom Styles */}
             <style>{`

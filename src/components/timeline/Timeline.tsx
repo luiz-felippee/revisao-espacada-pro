@@ -7,11 +7,13 @@ import type { SummaryEntry } from '../../types';
 interface TimelineProps {
     items: SummaryEntry[];
     emptyMessage?: string;
+    onItemClick?: (item: SummaryEntry) => void;
 }
 
 export const Timeline: React.FC<TimelineProps> = ({
     items,
-    emptyMessage = 'Nenhum evento ainda'
+    emptyMessage = 'Nenhum evento ainda',
+    onItemClick
 }) => {
     const [isIPhone, setIsIPhone] = useState(false);
 
@@ -42,7 +44,12 @@ export const Timeline: React.FC<TimelineProps> = ({
                     <div className="relative space-y-6">
                         <AnimatePresence mode="popLayout">
                             {items.map((item, index) => (
-                                <TimelineItem key={item.id} item={item} index={index} />
+                                <TimelineItem
+                                    key={item.id}
+                                    item={item}
+                                    index={index}
+                                    onClick={onItemClick ? () => onItemClick(item) : undefined}
+                                />
                             ))}
                         </AnimatePresence>
                     </div>

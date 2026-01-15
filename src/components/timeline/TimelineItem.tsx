@@ -14,9 +14,10 @@ import type { SummaryEntry } from '../../types';
 interface TimelineItemProps {
     item: SummaryEntry;
     index: number;
+    onClick?: () => void;
 }
 
-export const TimelineItem: React.FC<TimelineItemProps> = ({ item, index }) => {
+export const TimelineItem: React.FC<TimelineItemProps> = ({ item, index, onClick }) => {
     const formatTime = (isoDate: string) => {
         return new Date(isoDate).toLocaleTimeString('pt-BR', {
             hour: '2-digit',
@@ -110,10 +111,11 @@ export const TimelineItem: React.FC<TimelineItemProps> = ({ item, index }) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ delay: index * 0.05, duration: 0.4 }}
-            className="relative group mb-8 hover:translate-x-2 transition-transform duration-300"
+            className={`relative group mb-8 hover:translate-x-2 transition-transform duration-300`}
+            onClick={onClick}
         >
             {/* Card com Glassmorphism */}
-            <div className={`relative p-4 sm:p-8 rounded-2xl bg-gradient-to-br ${config.bgGradient} backdrop-blur-xl border ${config.borderColor} shadow-xl ${config.shadowColor} hover:shadow-2xl hover:scale-[1.01] transition-all duration-300 overflow-hidden`}>
+            <div className={`relative p-4 sm:p-8 rounded-2xl bg-gradient-to-br ${config.bgGradient} backdrop-blur-xl border ${config.borderColor} shadow-xl ${config.shadowColor} hover:shadow-2xl hover:scale-[1.01] transition-all duration-300 overflow-hidden ${onClick ? 'cursor-pointer' : ''}`}>
                 {/* Glow Effect */}
                 <div className={`absolute inset-0 bg-gradient-to-r ${config.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300 blur-xl`} />
 
