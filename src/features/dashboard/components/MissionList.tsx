@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Reorder } from 'framer-motion';
 
 
 import { ChevronLeft, ChevronRight, ChevronUp, Calendar as CalendarIcon, Trophy } from 'lucide-react';
 import { cn } from '../../../lib/utils';
-import { format, isToday, addDays } from 'date-fns';
+import { format, isToday, addDays, startOfYear } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { MissionItem } from './MissionItem';
 
@@ -45,6 +45,14 @@ export const MissionList = ({
     isAllDone
 }: MissionListProps) => {
     const [showCalendar, setShowCalendar] = useState(false);
+
+    useEffect(() => {
+        if (showCalendar) {
+            setTimeout(() => {
+                document.getElementById('selected-date-cell')?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+            }, 100);
+        }
+    }, [showCalendar]);
 
     // --- DRAG AND DROP PERSISTENCE LOGIC ---
     // Single consolidated key: 'mission_list_order' -> { habit: [ids], review: [ids], task: [ids] }
@@ -138,28 +146,47 @@ export const MissionList = ({
                 </div>
             </div>
 
-            {/* Calendar Popover */}
+            {/* Calendar Popover (Ano Completo com Scroll) */}
             {showCalendar && (
                 <div className="p-4 bg-slate-900 border-b border-slate-800 animate-in fade-in slide-in-from-top-2">
-                    <div className="grid grid-cols-7 gap-1 text-center mb-2">
+                    <div className="text-center mb-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
+                        Agenda {new Date().getFullYear()}
+                    </div>
+
+                    <div className="grid grid-cols-7 gap-1 text-center mb-2 sticky top-0 bg-slate-900 z-10 py-1">
                         {['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map(d => <span key={d} className="text-[10px] text-slate-500 font-bold">{d}</span>)}
                     </div>
-                    <div className="grid grid-cols-7 gap-1">
-                        {Array.from({ length: 14 }).map((_, i) => {
-                            const d = addDays(selectedDate, i - 7);
+
+                    <div className="grid grid-cols-7 gap-1 max-h-[300px] overflow-y-auto pr-1 custom-scrollbar">
+                        {Array.from({ length: 366 }).map((_, i) => {
+                            const d = addDays(startOfYear(new Date()), i);
                             const isSel = d.toDateString() === selectedDate.toDateString();
+
+                            // Mostra mês se for dia 1
+                            const isFirstDay = d.getDate() === 1;
+
                             return (
-                                <button
-                                    key={i}
-                                    onClick={() => { setSelectedDate(d); setShowCalendar(false); }}
-                                    className={cn(
-                                        "h-8 rounded-lg text-xs font-bold flex items-center justify-center transition-all",
-                                        isSel ? "bg-slate-800 text-blue-400 ring-2 ring-blue-500 shadow-lg shadow-blue-500/20 scale-110 z-10" : "text-slate-400 hover:bg-slate-800 hover:text-slate-200",
-                                        isToday(d) && !isSel && "text-blue-400 font-extrabold"
+                                <React.Fragment key={i}>
+                                    {isFirstDay && i > 0 && (
+                                        <div className="col-span-7 py-2 text-center text-xs font-bold text-blue-400 bg-slate-900 sticky top-0 z-10 opacity-95 backdrop-blur-md border-t border-slate-800/50 mt-1">
+                                            {format(d, 'MMMM', { locale: ptBR })}
+                                        </div>
                                     )}
-                                >
-                                    {format(d, 'd')}
-                                </button>
+                                    <button
+                                        id={isSel ? 'selected-date-cell' : undefined}
+                                        onClick={() => { setSelectedDate(d); setShowCalendar(false); }}
+                                        className={cn(
+                                            "h-8 rounded-lg text-xs font-bold flex items-center justify-center transition-all shrink-0 relative",
+                                            isSel
+                                                ? "bg-slate-800 text-blue-400 ring-2 ring-blue-500 shadow-lg shadow-blue-500/20 z-0 scale-105"
+                                                : "text-slate-400 hover:bg-slate-800 hover:text-slate-200",
+                                            isToday(d) && !isSel && "text-blue-400 font-extrabold"
+                                        )}
+                                        title={format(d, "d 'de' MMMM", { locale: ptBR })}
+                                    >
+                                        {format(d, 'd')}
+                                    </button>
+                                </React.Fragment>
                             );
                         })}
                     </div>

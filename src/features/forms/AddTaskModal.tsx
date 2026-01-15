@@ -6,7 +6,7 @@ import { Input } from '../../components/ui/Input';
 import { Select } from '../../components/ui/Select';
 import { Button } from '../../components/ui/Button';
 import { useStudy } from '../../context/StudyContext';
-import { format, addDays, addMonths } from 'date-fns';
+import { format, addDays, addMonths, addYears } from 'date-fns';
 import { DaySelector } from '../../components/forms/DaySelector';
 import { ImageUpload } from '../../components/forms/ImageUpload';
 import { ColorPicker } from '../../components/forms/ColorPicker';
@@ -270,12 +270,12 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({ isOpen, onClose, tas
 
                                 {/* Quick Deadlines */}
                                 <div className="flex items-center gap-2 overflow-x-auto pb-1 custom-scrollbar justify-start sm:justify-center pt-2">
-                                    {[
-                                        { label: '+1 Semana', days: 7 },
+                                    {([
                                         { label: '+1 Mês', months: 1 },
                                         { label: '+3 Meses', months: 3 },
                                         { label: '+6 Meses', months: 6 },
-                                    ].map((opt) => (
+                                        { label: '+1 Ano', years: 1 },
+                                    ] as { label: string; days?: number; months?: number; years?: number; }[]).map((opt) => (
                                         <button
                                             key={opt.label}
                                             type="button"
@@ -284,6 +284,7 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({ isOpen, onClose, tas
                                                 let target = base;
                                                 if (opt.days) target = addDays(base, opt.days);
                                                 if (opt.months) target = addMonths(base, opt.months);
+                                                if (opt.years) target = addYears(base, opt.years);
 
                                                 const fmt = format(target, 'yyyy-MM-dd');
                                                 if (type === 'day') setDate(fmt);
