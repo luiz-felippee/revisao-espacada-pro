@@ -27,6 +27,24 @@ const POPULAR_EMOJIS = [
     '💡', '🔥', '🎯', '🏆', '⭐', '🎨', '🎵', '🏥', '💼', '🏠'
 ];
 
+const ICON_TRANSLATIONS: Record<string, string> = {
+    'Rocket': 'Foguete Lançamento', 'Cpu': 'Processador Chip Tech', 'Bot': 'Robô Bot AI',
+    'Brain': 'Cérebro Mente Estudo', 'Code': 'Código Dev Programação', 'Terminal': 'Terminal Console',
+    'Database': 'Banco de Dados Storage', 'Server': 'Servidor Host', 'Cloud': 'Nuvem Cloud',
+    'Zap': 'Raio Energia Flash', 'Smartphone': 'Celular Mobile Phone', 'Laptop': 'Notebook PC Computador',
+    'Network': 'Rede Conexão', 'Wifi': 'Internet Wireless', 'Fingerprint': 'Digital Biometria',
+    'Scan': 'Escanear QR', 'Shield': 'Escudo Segurança', 'Lock': 'Cadeado Bloqueio', 'Key': 'Chave Acesso',
+    'CircuitBoard': 'Placa Circuito Hardware', 'Radio': 'Rádio', 'Signal': 'Sinal Conexão',
+    'Target': 'Alvo Meta Objetivo', 'Trophy': 'Troféu Prêmio Vitória', 'Star': 'Estrela Favorito',
+    'Flame': 'Fogo Chama Streak Hot', 'Book': 'Livro Leitura Estudo', 'GraduationCap': 'Formatura Graduação Faculdade',
+    'Globe': 'Globo Mundo Terra', 'Map': 'Mapa Localização', 'Compass': 'Bússola Direção',
+    'Flag': 'Bandeira Marcação', 'Bell': 'Sino Notificação Alerta', 'Calendar': 'Calendário Agenda Data',
+    'Clock': 'Relógio Tempo Hora', 'Watch': 'Relógio Pulso Smartwatch', 'Headphones': 'Fones Ouvido Música Áudio',
+    'Speaker': 'Alto-falante Som', 'Mic': 'Microfone Gravar Voz', 'Camera': 'Câmera Foto', 'Video': 'Vídeo Filme',
+    'Image': 'Imagem Foto Galeria', 'File': 'Arquivo Documento Papel', 'Folder': 'Pasta Diretório',
+    'Settings': 'Configurações Ajustes Gear', 'User': 'Usuário Pessoa Perfil', 'Users': 'Usuários Grupo Equipe Pessoas'
+};
+
 export const SymbolPicker: React.FC<SymbolPickerProps> = ({ value, onChange, placeholder = '✨', className }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [activeTab, setActiveTab] = useState<'icons' | 'emojis' | 'recent'>('icons');
@@ -62,9 +80,11 @@ export const SymbolPicker: React.FC<SymbolPickerProps> = ({ value, onChange, pla
         });
     };
 
-    const filteredIcons = POPULAR_ICONS.filter(icon =>
-        icon.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const filteredIcons = POPULAR_ICONS.filter(icon => {
+        const search = searchQuery.toLowerCase();
+        const ptFeatures = ICON_TRANSLATIONS[icon]?.toLowerCase() || '';
+        return icon.toLowerCase().includes(search) || ptFeatures.includes(search);
+    });
 
     return (
         <div className={cn("relative inline-block w-full", className)} ref={containerRef}>
@@ -142,7 +162,7 @@ export const SymbolPicker: React.FC<SymbolPickerProps> = ({ value, onChange, pla
                                     <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                                     <input
                                         type="text"
-                                        placeholder="Buscar ícone (ex: Brain, Rocket...)"
+                                        placeholder="Buscar ícone (ex: Cérebro, Foguete...)"
                                         value={searchQuery}
                                         onChange={e => setSearchQuery(e.target.value)}
                                         className="w-full h-11 bg-slate-950/80 border border-white/5 rounded-xl pl-10 pr-4 text-xs text-white outline-none focus:border-blue-500/30 ring-0 focus:ring-1 focus:ring-blue-500/20 transition-all font-medium"
@@ -160,7 +180,7 @@ export const SymbolPicker: React.FC<SymbolPickerProps> = ({ value, onChange, pla
                                                     ? "bg-blue-600 border-blue-400 text-white scale-110 shadow-lg shadow-blue-500/30"
                                                     : "bg-slate-800/20 border-white/5 text-slate-400 hover:bg-slate-800/60 hover:text-white"
                                             )}
-                                            title={iconName}
+                                            title={ICON_TRANSLATIONS[iconName]?.split(' ')[0] || iconName}
                                         >
                                             <IconRenderer icon={iconName} size={22} />
                                         </button>
