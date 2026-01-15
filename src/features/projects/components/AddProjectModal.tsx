@@ -78,10 +78,10 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
                 </div>
 
                 {/* Form */}
-                <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5">
-                    {/* Icon & Title */}
-                    <div className="flex flex-col md:flex-row gap-3 md:gap-4">
-                        <div className="w-full md:w-[120px] flex-shrink-0">
+                <form onSubmit={handleSubmit} className="space-y-6 md:space-y-5">
+                    {/* Icon & Title - Layout Horizontal Unificado */}
+                    <div className="flex flex-row gap-3 md:gap-4">
+                        <div className="w-[72px] md:w-[120px] flex-shrink-0">
                             <label className="block text-[10px] md:text-xs font-bold text-slate-500 uppercase mb-1.5 md:mb-2 ml-1">
                                 Ícone
                             </label>
