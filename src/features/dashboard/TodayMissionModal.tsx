@@ -29,7 +29,7 @@ const DraggableMissionItem = ({ item, children, showDragHandle = true }: { item:
             value={item}
             dragListener={false} // Disable default drag to use handle
             dragControls={dragControls}
-            className="touch-none relative"
+            className="relative"
             style={{ listStyle: 'none' }} // Remove list dots
         >
             <div className="flex items-center gap-2">
@@ -612,7 +612,7 @@ export const TodayMissionModal: React.FC<TodayMissionModalProps> = ({ isOpen, on
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} title={null} maxWidth="lg">
-            <div className="space-y-6 px-2 sm:px-4 mt-12 sm:mt-16 pb-20 relative overflow-y-auto max-h-[85vh]">
+            <div className="space-y-6 px-2 sm:px-4 mt-12 sm:mt-16 pb-20 relative">
                 {/* Header Section */}
                 <div className="space-y-4">
                     <div className="flex items-center justify-between px-2">
