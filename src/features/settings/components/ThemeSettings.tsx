@@ -1,12 +1,12 @@
 import React from 'react';
 import { Sun, Moon, Monitor, Palette, RotateCcw, Check } from 'lucide-react';
-import { useTheme } from '../../../context/ThemeContext';
+import { useAppearance } from '../../../context/AppearanceContext';
 import { COLOR_PRESETS } from '../../../types/theme';
 import type { ThemeMode } from '../../../types/theme';
 import { cn } from '../../../lib/utils';
 
 export const ThemeSettings = () => {
-    const { theme, currentColors, setThemeMode, setColorPreset, resetTheme } = useTheme();
+    const { theme, currentColors, setThemeMode, setColorPreset, resetTheme } = useAppearance();
 
     const themeModes: Array<{ id: ThemeMode; label: string; icon: React.ReactNode; description: string }> = [
         {

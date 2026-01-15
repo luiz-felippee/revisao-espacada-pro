@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import type { ThemeMode, ThemeConfig, ColorPreset } from '../types/theme';
 import { COLOR_PRESETS, DEFAULT_THEME } from '../types/theme';
 
-interface ThemeContextValue {
+interface AppearanceContextValue {
     theme: ThemeConfig;
     currentColors: ColorPreset;
     setThemeMode: (mode: ThemeMode) => void;
@@ -11,11 +11,11 @@ interface ThemeContextValue {
     resetTheme: () => void;
 }
 
-const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
+const AppearanceContext = createContext<AppearanceContextValue | undefined>(undefined);
 
 const THEME_STORAGE_KEY = 'app_theme_config';
 
-export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AppearanceProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [theme, setTheme] = useState<ThemeConfig>(() => {
         const stored = localStorage.getItem(THEME_STORAGE_KEY);
         if (stored) {
@@ -99,7 +99,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     };
 
     return (
-        <ThemeContext.Provider
+        <AppearanceContext.Provider
             value={{
                 theme,
                 currentColors,
@@ -110,14 +110,14 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             }}
         >
             {children}
-        </ThemeContext.Provider>
+        </AppearanceContext.Provider>
     );
 };
 
-export const useTheme = () => {
-    const context = useContext(ThemeContext);
+export const useAppearance = () => {
+    const context = useContext(AppearanceContext);
     if (!context) {
-        throw new Error('useTheme must be used within ThemeProvider');
+        throw new Error('useAppearance must be used within AppearanceProvider');
     }
     return context;
 };
