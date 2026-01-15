@@ -5,7 +5,6 @@ import { LayoutDashboard, BookOpen, Target, List, Briefcase } from 'lucide-react
 import { cn } from '../../lib/utils';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { MobileThemesModal } from '../../features/themes/components/MobileThemesModal';
-import { MobileProjectsModal } from '../../features/projects/components/MobileProjectsModal';
 
 interface MobileBottomNavProps {
     // kept for compatibility if needed, but ignored
@@ -36,7 +35,6 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0, hasOverdueTas
     const [activeFeedback, setActiveFeedback] = React.useState<string | null>(null);
     const feedbackTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
     const [isThemesModalOpen, setIsThemesModalOpen] = React.useState(false);
-    const [isProjectsModalOpen, setIsProjectsModalOpen] = React.useState(false);
 
     const showFeedback = (label: string) => {
         if (feedbackTimeoutRef.current) clearTimeout(feedbackTimeoutRef.current);
@@ -81,11 +79,9 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0, hasOverdueTas
                                 key={item.id}
                                 onClick={() => {
                                     showFeedback(item.label);
-                                    // Se for themes ou projects no mobile, abre modal ao invés de navegar
+                                    // Se for themes no mobile, abre modal ao invés de navegar
                                     if (item.id === 'themes') {
                                         setIsThemesModalOpen(true);
-                                    } else if (item.id === 'projects') {
-                                        setIsProjectsModalOpen(true);
                                     } else {
                                         navigate(`/${item.id}`);
                                     }
@@ -224,12 +220,6 @@ export const MobileBottomNav = ({ onOpenMission, missionCount = 0, hasOverdueTas
             <MobileThemesModal
                 isOpen={isThemesModalOpen}
                 onClose={() => setIsThemesModalOpen(false)}
-            />
-
-            {/* Mobile Projects Modal */}
-            <MobileProjectsModal
-                isOpen={isProjectsModalOpen}
-                onClose={() => setIsProjectsModalOpen(false)}
             />
         </>
     );
