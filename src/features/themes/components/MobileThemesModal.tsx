@@ -51,13 +51,16 @@ export const MobileThemesModal: React.FC<MobileThemesModalProps> = ({ isOpen, on
                         </div>
 
                         {/* Add Theme Button */}
-                        <button
-                            onClick={() => setIsAddModalOpen(true)}
-                            className="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-2xl font-bold shadow-xl shadow-blue-900/30 active:scale-[0.98] transition-all flex items-center justify-center gap-3"
-                        >
-                            <Plus className="w-5 h-5" />
-                            Criar Novo Tema
-                        </button>
+                        {/* Add Theme Button - Show ONLY if there are themes */}
+                        {studyThemes.length > 0 && (
+                            <button
+                                onClick={() => setIsAddModalOpen(true)}
+                                className="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-2xl font-bold shadow-xl shadow-blue-900/30 active:scale-[0.98] transition-all flex items-center justify-center gap-3"
+                            >
+                                <Plus className="w-5 h-5" />
+                                Criar Novo Tema
+                            </button>
+                        )}
                     </div>
 
                     {/* Scrollable Content */}
