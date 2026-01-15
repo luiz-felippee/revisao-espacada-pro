@@ -6,8 +6,10 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     const [volume, setVolumeState] = useState(() => {
         const saved = localStorage.getItem('audio_volume');
-        return saved ? parseFloat(saved) : 0.2; // Reduced from 0.5 to 0.2 (20%)
+        const parsed = saved ? parseFloat(saved) : 0.2;
+        return isFinite(parsed) ? parsed : 0.2; // Protection against NaN
     });
+
     const [currentSound, setCurrentSoundState] = useState<SoundType>(() => {
         const saved = localStorage.getItem('audio_sound');
         return (saved as SoundType) || 'white';
@@ -21,27 +23,32 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const audioCtxRef = useRef<AudioContext | null>(null);
     const gainNodeRef = useRef<GainNode | null>(null);
     const sourceNodeRef = useRef<AudioBufferSourceNode | null>(null);
-
-    // For Rain sound (using HTML5 Audio for simplicity if using a file)
     const rainAudioRef = useRef<HTMLAudioElement | null>(null);
 
-    // Initialize Audio Context (Lazy interaction)
     const initAudio = useCallback(() => {
         if (!audioCtxRef.current) {
-            const Ctx = (window.AudioContext || (window as any).webkitAudioContext);
+            const Ctx = window.AudioContext || (window as any).webkitAudioContext;
+            if (!Ctx) {
+                console.warn("AudioContext not supported in this browser");
+                return;
+            }
             audioCtxRef.current = new Ctx();
-            gainNodeRef.current = audioCtxRef.current!.createGain();
-            gainNodeRef.current.connect(audioCtxRef.current!.destination);
+
+            if (!audioCtxRef.current) return;
+
+            gainNodeRef.current = audioCtxRef.current.createGain();
+            gainNodeRef.current.connect(audioCtxRef.current.destination);
             gainNodeRef.current.gain.value = volumeRef.current;
         }
         if (audioCtxRef.current?.state === 'suspended') {
-            audioCtxRef.current.resume();
+            audioCtxRef.current.resume().catch(e => console.warn("Audio resume failed", e));
         }
-    }, []); // Volume is set in a separate effect
+    }, []);
 
-    // Generate Noise Buffer
-    const createNoiseBuffer = (type: 'white' | 'pink' | 'brown'): AudioBuffer => {
-        const ctx = audioCtxRef.current!;
+    const createNoiseBuffer = (type: 'white' | 'pink' | 'brown'): AudioBuffer | null => {
+        const ctx = audioCtxRef.current;
+        if (!ctx) return null;
+
         const bufferSize = 2 * ctx.sampleRate; // 2 seconds buffer
         const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
         const output = buffer.getChannelData(0);
@@ -61,7 +68,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 b4 = 0.55000 * b4 + white * 0.5329522;
                 b5 = -0.7616 * b5 - white * 0.0168980;
                 output[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
-                output[i] *= 0.11; // (roughly) compensate for gain
+                output[i] *= 0.11;
                 b6 = white * 0.115926;
             }
         } else if (type === 'brown') {
@@ -70,7 +77,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 const white = Math.random() * 2 - 1;
                 output[i] = (lastOut + (0.02 * white)) / 1.02;
                 lastOut = output[i];
-                output[i] *= 3.5; // (roughly) compensate for gain
+                output[i] *= 3.5;
             }
         }
         return buffer;
@@ -95,21 +102,25 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
         if (currentSound === 'rain') {
             if (!rainAudioRef.current) {
-                rainAudioRef.current = new Audio('https://actions.google.com/sounds/v1/weather/rain_heavy_loud.ogg'); // Reliable Google URL
+                rainAudioRef.current = new Audio('https://actions.google.com/sounds/v1/weather/rain_heavy_loud.ogg');
                 rainAudioRef.current.loop = true;
             }
             rainAudioRef.current.volume = volumeRef.current;
-            rainAudioRef.current.play().catch(e => console.error("Audio play failed", e));
+            rainAudioRef.current.play().catch(e => console.error(e));
         } else {
-            const buffer = createNoiseBuffer(currentSound);
-            const source = audioCtxRef.current!.createBufferSource();
-            source.buffer = buffer;
-            source.loop = true;
-            source.connect(gainNodeRef.current!);
-            source.start();
-            sourceNodeRef.current = source;
+            if (currentSound !== 'rain') {
+                const buffer = createNoiseBuffer(currentSound);
+                if (!buffer || !audioCtxRef.current || !gainNodeRef.current) return;
+
+                const source = audioCtxRef.current.createBufferSource();
+                source.buffer = buffer;
+                source.loop = true;
+                source.connect(gainNodeRef.current);
+                source.start();
+                sourceNodeRef.current = source;
+            }
         }
-    }, [currentSound, initAudio, stopAudio]); // Removed volume to avoid restart on volume change
+    }, [currentSound, initAudio, stopAudio]);
 
     useEffect(() => {
         if (isPlaying) {
@@ -136,17 +147,21 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         localStorage.setItem('audio_sound', sound);
     };
 
-    // Start audio (for auto-play when focus starts)
     const startAudioFn = () => {
         if (!isPlaying) {
             setIsPlaying(true);
         }
     };
 
-    // SFX Logic
+    const stopAudioFn = () => {
+        if (isPlaying) {
+            setIsPlaying(false);
+        }
+    };
+
     const playSFX = (type: 'success' | 'xp' | 'achievement' | 'levelUp') => {
         try {
-            initAudio(); // Ensure context is alive
+            initAudio();
             const ctx = audioCtxRef.current;
             if (!ctx || ctx.state === 'suspended') return;
 
@@ -170,7 +185,6 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                     oscillator.stop(now + 0.8);
                     break;
                 case 'achievement':
-                    // Simple chord effect
                     [523.25, 659.25, 783.99].forEach((freq, i) => {
                         const osc = ctx.createOscillator();
                         const g = ctx.createGain();
@@ -206,14 +220,7 @@ export const AudioProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                     break;
             }
         } catch (e) {
-            console.warn("SFX play failed (likely browser restriction):", e);
-        }
-    };
-
-    // Stop audio (for when focus ends)
-    const stopAudioFn = () => {
-        if (isPlaying) {
-            setIsPlaying(false);
+            console.warn("SFX play failed", e);
         }
     };
 
