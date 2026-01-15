@@ -19,7 +19,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
     const [status, setStatus] = useState<Project['status']>('planning');
     const [startDate, setStartDate] = useState('');
     const [deadline, setDeadline] = useState('');
-    const [icon, setIcon] = useState('📁');
+    const [icon, setIcon] = useState('🚀');
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -45,15 +45,15 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
         setStatus('planning');
         setStartDate('');
         setDeadline('');
-        setIcon('📁');
+        setIcon('🚀');
 
         onClose();
     };
 
     const categoryOptions = [
-        { value: 'professional', label: 'Profissional', icon: '💼' },
-        { value: 'personal', label: 'Pessoal', icon: '🏠' },
-        { value: 'academic', label: 'Acadêmico', icon: '🎓' },
+        { value: 'professional', label: 'Profissional', icon: '💻' },
+        { value: 'personal', label: 'Pessoal', icon: '⚡' },
+        { value: 'academic', label: 'Acadêmico', icon: '🤖' },
     ] as const;
 
     const statusOptions = [
@@ -88,7 +88,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
                             <SymbolPicker
                                 value={icon}
                                 onChange={setIcon}
-                                placeholder="📁"
+                                placeholder="🚀"
                             />
                         </div>
                         <div className="flex-1">

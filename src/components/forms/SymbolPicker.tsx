@@ -13,18 +13,18 @@ interface SymbolPickerProps {
 }
 
 const POPULAR_ICONS = [
-    'Book', 'BookOpen', 'Target', 'CheckSquare', 'Clock', 'Flame', 'Zap', 'Brain',
-    'Code', 'GraduationCap', 'Trophy', 'Star', 'Palette', 'Dumbbell', 'Heart',
-    'Music', 'Coffee', 'Languages', 'Globe', 'Mountain', 'Stethoscope', 'Wallet',
-    'Briefcase', 'Car', 'Plane', 'Map', 'Camera', 'Smartphone', 'Laptop', 'Rocket',
-    'Library', 'PenTool', 'Search', 'AlertCircle', 'Calendar', 'Mail', 'MessageCircle',
-    'Shield', 'Key', 'Lock', 'User', 'Settings', 'Home', 'Compass'
+    'Rocket', 'Cpu', 'Bot', 'Brain', 'Code', 'Terminal', 'Database', 'Server', 'Cloud', 'Zap',
+    'Smartphone', 'Laptop', 'Network', 'Wifi', 'Fingerprint', 'Scan', 'Shield', 'Lock', 'Key',
+    'CircuitBoard', 'Radio', 'Signal', 'Target', 'Trophy', 'Star', 'Flame', 'Book', 'GraduationCap',
+    'Globe', 'Map', 'Compass', 'Flag', 'Bell', 'Calendar', 'Clock', 'Watch', 'Headphones', 'Speaker',
+    'Mic', 'Camera', 'Video', 'Image', 'File', 'Folder', 'Settings', 'User', 'Users'
 ];
 
 const POPULAR_EMOJIS = [
-    '📚', '🎯', '✅', '⏰', '🔥', '⚡', '🧠', '💻', '🎓', '🏆',
-    '⭐', '🎨', '💪', '❤️', '🎵', '☕', '🌍', '🏔️', '🏥', '💼',
-    '🚀', '📝', '🏃', '🧘', '🍎', '💰', '🔑', '🔒', '🏠', '✨'
+    '🚀', '🤖', '🧠', '💻', '⚡', '💾', '🔌', '📡', '🔋', '🔬',
+    '👾', '🛸', '🌌', '🛰️', '🔭', '🧬', '⚛️', '🧪', '🔮', '🕹️',
+    '📱', '⌚', '🖥️', '⌨️', '🖱️', '💿', '🔐', '🌐', '📚', '🎓',
+    '💡', '🔥', '🎯', '🏆', '⭐', '🎨', '🎵', '🏥', '💼', '🏠'
 ];
 
 export const SymbolPicker: React.FC<SymbolPickerProps> = ({ value, onChange, placeholder = '✨', className }) => {
