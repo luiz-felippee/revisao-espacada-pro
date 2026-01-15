@@ -55,8 +55,8 @@ export const Modal: React.FC<ModalProps> = ({
             className={`fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200 ${wrapperClassName || ''}`}
             style={{
                 touchAction: 'none',
-                paddingTop: 'max(env(safe-area-inset-top, 0px), 0.5rem)', // Respeita safe area no topo
-                paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 0.5rem)', // Respeita safe area no fundo
+                paddingTop: 'calc(env(safe-area-inset-top) + 16px)', // Mais espaço no topo para iOS
+                paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 16px)',
                 paddingLeft: 'max(env(safe-area-inset-left, 0px), 0.5rem)',
                 paddingRight: 'max(env(safe-area-inset-right, 0px), 0.5rem)'
             }}
