@@ -13,6 +13,11 @@ export const DailyRewardModal: React.FC = () => {
         if (!gamification.streak) return; // Wait for load
 
         const today = new Date().toISOString().split('T')[0];
+
+        // Verificar se já reivindicou localmente hoje (proteção extra)
+        const localClaimed = localStorage.getItem(`daily_reward_claimed_${today}`);
+        if (localClaimed === 'true') return;
+
         const lastLogin = gamification.streak.lastLoginDate;
         const lastRewardDate = gamification.streak.lastDailyRewardDate;
 
@@ -28,6 +33,9 @@ export const DailyRewardModal: React.FC = () => {
         const result = claimDailyReward();
 
         if (result.claimed) {
+            const today = new Date().toISOString().split('T')[0];
+            localStorage.setItem(`daily_reward_claimed_${today}`, 'true');
+
             confetti({
                 particleCount: 100,
                 spread: 70,

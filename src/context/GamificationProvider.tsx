@@ -145,8 +145,9 @@ export const GamificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
             // Update state
             setGamification(result.newState);
 
-            // Sync to Supabase
+            // Sync to Supabase - FORCE UPDATE for daily reward to prevent duplicates on other devices
             if (user && hasLoaded) {
+                // Also update via SyncQueue to keep consistency locally
                 SyncQueueService.enqueue({
                     type: 'UPDATE',
                     table: 'profiles',
@@ -155,6 +156,14 @@ export const GamificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
                         gamification: result.newState
                     } as any
                 });
+
+                // Force immediate save attempt to ensure other devices get the update ASAP
+                supabase.from('profiles')
+                    .update({ gamification: result.newState })
+                    .eq('id', user.id)
+                    .then(({ error }) => {
+                        if (error) console.error('Failed to force save daily reward:', error);
+                    });
             }
         }
 
