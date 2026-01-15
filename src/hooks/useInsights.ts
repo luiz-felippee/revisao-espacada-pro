@@ -23,7 +23,11 @@ export const useInsights = () => {
 
         tasks.forEach(task => task.sessions?.forEach(s => sessions.push({ ...s, duration: s.durationMinutes })));
         goals.forEach(goal => goal.sessions?.forEach(s => sessions.push({ ...s, duration: s.durationMinutes })));
-        themes.forEach(theme => theme.subthemes?.forEach(st => st.sessions?.forEach(s => sessions.push({ ...s, duration: s.durationMinutes }))));
+        themes.forEach(theme => {
+            if (theme.subthemes) {
+                theme.subthemes.forEach(st => st.sessions?.forEach(s => sessions.push({ ...s, duration: s.durationMinutes })));
+            }
+        });
 
         return sessions.sort((a, b) => new Date(b.start).getTime() - new Date(a.start).getTime());
     }, [tasks, goals, themes]);
