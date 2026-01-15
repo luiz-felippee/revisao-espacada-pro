@@ -17,13 +17,13 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({ time, onOpenSidebar,
                 {/* Left: Hamburger Menu */}
                 <button
                     onClick={isSidebarOpen ? onCloseSidebar : onOpenSidebar}
-                    className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white/5 active:bg-white/10 transition-colors touch-manipulation"
+                    className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/5 active:bg-white/10 transition-colors touch-manipulation"
                     aria-label={isSidebarOpen ? "Fechar menu" : "Abrir menu"}
                 >
                     {isSidebarOpen ? (
-                        <X className="w-4 h-4 text-slate-300" />
+                        <X className="w-6 h-6 text-slate-300" />
                     ) : (
-                        <Menu className="w-4 h-4 text-slate-300" />
+                        <Menu className="w-6 h-6 text-slate-300" />
                     )}
                 </button>
 
