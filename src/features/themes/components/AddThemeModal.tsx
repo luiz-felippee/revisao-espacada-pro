@@ -408,9 +408,9 @@ export const AddThemeModal: React.FC<AddThemeModalProps> = ({ isOpen, onClose, t
                                                                         <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform flex-shrink-0 ${isExpanded ? 'rotate-180' : ''}`} />
                                                                     </button>
                                                                     {isExpanded && (
-                                                                        <div className="space-y-2 mt-2 animate-in slide-in-from-top-2 fade-in duration-200">
+                                                                        <div className="space-y-3 mt-3 animate-in slide-in-from-top-2 fade-in duration-200">
                                                                             <Input
-                                                                                className={`flex-1 h-8 text-xs ${isModule ? 'font-bold text-blue-100 border-blue-500/20 focus:border-blue-500/50 bg-blue-900/10' : 'bg-slate-950/30 border-slate-800/50'}`}
+                                                                                className={`w-full h-12 text-sm px-3 ${isModule ? 'font-bold text-blue-100 border-blue-500/20 focus:border-blue-500/50 bg-blue-900/10' : 'bg-slate-950/50 border-slate-800'}`}
                                                                                 placeholder={isModule ? "Nome do Módulo..." : `Tópico...`}
                                                                                 value={st.title}
                                                                                 onChange={e => handleChangeSubtheme(index, 'title', e.target.value)}
@@ -418,7 +418,7 @@ export const AddThemeModal: React.FC<AddThemeModalProps> = ({ isOpen, onClose, t
                                                                             <select
                                                                                 value={st.difficulty}
                                                                                 onChange={(e) => handleChangeSubtheme(index, 'difficulty', e.target.value as Difficulty)}
-                                                                                className={`w-full h-8 rounded-lg bg-slate-950/50 border border-slate-800/50 text-[10px] px-2 outline-none focus:border-blue-500/50 cursor-pointer transition-colors ${DIFFICULTY_COLORS[st.difficulty]}`}
+                                                                                className={`w-full h-12 rounded-xl bg-slate-950/50 border border-slate-800 text-sm px-3 outline-none focus:border-blue-500/50 cursor-pointer transition-colors ${DIFFICULTY_COLORS[st.difficulty]}`}
                                                                             >
                                                                                 <option value="beginner">Iniciante</option>
                                                                                 <option value="intermediate">Intermediário</option>
@@ -426,16 +426,19 @@ export const AddThemeModal: React.FC<AddThemeModalProps> = ({ isOpen, onClose, t
                                                                                 <option value="module">📦 Módulo</option>
                                                                             </select>
                                                                             {!isModule && (
-                                                                                <div className="flex items-center gap-2">
-                                                                                    <div className="bg-slate-950/50 rounded-md border border-slate-800/50 p-0.5 scale-90 origin-left">
-                                                                                        <DurationStepper
-                                                                                            value={st.duration}
-                                                                                            onChange={(val) => handleChangeSubtheme(index, 'duration', val)}
-                                                                                            step={1}
-                                                                                            min={0}
-                                                                                        />
+                                                                                <div className="flex items-center justify-between bg-slate-900/40 p-2.5 rounded-xl border border-slate-800/50">
+                                                                                    <span className="text-xs font-medium text-slate-400">Tempo estimado:</span>
+                                                                                    <div className="flex items-center gap-3">
+                                                                                        <div className="bg-slate-950 rounded-lg border border-slate-700 p-1">
+                                                                                            <DurationStepper
+                                                                                                value={st.duration}
+                                                                                                onChange={(val) => handleChangeSubtheme(index, 'duration', val)}
+                                                                                                step={1}
+                                                                                                min={0}
+                                                                                            />
+                                                                                        </div>
+                                                                                        <span className="text-xs font-bold text-slate-300 min-w-[3ch] text-right">{st.duration}m</span>
                                                                                     </div>
-                                                                                    <span className="text-[10px] text-slate-600">minutos estim.</span>
                                                                                 </div>
                                                                             )}
                                                                         </div>
