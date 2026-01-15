@@ -134,40 +134,95 @@ export const GamificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
     const dismissAchievement = () => setNewlyUnlocked(null);
 
-    const claimDailyReward = (): { claimed: boolean, xpAmount: number } => {
-        const result = GamificationService.claimDailyReward(gamification);
+    const claimDailyReward = async (): Promise<{ claimed: boolean, xpAmount: number }> => {
+        const today = GamificationService.getToday();
 
-        if (result.claimed) {
-            // Play sounds and show feedback
-            playXPSound();
-            showToast(`+${result.xpAmount} XP (Recompensa Diária)`, "success");
+        // 1. Lógica Offline / Sem Login
+        if (!user) {
+            const result = GamificationService.claimDailyReward(gamification);
+            if (result.claimed) {
+                playXPSound();
+                showToast(`+${result.xpAmount} XP (Recompensa Diária)`, "success");
+                setGamification(result.newState);
+            }
+            return { claimed: result.claimed, xpAmount: result.xpAmount };
+        }
 
-            // Update state
-            setGamification(result.newState);
+        try {
+            // 2. Verificar estado no servidor (Fonte da Verdade)
+            const { data, error } = await supabase
+                .from('profiles')
+                .select('gamification')
+                .eq('id', user.id)
+                .maybeSingle();
 
-            // Sync to Supabase - FORCE UPDATE for daily reward to prevent duplicates on other devices
-            if (user && hasLoaded) {
-                // Also update via SyncQueue to keep consistency locally
+            if (error) {
+                console.error('Erro ao verificar recompensa no servidor:', error);
+                throw error; // Fallback no catch
+            }
+
+            // Usar estado do servidor se disponível, senão o local
+            let baseState = (data?.gamification as GamificationState) || gamification;
+
+            // Proteção contra estrutura inválida
+            if (!baseState.level) baseState = gamification;
+
+            // 3. Verificar se já coletou HOJE no servidor
+            if (baseState.streak?.lastDailyRewardDate === today) {
+                console.log('Recompensa já coletada no servidor.');
+                setGamification(baseState); // Atualiza local para refletir a verdade
+                if (baseState.streak.lastDailyRewardDate !== gamification.streak.lastDailyRewardDate) {
+                    showToast("Sincronizado: Recompensa já foi coletada hoje!", "info");
+                }
+                return { claimed: false, xpAmount: 0 };
+            }
+
+            // 4. Processar coleta
+            const result = GamificationService.claimDailyReward(baseState);
+
+            if (result.claimed) {
+                // Atualizar estado local
+                setGamification(result.newState);
+                playXPSound();
+                showToast(`+${result.xpAmount} XP (Recompensa Diária)`, "success");
+
+                // 5. Salvar no Servidor (Critical Path)
+                const { error: updateError } = await supabase
+                    .from('profiles')
+                    .update({ gamification: result.newState })
+                    .eq('id', user.id);
+
+                if (updateError) {
+                    // Se falhar o save, enfileira para tentar depois
+                    console.warn('Falha ao salvar recompensa, enfileirando sync:', updateError);
+                    SyncQueueService.enqueue({
+                        type: 'UPDATE',
+                        table: 'profiles',
+                        data: { id: user.id, gamification: result.newState } as any
+                    });
+                }
+            }
+
+            return { claimed: result.claimed, xpAmount: result.xpAmount };
+
+        } catch (err) {
+            // Fallback para comportamento local otimista em caso de erro de rede
+            console.warn('Fallback local para Daily Reward devido a erro:', err);
+            const result = GamificationService.claimDailyReward(gamification);
+
+            if (result.claimed) {
+                setGamification(result.newState);
+                playXPSound();
+                showToast(`+${result.xpAmount} XP (Offline)`, "success");
+
                 SyncQueueService.enqueue({
                     type: 'UPDATE',
                     table: 'profiles',
-                    data: {
-                        id: user.id,
-                        gamification: result.newState
-                    } as any
+                    data: { id: user.id, gamification: result.newState } as any
                 });
-
-                // Force immediate save attempt to ensure other devices get the update ASAP
-                supabase.from('profiles')
-                    .update({ gamification: result.newState })
-                    .eq('id', user.id)
-                    .then(({ error }) => {
-                        if (error) console.error('Failed to force save daily reward:', error);
-                    });
             }
+            return { claimed: result.claimed, xpAmount: result.xpAmount };
         }
-
-        return { claimed: result.claimed, xpAmount: result.xpAmount };
     };
 
     const resetGamification = async () => {

@@ -8,6 +8,7 @@ import confetti from 'canvas-confetti';
 export const DailyRewardModal: React.FC = () => {
     const { gamification, claimDailyReward } = useGamification();
     const [isOpen, setIsOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         if (!gamification.streak) return; // Wait for load
@@ -29,23 +30,28 @@ export const DailyRewardModal: React.FC = () => {
         }
     }, [gamification.streak]);
 
-    const handleClaim = () => {
-        const result = claimDailyReward();
+    const handleClaim = async () => {
+        setIsLoading(true);
+        try {
+            const result = await claimDailyReward();
 
-        if (result.claimed) {
-            const today = new Date().toISOString().split('T')[0];
-            localStorage.setItem(`daily_reward_claimed_${today}`, 'true');
+            if (result.claimed) {
+                const today = new Date().toISOString().split('T')[0];
+                localStorage.setItem(`daily_reward_claimed_${today}`, 'true');
 
-            confetti({
-                particleCount: 100,
-                spread: 70,
-                origin: { y: 0.6 },
-                colors: ['#F59E0B', '#EF4444', '#10B981']
-            });
-            setIsOpen(false);
-        } else {
-            // Já foi reivindicado (não deveria chegar aqui, mas é uma proteção)
-            setIsOpen(false);
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#F59E0B', '#EF4444', '#10B981']
+                });
+                setIsOpen(false);
+            } else {
+                // Se retornou claimed=false, significa que já foi coletado remotamente
+                setIsOpen(false);
+            }
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -88,7 +94,9 @@ export const DailyRewardModal: React.FC = () => {
                         onClick={handleClaim}
                         className="w-full mt-4 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-400 hover:to-red-500 border-none shadow-lg shadow-orange-900/20 group"
                     >
-                        <span className="font-bold text-white group-hover:scale-105 transition-transform">Resgatar Recompensa</span>
+                        <span className="font-bold text-white group-hover:scale-105 transition-transform">
+                            {isLoading ? 'Verificando...' : 'Resgatar Recompensa'}
+                        </span>
                     </Button>
                 </div>
             </div>
