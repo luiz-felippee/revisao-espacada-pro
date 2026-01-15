@@ -14,9 +14,9 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({ time, onOpenSidebar,
     const navigate = useNavigate();
 
     return (
-        <header className="md:hidden fixed top-0 left-0 right-0 z-40 bg-slate-950/80 backdrop-blur-xl border-b border-white/5">
+        <header className="md:hidden fixed top-0 left-0 right-0 z-40 bg-slate-950/95 backdrop-blur-xl border-b border-white/5 pt-[env(safe-area-inset-top)] transition-all duration-200">
             {/* Primeira linha: Menu + Status compacto */}
-            <div className="flex items-center justify-between px-4 h-10" style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}>
+            <div className="flex items-center justify-between px-4 h-12">
                 {/* Left: Hamburger Menu */}
                 <button
                     onClick={isSidebarOpen ? onCloseSidebar : onOpenSidebar}
