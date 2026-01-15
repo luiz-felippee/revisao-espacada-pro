@@ -86,14 +86,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <div className={cn("py-6 relative", isCollapsed ? "px-4" : "px-6")}>
                     {isCollapsed ? (
                         <div className="flex justify-center">
-                            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                            <div
+                                onClick={() => onTabChange('dashboard')}
+                                className="w-10 h-10 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20 cursor-pointer hover:scale-105 transition-transform"
+                            >
                                 <span className="text-white font-black text-xl">⚡</span>
                             </div>
                         </div>
                     ) : (
                         <>
-                            <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                            <div
+                                onClick={() => onTabChange('dashboard')}
+                                className="flex items-center gap-3 cursor-pointer group"
+                            >
+                                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform">
                                     <span className="text-white font-black text-2xl">⚡</span>
                                 </div>
                                 <div>

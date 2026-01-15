@@ -1,6 +1,7 @@
 import React from 'react';
 import { Menu, X } from 'lucide-react';
 import { format } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 
 interface MobileHeaderProps {
     time: Date;
@@ -10,6 +11,8 @@ interface MobileHeaderProps {
 }
 
 export const MobileHeader: React.FC<MobileHeaderProps> = ({ time, onOpenSidebar, onCloseSidebar, isSidebarOpen }) => {
+    const navigate = useNavigate();
+
     return (
         <header className="md:hidden fixed top-0 left-0 right-0 z-40 bg-slate-950/80 backdrop-blur-xl border-b border-white/5">
             {/* Primeira linha: Menu + Status compacto */}
@@ -63,7 +66,10 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({ time, onOpenSidebar,
 
             {/* Segunda linha: Logo centralizado - MAIS EMBAIXO */}
             <div className="flex items-center justify-center pb-3 pt-1">
-                <div className="flex items-center gap-2.5">
+                <div
+                    className="flex items-center gap-2.5 cursor-pointer active:scale-95 transition-transform"
+                    onClick={() => navigate('/dashboard')}
+                >
                     <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/20">
                         <span className="text-base">⚡</span>
                     </div>
