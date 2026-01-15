@@ -63,13 +63,13 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({ time, onOpenSidebar,
 
             {/* Segunda linha: Logo centralizado - MAIS EMBAIXO */}
             <div className="flex items-center justify-center pb-3 pt-1">
-                <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/20">
-                        <span className="text-sm">⚡</span>
+                <div className="flex items-center gap-2.5">
+                    <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center shadow-lg shadow-blue-500/20">
+                        <span className="text-base">⚡</span>
                     </div>
-                    <div className="flex flex-col leading-none">
-                        <span className="text-[11px] font-bold text-white">Revisão</span>
-                        <span className="text-[8px] font-semibold text-blue-400 uppercase tracking-wide">Espaçada</span>
+                    <div className="flex flex-col leading-none gap-0.5">
+                        <span className="text-sm font-bold text-white">Revisão</span>
+                        <span className="text-[10px] font-semibold text-blue-400 uppercase tracking-wide">Espaçada</span>
                     </div>
                 </div>
             </div>
