@@ -59,6 +59,20 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }));
     }, [unlockedSubthemes]);
 
+    // Force Zen Mode off on Mobile to prevent UI break
+    useEffect(() => {
+        const checkMobileZen = () => {
+            if (window.innerWidth < 768 && zenMode) {
+                console.log('📱 Disabling Zen Mode on Mobile');
+                setZenMode(false);
+            }
+        };
+
+        checkMobileZen(); // Check on mount/update
+        window.addEventListener('resize', checkMobileZen);
+        return () => window.removeEventListener('resize', checkMobileZen);
+    }, [zenMode]);
+
     // Broadcast Channel for Multi-Tab Sync
     useEffect(() => {
         const channel = new BroadcastChannel('study_sync_channel');
@@ -110,6 +124,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
 
     const toggleZenMode = () => {
+        if (window.innerWidth < 768) return; // Prevent enabling on mobile
+
         setZenMode(prev => {
             const newValue = !prev;
             localStorage.setItem('zen_mode', JSON.stringify(newValue));
