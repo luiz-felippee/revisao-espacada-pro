@@ -14,24 +14,24 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({ time, onOpenSidebar,
     const navigate = useNavigate();
 
     return (
-        <header className="md:hidden fixed top-0 left-0 right-0 z-40 bg-slate-950/95 backdrop-blur-xl border-b border-white/5 pt-[env(safe-area-inset-top)] transition-all duration-200">
-            {/* Primeira linha: Menu + Status compacto */}
-            <div className="flex items-center justify-between px-4 h-12">
-                {/* Left: Hamburger Menu */}
+        <header className="md:hidden fixed top-0 left-0 right-0 z-40 bg-slate-950/95 backdrop-blur-xl border-b border-white/5 pt-[calc(env(safe-area-inset-top)+2rem)] transition-all duration-200">
+            {/* Primeira linha: Menu + Status compacto - Altura aumentada para acomodar menu maior */}
+            <div className="flex items-center justify-between px-4 h-14">
+                {/* Left: Hamburger Menu MAIOR */}
                 <button
                     onClick={isSidebarOpen ? onCloseSidebar : onOpenSidebar}
-                    className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white/5 active:bg-white/10 transition-colors touch-manipulation"
+                    className="w-12 h-12 flex items-center justify-center rounded-xl hover:bg-white/5 active:bg-white/10 transition-colors touch-manipulation"
                     aria-label={isSidebarOpen ? "Fechar menu" : "Abrir menu"}
                 >
                     {isSidebarOpen ? (
-                        <X className="w-6 h-6 text-slate-300" />
+                        <X className="w-7 h-7 text-slate-300" />
                     ) : (
-                        <Menu className="w-6 h-6 text-slate-300" />
+                        <Menu className="w-7 h-7 text-slate-300" />
                     )}
                 </button>
 
-                {/* Right: Status Online + Data/Hora COMPACTOS */}
-                <div className="flex items-center gap-1.5 bg-slate-900/80 border border-slate-800 rounded-full px-2 py-0.5 shadow-sm">
+                {/* Right: Status Online + Data/Hora - Mantido compacto mas alinhado */}
+                <div className="flex items-center gap-1.5 bg-slate-900/80 border border-slate-800 rounded-full px-3 py-1 shadow-sm">
                     {/* Online indicator */}
                     <div className="relative flex items-center justify-center">
                         <div className="w-0.5 h-0.5 bg-emerald-500 rounded-full animate-pulse absolute -top-0.5 -right-0.5 z-10" />
@@ -64,8 +64,8 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({ time, onOpenSidebar,
                 </div>
             </div>
 
-            {/* Segunda linha: Logo centralizado - MAIS EMBAIXO */}
-            <div className="flex items-center justify-center pb-4 pt-3">
+            {/* Segunda linha: Logo centralizado - Bem próximo da linha de cima */}
+            <div className="flex items-center justify-center pb-4 pt-1">
                 <div
                     className="flex items-center gap-2.5 cursor-pointer active:scale-95 transition-transform"
                     onClick={() => navigate('/dashboard')}
