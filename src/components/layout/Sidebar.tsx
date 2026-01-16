@@ -171,7 +171,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     {menuItems.map((item) => (
                         <div key={item.id} className="relative">
                             <button
-                                onClick={() => onTabChange(item.id)}
+                                onClick={() => {
+                                    onTabChange(item.id);
+                                    // Fechar menu automaticamente no mobile ao navegar
+                                    if (window.innerWidth < 1024) {
+                                        onCloseSidebar();
+                                    }
+                                }}
                                 className={cn(
                                     "relative group flex items-center w-full rounded-xl transition-all duration-300 overflow-visible",
                                     isCollapsed ? "justify-center px-3 py-3" : "gap-3 px-4 py-3",
