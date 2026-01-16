@@ -271,6 +271,7 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({ isOpen, onClose, tas
                                 {/* Quick Deadlines */}
                                 <div className="flex items-center gap-2 overflow-x-auto pb-1 custom-scrollbar justify-start sm:justify-center pt-2">
                                     {([
+                                        // Options updated: 1 Month -> 1 Year
                                         { label: '+1 Mês', months: 1 },
                                         { label: '+3 Meses', months: 3 },
                                         { label: '+6 Meses', months: 6 },
