@@ -65,7 +65,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({ time, onOpenSidebar,
             </div>
 
             {/* Segunda linha: Logo centralizado - MAIS EMBAIXO */}
-            <div className="flex items-center justify-center pb-3 pt-1">
+            <div className="flex items-center justify-center pb-4 pt-3">
                 <div
                     className="flex items-center gap-2.5 cursor-pointer active:scale-95 transition-transform"
                     onClick={() => navigate('/dashboard')}
