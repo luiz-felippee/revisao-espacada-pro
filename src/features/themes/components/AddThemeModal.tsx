@@ -426,37 +426,34 @@ export const AddThemeModal: React.FC<AddThemeModalProps> = ({ isOpen, onClose, t
                                                                                 <option value="module">📦 Módulo</option>
                                                                             </select>
                                                                             {!isModule && (
-                                                                                <div className="flex items-center justify-between bg-slate-900/40 p-2 rounded-lg border border-slate-800/50 mt-1">
-                                                                                    <span className="text-[10px] uppercase font-bold text-slate-500 pl-1">Tempo Est.</span>
-
-                                                                                    <div className="flex items-center gap-1 bg-slate-950/80 rounded-lg border border-slate-800 p-0.5 shadow-inner">
+                                                                                <div className="flex items-center justify-end gap-3 mt-2">
+                                                                                    <span className="text-[10px] uppercase font-bold text-slate-500">Tempo:</span>
+                                                                                    <div className="flex items-center bg-slate-950 rounded-lg border border-slate-700/80 overflow-hidden h-7">
                                                                                         <button
                                                                                             type="button"
                                                                                             onClick={(e) => {
                                                                                                 e.stopPropagation();
                                                                                                 const val = parseInt(st.duration) || 0;
-                                                                                                handleChangeSubtheme(index, 'duration', Math.max(0, val - 1).toString());
+                                                                                                handleChangeSubtheme(index, 'duration', Math.max(0, val - 5).toString());
                                                                                             }}
-                                                                                            className="w-7 h-7 flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+                                                                                            className="w-7 h-full flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 transition-colors border-r border-slate-800"
                                                                                         >
-                                                                                            <Minus className="w-3.5 h-3.5" />
+                                                                                            <Minus className="w-3 h-3" />
                                                                                         </button>
-
-                                                                                        <div className="min-w-[2.5rem] text-center px-1">
-                                                                                            <span className="text-sm font-bold text-white">{st.duration}</span>
-                                                                                            <span className="text-[10px] text-slate-500 ml-0.5">m</span>
+                                                                                        <div className="min-w-[3rem] px-1 text-center bg-slate-900/50 h-full flex items-center justify-center">
+                                                                                            <span className="text-xs font-bold text-white tabular-nums">{st.duration}</span>
+                                                                                            <span className="text-[9px] text-slate-500 ml-0.5">min</span>
                                                                                         </div>
-
                                                                                         <button
                                                                                             type="button"
                                                                                             onClick={(e) => {
                                                                                                 e.stopPropagation();
                                                                                                 const val = parseInt(st.duration) || 0;
-                                                                                                handleChangeSubtheme(index, 'duration', (val + 1).toString());
+                                                                                                handleChangeSubtheme(index, 'duration', (val + 5).toString());
                                                                                             }}
-                                                                                            className="w-7 h-7 flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+                                                                                            className="w-7 h-full flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 transition-colors border-l border-slate-800"
                                                                                         >
-                                                                                            <Plus className="w-3.5 h-3.5" />
+                                                                                            <Plus className="w-3 h-3" />
                                                                                         </button>
                                                                                     </div>
                                                                                 </div>
@@ -487,10 +484,14 @@ export const AddThemeModal: React.FC<AddThemeModalProps> = ({ isOpen, onClose, t
                                                                     </div>
                                                                     {!isModule && (
                                                                         <div className="flex items-center gap-2 pl-1">
-                                                                            <div className="bg-slate-950/50 rounded-lg border border-slate-800/50 flex items-center p-0.5 h-8">
-                                                                                <button type="button" onClick={() => { const val = parseInt(st.duration) || 0; handleChangeSubtheme(index, 'duration', Math.max(0, val - 1).toString()); }} className="w-6 h-full flex items-center justify-center text-slate-500 hover:text-white hover:bg-white/5 rounded"><Minus className="w-3 h-3" /></button>
-                                                                                <span className="text-xs font-bold text-slate-300 w-10 text-center">{st.duration}m</span>
-                                                                                <button type="button" onClick={() => { const val = parseInt(st.duration) || 0; handleChangeSubtheme(index, 'duration', (val + 1).toString()); }} className="w-6 h-full flex items-center justify-center text-slate-500 hover:text-white hover:bg-white/5 rounded"><Plus className="w-3 h-3" /></button>
+                                                                            <div className="flex items-center gap-2 pl-1">
+                                                                                <div className="bg-slate-950/50 rounded-lg border border-slate-700/80 flex items-center h-8 overflow-hidden">
+                                                                                    <button type="button" onClick={() => { const val = parseInt(st.duration) || 0; handleChangeSubtheme(index, 'duration', Math.max(0, val - 5).toString()); }} className="w-6 h-full flex items-center justify-center text-slate-500 hover:text-white hover:bg-slate-800 border-r border-slate-800 transition-colors"><Minus className="w-3 h-3" /></button>
+                                                                                    <div className="w-12 h-full flex items-center justify-center bg-slate-900/30">
+                                                                                        <span className="text-xs font-bold text-slate-300 tabular-nums">{st.duration}m</span>
+                                                                                    </div>
+                                                                                    <button type="button" onClick={() => { const val = parseInt(st.duration) || 0; handleChangeSubtheme(index, 'duration', (val + 5).toString()); }} className="w-6 h-full flex items-center justify-center text-slate-500 hover:text-white hover:bg-slate-800 border-l border-slate-800 transition-colors"><Plus className="w-3 h-3" /></button>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                     )}
