@@ -66,7 +66,8 @@ export const Modal: React.FC<ModalProps> = ({
             <div
                 className={`relative w-full mx-1 sm:mx-auto ${maxWidthClass} bg-slate-950/90 border border-slate-800 rounded-2xl sm:rounded-3xl shadow-2xl animate-in zoom-in-95 duration-200 flex flex-col overflow-hidden ${className || ''}`}
                 style={{
-                    maxHeight: 'calc(95vh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))'
+                    maxHeight: 'calc(95vh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))',
+                    touchAction: 'pan-y'
                 }}
                 onClick={e => e.stopPropagation()}
                 role="dialog"
@@ -77,11 +78,14 @@ export const Modal: React.FC<ModalProps> = ({
                     <div className="flex items-center justify-between px-4 py-3 sm:px-6 sm:py-5 border-b border-white/5 shrink-0">
                         <h2 id={titleId} className={`text-lg sm:text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400`}>{title}</h2>
                         <button
-                            onClick={onClose}
-                            className="p-2 -mr-2 text-slate-400 hover:text-red-500 hover:bg-red-500/20 rounded-full transition-colors absolute top-2 right-2 sm:top-3 sm:right-3 z-50 touch-manipulation group"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onClose();
+                            }}
+                            className="p-3.5 sm:p-2 -mr-3 sm:-mr-2 text-slate-400 hover:text-red-500 hover:bg-red-500/20 active:bg-slate-800 rounded-full transition-all absolute top-1 right-1 sm:top-3 sm:right-3 z-[60] touch-manipulation group active:scale-95"
                             aria-label="Fechar modal"
                         >
-                            <X className="w-5 h-5 sm:w-6 sm:h-6 group-hover:scale-110 transition-transform" aria-hidden="true" />
+                            <X className="w-6 h-6 sm:w-6 sm:h-6 group-hover:scale-110 transition-transform" aria-hidden="true" />
                         </button>
                     </div>
                 )}

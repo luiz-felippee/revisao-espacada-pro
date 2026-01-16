@@ -173,10 +173,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             <button
                                 onClick={() => {
                                     onTabChange(item.id);
-                                    // Fechar menu automaticamente no mobile ao navegar
-                                    if (window.innerWidth < 1024) {
-                                        onCloseSidebar();
-                                    }
+                                    // Sempre fechar o menu ao navegar (no desktop o estado é ignorado visualmente pelo CSS)
+                                    onCloseSidebar();
                                 }}
                                 className={cn(
                                     "relative group flex items-center w-full rounded-xl transition-all duration-300 overflow-visible",

@@ -95,10 +95,12 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ value, onChange, label
 
     return (
         <div className="space-y-2">
-            <label className="text-sm font-medium text-slate-300 block mb-2">
-                {label}
-            </label>
-            <div className="flex flex-wrap gap-2">
+            {label && (
+                <label className="text-sm font-medium text-slate-300 block mb-2 text-center">
+                    {label}
+                </label>
+            )}
+            <div className="flex flex-wrap gap-2 justify-center">
                 {displayColors.map((color) => (
                     <button
                         key={color.value}

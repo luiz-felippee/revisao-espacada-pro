@@ -34,69 +34,73 @@ export const ProjectList = () => {
             </div>
 
             {/* Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
                 <div>
                     <h1 className="text-3xl font-black text-white tracking-tight">
                         Projetos
                     </h1>
-                    <p className="text-slate-400 mt-1">
+                    <p className="text-slate-400 mt-1 text-sm sm:text-base">
                         Gerencie seus projetos profissionais e pessoais
                     </p>
                 </div>
-                <button
-                    onClick={() => setIsAddModalOpen(true)}
-                    className="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-bold transition-all flex items-center gap-2 shadow-lg shadow-blue-500/20"
-                >
-                    <Plus className="w-4 h-4" />
-                    Novo Projeto
-                </button>
+                <div className="w-full sm:w-auto">
+                    <button
+                        onClick={() => setIsAddModalOpen(true)}
+                        className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white px-4 py-3 sm:py-2 rounded-xl sm:rounded-lg font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 active:scale-95 touch-manipulation"
+                    >
+                        <Plus className="w-5 h-5 sm:w-4 sm:h-4" />
+                        Novo Projeto
+                    </button>
+                </div>
             </div>
 
             {/* Filters */}
-            <div className="flex flex-wrap gap-2">
-                {/* Status Filters */}
-                {(['all', 'planning', 'active', 'paused', 'completed'] as const).map(status => {
-                    const labels = {
-                        all: 'Todos',
-                        planning: 'Planejando',
-                        active: 'Ativos',
-                        paused: 'Pausados',
-                        completed: 'Concluídos',
-                    };
+            <div className="w-full overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0 scrollbar-hide">
+                <div className="flex gap-2 min-w-max">
+                    {/* Status Filters */}
+                    {(['all', 'planning', 'active', 'paused', 'completed'] as const).map(status => {
+                        const labels = {
+                            all: 'Todos',
+                            planning: 'Planejando',
+                            active: 'Ativos',
+                            paused: 'Pausados',
+                            completed: 'Concluídos',
+                        };
 
-                    const colors = {
-                        all: 'bg-slate-500/20 text-slate-300 border-slate-500/30',
-                        planning: 'bg-slate-500/20 text-slate-300 border-slate-500/30',
-                        active: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-                        paused: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
-                        completed: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
-                    };
+                        const colors = {
+                            all: 'bg-slate-500/20 text-slate-300 border-slate-500/30',
+                            planning: 'bg-slate-500/20 text-slate-300 border-slate-500/30',
+                            active: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
+                            paused: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+                            completed: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
+                        };
 
-                    return (
-                        <button
-                            key={status}
-                            onClick={() => setStatusFilter(status)}
-                            className={`px-4 py-2 rounded-lg font-medium text-sm border transition-all ${statusFilter === status
+                        return (
+                            <button
+                                key={status}
+                                onClick={() => setStatusFilter(status)}
+                                className={`px-4 py-2 rounded-lg font-medium text-sm border transition-all whitespace-nowrap ${statusFilter === status
                                     ? colors[status] + ' ring-2 ring-white/20'
                                     : 'bg-slate-900/50 text-slate-400 border-slate-700 hover:bg-slate-800'
-                                }`}
-                        >
-                            {labels[status]} ({statusCounts[status]})
-                        </button>
-                    );
-                })}
+                                    }`}
+                            >
+                                {labels[status]} ({statusCounts[status]})
+                            </button>
+                        );
+                    })}
+                </div>
             </div>
 
             {/* Projects Grid */}
             {filteredProjects.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-[400px] text-center">
-                    <div className="w-24 h-24 bg-slate-900/30 backdrop-blur-md rounded-full flex items-center justify-center mb-6 ring-1 ring-white/10">
-                        <LayoutGrid className="w-10 h-10 text-slate-600" />
+                <div className="flex flex-col items-center justify-center py-20 text-center animate-in fade-in zoom-in-95 duration-300">
+                    <div className="w-20 h-20 bg-slate-900/50 backdrop-blur-md rounded-full flex items-center justify-center mb-6 ring-1 ring-white/10 shadow-xl">
+                        <LayoutGrid className="w-8 h-8 text-slate-600" />
                     </div>
                     <h3 className="text-xl font-bold text-white mb-2">
                         {statusFilter === 'all' ? 'Nenhum projeto ainda' : `Nenhum projeto ${statusFilter === 'planning' ? 'em planejamento' : statusFilter}`}
                     </h3>
-                    <p className="text-slate-400 max-w-sm mb-6">
+                    <p className="text-slate-400 max-w-xs mx-auto mb-6 text-sm">
                         {statusFilter === 'all'
                             ? 'Crie seu primeiro projeto para começar a organizar suas entregas'
                             : 'Experimente filtrar por outro status'}
