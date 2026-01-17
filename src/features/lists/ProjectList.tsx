@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Plus, Filter, LayoutGrid, LayoutList } from 'lucide-react';
+import { Plus, Filter, LayoutGrid, LayoutList, Clock, ChevronRight } from 'lucide-react';
 import { useProjectContext } from '../../context/ProjectProvider';
 import { ProjectCard } from '../projects/components/ProjectCard';
 import { AddProjectModal } from '../projects/components/AddProjectModal';
+import { useNavigate } from 'react-router-dom';
 import type { Project } from '../../types';
 
 export const ProjectList = () => {
     const { projects } = useProjectContext();
+    const navigate = useNavigate();
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [statusFilter, setStatusFilter] = useState<Project['status'] | 'all'>('all');
     const [categoryFilter, setCategoryFilter] = useState<Project['category'] | 'all'>('all');
@@ -52,6 +54,27 @@ export const ProjectList = () => {
                         Novo Projeto
                     </button>
                 </div>
+            </div>
+
+            {/* Mobile Shortcut: Projetos Tech (Substitui o botão do topo) */}
+            <div className="md:hidden w-full">
+                <button
+                    onClick={() => navigate('/summaries')}
+                    className="w-full bg-slate-900/60 border border-slate-700/50 p-4 rounded-xl flex items-center justify-between group active:scale-95 transition-all shadow-lg shadow-black/20"
+                >
+                    <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-500/20 to-red-500/20 border border-orange-500/10 flex items-center justify-center text-orange-400 group-hover:scale-110 transition-transform">
+                            <Clock className="w-6 h-6" />
+                        </div>
+                        <div className="text-left">
+                            <h3 className="font-bold text-white text-lg leading-tight">Projetos Tech</h3>
+                            <p className="text-xs text-slate-400 font-medium">Acessar lista rápida</p>
+                        </div>
+                    </div>
+                    <div className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center group-hover:bg-blue-600 transition-colors">
+                        <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-white" />
+                    </div>
+                </button>
             </div>
 
             {/* Filters */}
