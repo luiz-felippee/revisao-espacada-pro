@@ -110,49 +110,11 @@ export default defineConfig({
     // Code splitting otimizado
     rollupOptions: {
       output: {
-        // Chunks mais granulares para better caching
-        manualChunks: (id) => {
-          // React ecosystem
-          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
-            return 'vendor-react';
-          }
-          if (id.includes('node_modules/react-router')) {
-            return 'vendor-router';
-          }
-          if (id.includes('node_modules/framer-motion')) {
-            return 'vendor-motion';
-          }
-
-          // UI Libraries
-          if (id.includes('node_modules/lucide-react')) {
-            return 'vendor-icons';
-          }
-          if (id.includes('node_modules/recharts')) {
-            return 'vendor-charts';
-          }
-
-          // Backend/Data
-          if (id.includes('node_modules/@supabase')) {
-            return 'vendor-supabase';
-          }
-          if (id.includes('node_modules/date-fns')) {
-            return 'vendor-dates';
-          }
-
-          // Rich text editor
-          if (id.includes('node_modules/@tiptap')) {
-            return 'vendor-editor';
-          }
-
-          // Analytics
-          if (id.includes('node_modules/@vercel') || id.includes('node_modules/@sentry')) {
-            return 'vendor-analytics';
-          }
-
-          // Other large dependencies
-          if (id.includes('node_modules/')) {
-            return 'vendor-misc';
-          }
+        // Chunks mais simples para compatibilidade
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-ui': ['framer-motion', 'lucide-react'],
+          'vendor-backend': ['@supabase/supabase-js'],
         },
 
         // Optimize chunk naming
