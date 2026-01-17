@@ -13,16 +13,27 @@ export const DailyRewardModal: React.FC = () => {
     useEffect(() => {
         if (!gamification.streak) return; // Wait for load
 
-        const today = new Date().toISOString().split('T')[0];
+        // USAR DATA LOCAL (Igual ao Service)
+        // Isso resolve discrepâncias de fuso horário onde toISOString() (UTC) era diferente de format() (Local)
+        // Ex: 22h no Brasil ainda é dia X, mas UTC já é dia X+1.
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const today = `${year}-${month}-${day}`;
 
-        // Verificar se já reivindicou localmente hoje (proteção extra)
-        const localClaimed = localStorage.getItem(`daily_reward_claimed_${today}`);
-        if (localClaimed === 'true') return;
+        // Verificação Robusta com LocalStorage (Única fonte de verdade local)
+        const lastClaimedDate = localStorage.getItem('last_daily_reward_date');
+
+        // Se já pegou hoje (marcado no storage), cancela imediatamente
+        if (lastClaimedDate === today) return;
 
         const lastLogin = gamification.streak.lastLoginDate;
         const lastRewardDate = gamification.streak.lastDailyRewardDate;
 
-        // Verificar se acessou hoje e ainda não reivindicou
+        // Verificar se acessou hoje e ainda não reivindicou no banco
+        // Se lastLogin não for hoje, o usuário ainda não "logou" na lógica do service (checkStreak não rodou ou falhou)
+        // Mas se checkStreak roda no provider load, deve estar atualizado.
         if (lastLogin === today && lastRewardDate !== today) {
             // Small delay to ensure UI is ready and it's not jarring
             const timer = setTimeout(() => setIsOpen(true), 1500);
@@ -36,8 +47,14 @@ export const DailyRewardModal: React.FC = () => {
             const result = await claimDailyReward();
 
             if (result.claimed) {
-                const today = new Date().toISOString().split('T')[0];
-                localStorage.setItem(`daily_reward_claimed_${today}`, 'true');
+                // Formatar today localmente de novo para garantir
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = String(now.getMonth() + 1).padStart(2, '0');
+                const day = String(now.getDate()).padStart(2, '0');
+                const today = `${year}-${month}-${day}`;
+
+                localStorage.setItem('last_daily_reward_date', today);
 
                 confetti({
                     particleCount: 100,
