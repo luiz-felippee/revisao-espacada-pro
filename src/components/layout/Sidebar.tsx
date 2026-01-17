@@ -213,11 +213,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                     <span className="relative z-10 font-medium tracking-wide">{item.label}</span>
                                 )}
 
-                                {/* Tooltip - aparece ao passar o mouse */}
-                                <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-3 py-2 bg-slate-800 text-white text-sm rounded-lg shadow-xl opacity-0 group-hover:opacity-100 group-hover:visible invisible transition-all duration-200 whitespace-nowrap z-[60] pointer-events-none">
-                                    {item.label}
-                                    <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-slate-800" />
-                                </div>
+                                {/* Tooltip - Aparece APENAS quando colapsado */}
+                                {isCollapsed && (
+                                    <div className="absolute left-full ml-2 top-1/2 -translate-y-1/2 px-3 py-2 bg-slate-800 text-white text-sm rounded-lg shadow-xl opacity-0 group-hover:opacity-100 group-hover:visible invisible transition-all duration-200 whitespace-nowrap z-[60] pointer-events-none">
+                                        {item.label}
+                                        <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-slate-800" />
+                                    </div>
+                                )}
                             </button>
                         </div>
                     ))}
