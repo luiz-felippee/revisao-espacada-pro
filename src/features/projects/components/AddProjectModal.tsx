@@ -156,7 +156,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
                 </div>
 
                 {/* Dates */}
-                <div className="grid grid-cols-2 gap-3 md:gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label className="block text-[10px] md:text-xs font-bold text-slate-500 uppercase mb-1.5 md:mb-2 ml-1">
                             Data de Início
@@ -171,7 +171,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({ isOpen, onClos
 
                     <div>
                         <label className="block text-[10px] md:text-xs font-bold text-slate-500 uppercase mb-1.5 md:mb-2 ml-1">
-                            Deadline
+                            Data Término
                         </label>
                         <input
                             type="date"
