@@ -174,6 +174,14 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
     const isStrictFocus = pomoSettings.strictMode && isActive && mode === 'focus';
     const showSidebar = (!zenMode && !isStrictFocus) && (modals.state.isSidebarOpen || window.innerWidth >= 1024);
 
+    // Listener global para abrir o modal de "Meus Projetos" (SummaryModal)
+    // Usado pelo atalho "Projetos Tech" na lista de projetos mobile
+    useEffect(() => {
+        const handleOpen = () => setIsSummaryModalOpen(true);
+        window.addEventListener('open-summary-modal', handleOpen);
+        return () => window.removeEventListener('open-summary-modal', handleOpen);
+    }, [setIsSummaryModalOpen]);
+
     return (
         <div className="flex h-screen bg-slate-950 text-slate-100 overflow-hidden relative" style={{ scrollbarGutter: 'stable' }}>
 

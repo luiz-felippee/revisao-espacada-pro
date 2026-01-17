@@ -3,12 +3,10 @@ import { Plus, Filter, LayoutGrid, LayoutList, Clock, ChevronRight } from 'lucid
 import { useProjectContext } from '../../context/ProjectProvider';
 import { ProjectCard } from '../projects/components/ProjectCard';
 import { AddProjectModal } from '../projects/components/AddProjectModal';
-import { useNavigate } from 'react-router-dom';
 import type { Project } from '../../types';
 
 export const ProjectList = () => {
     const { projects } = useProjectContext();
-    const navigate = useNavigate();
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [statusFilter, setStatusFilter] = useState<Project['status'] | 'all'>('all');
     const [categoryFilter, setCategoryFilter] = useState<Project['category'] | 'all'>('all');
@@ -59,7 +57,7 @@ export const ProjectList = () => {
             {/* Mobile Shortcut: Projetos Tech (Substitui o botão do topo) */}
             <div className="md:hidden w-full">
                 <button
-                    onClick={() => navigate('/summaries')}
+                    onClick={() => window.dispatchEvent(new Event('open-summary-modal'))}
                     className="w-full bg-slate-900/60 border border-slate-700/50 p-4 rounded-xl flex items-center justify-between group active:scale-95 transition-all shadow-lg shadow-black/20"
                 >
                     <div className="flex items-center gap-4">
