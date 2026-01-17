@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite' // force restart
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
-import { visualizer } from 'rollup-plugin-visualizer'
+// import { visualizer } from 'rollup-plugin-visualizer' // Temporarily disabled
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -88,27 +88,89 @@ export default defineConfig({
         ]
       }
     }),
-    visualizer({
-      open: true,
-      gzipSize: true,
-      brotliSize: true,
-      filename: 'dist/stats.html'
-    })
+    // Temporarily disabled for debugging
+    // visualizer({
+    //   open: true,
+    //   gzipSize: true,
+    //   brotliSize: true,
+    //   filename: 'dist/stats.html'
+    // })
   ],
   build: {
     // Minification - usando esbuild para evitar problemas com exports
     minify: 'esbuild',
-    // Code splitting
+
+    // Target modern browsers for smaller bundles
+    target: 'esnext',
+
+    // Optimize CSS
+    cssCodeSplit: true,
+    cssMinify: true,
+
+    // Code splitting otimizado
     rollupOptions: {
       output: {
-        manualChunks: {
-          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
-          'vendor-supabase': ['@supabase/supabase-js'],
-          'vendor-icons': ['lucide-react']
-        }
+        // Chunks mais granulares para better caching
+        manualChunks: (id) => {
+          // React ecosystem
+          if (id.includes('node_modules/react') || id.includes('node_modules/react-dom')) {
+            return 'vendor-react';
+          }
+          if (id.includes('node_modules/react-router')) {
+            return 'vendor-router';
+          }
+          if (id.includes('node_modules/framer-motion')) {
+            return 'vendor-motion';
+          }
+
+          // UI Libraries
+          if (id.includes('node_modules/lucide-react')) {
+            return 'vendor-icons';
+          }
+          if (id.includes('node_modules/recharts')) {
+            return 'vendor-charts';
+          }
+
+          // Backend/Data
+          if (id.includes('node_modules/@supabase')) {
+            return 'vendor-supabase';
+          }
+          if (id.includes('node_modules/date-fns')) {
+            return 'vendor-dates';
+          }
+
+          // Rich text editor
+          if (id.includes('node_modules/@tiptap')) {
+            return 'vendor-editor';
+          }
+
+          // Analytics
+          if (id.includes('node_modules/@vercel') || id.includes('node_modules/@sentry')) {
+            return 'vendor-analytics';
+          }
+
+          // Other large dependencies
+          if (id.includes('node_modules/')) {
+            return 'vendor-misc';
+          }
+        },
+
+        // Optimize chunk naming
+        chunkFileNames: 'assets/[name]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash][extname]',
       }
     },
-    // Chunk size warnings
-    chunkSizeWarningLimit: 600
+
+    // Chunk size warnings - mais restritivo
+    chunkSizeWarningLimit: 500,
+
+    // Optimize sourcemaps for production
+    sourcemap: false,
+
+    // Tree shaking
+    modulePreload: {
+      polyfill: false
+    }
   }
 })

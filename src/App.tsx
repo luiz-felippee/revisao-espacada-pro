@@ -15,6 +15,7 @@ import { UIThemeProvider } from './context/UIThemeProvider';
 import { SyncStatusWatcher } from './components/SyncStatusWatcher';
 import { AudioProvider } from './context/AudioProvider';
 import { AppearanceProvider } from './context/AppearanceContext';
+import { QueryProvider } from './context/QueryProvider';
 import { MainLayout } from './layouts/MainLayout';
 import { LoginPage } from './features/auth/LoginPage';
 import { LoadingSpinner } from './components/ui/LoadingSpinner';
@@ -151,6 +152,7 @@ function App() {
   return (
     <BrowserRouter>
       <ContextComposer providers={[
+        <QueryProvider children={null} />,
         <AuthProvider children={null} />,
         <AppearanceProvider children={null} />,
         <ToastProvider children={null} />,
