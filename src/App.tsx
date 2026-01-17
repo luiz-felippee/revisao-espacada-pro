@@ -16,6 +16,7 @@ import { SyncStatusWatcher } from './components/SyncStatusWatcher';
 import { AudioProvider } from './context/AudioProvider';
 import { AppearanceProvider } from './context/AppearanceContext';
 import { QueryProvider } from './context/QueryProvider';
+import { HelmetProvider } from 'react-helmet-async';
 import { MainLayout } from './layouts/MainLayout';
 import { LoginPage } from './features/auth/LoginPage';
 import { LoadingSpinner } from './components/ui/LoadingSpinner';
@@ -150,24 +151,26 @@ import { ContextComposer } from './components/utils/ContextComposer';
 
 function App() {
   return (
-    <BrowserRouter>
-      <ContextComposer providers={[
-        <QueryProvider children={null} />,
-        <AuthProvider children={null} />,
-        <AppearanceProvider children={null} />,
-        <ToastProvider children={null} />,
-        <ConfirmProvider children={null} />,
-        <UIThemeProvider children={null} />,
-        <AudioProvider children={null} />
-      ]}>
-        <SyncStatusWatcher />
-        <AppContent />
-      </ContextComposer>
+    <HelmetProvider>
+      <BrowserRouter>
+        <ContextComposer providers={[
+          <QueryProvider children={null} />,
+          <AuthProvider children={null} />,
+          <AppearanceProvider children={null} />,
+          <ToastProvider children={null} />,
+          <ConfirmProvider children={null} />,
+          <UIThemeProvider children={null} />,
+          <AudioProvider children={null} />
+        ]}>
+          <SyncStatusWatcher />
+          <AppContent />
+        </ContextComposer>
 
-      {/* Vercel Analytics & Speed Insights */}
-      <Analytics />
-      <SpeedInsights />
-    </BrowserRouter>
+        {/* Vercel Analytics & Speed Insights */}
+        <Analytics />
+        <SpeedInsights />
+      </BrowserRouter>
+    </HelmetProvider>
   );
 }
 
