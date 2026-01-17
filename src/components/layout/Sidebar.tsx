@@ -73,6 +73,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                     isSidebarOpen ? "translate-x-0" : "-translate-x-full",
                     // Desktop (lg+): always visible, relative, sem translate (overrides mobile logic)
                     "lg:translate-x-0 lg:relative lg:z-20",
+                    // Espaçamento do topo no mobile (safe area para hora/notch)
+                    "pt-14 lg:pt-0",
                     zenMode && "opacity-30 hover:opacity-100 grayscale"
                 )}
                 style={{
@@ -115,9 +117,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             </div>
 
                             {/* Botão de fechar - só quando expandido */}
+                            {/* Adjusted top position for mobile safe area */}
                             <button
-                                onClick={() => onTabChange('calendar')}
-                                className="absolute top-6 right-6 p-2 rounded-lg text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200"
+                                onClick={onCloseSidebar}
+                                className="absolute top-6 right-6 lg:top-6 p-2 rounded-lg text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200"
                                 aria-label="Colapsar menu"
                                 title="Colapsar menu"
                             >
@@ -137,19 +140,28 @@ export const Sidebar: React.FC<SidebarProps> = ({
                                 </div>
                             </div>
                         ) : (
-                            <div className="relative p-4 rounded-2xl bg-slate-900/60 border border-slate-800/50 backdrop-blur-sm">
+                            <div
+                                onClick={() => {
+                                    onTabChange('settings');
+                                    onCloseSidebar();
+                                }}
+                                className="relative p-4 rounded-2xl bg-slate-900/60 border border-slate-800/50 backdrop-blur-sm cursor-pointer hover:bg-slate-800/80 transition-colors group"
+                            >
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3">
                                         <div className="w-11 h-11 bg-slate-700 rounded-full flex items-center justify-center ring-2 ring-slate-600/50">
                                             <span className="text-white font-bold text-lg">{user?.name?.[0]?.toUpperCase() || 'U'}</span>
                                         </div>
                                         <div>
-                                            <span className="text-sm font-semibold text-white block leading-tight">{user?.name || 'Usuário'}</span>
+                                            <span className="text-sm font-semibold text-white block leading-tight group-hover:text-blue-400 transition-colors">{user?.name || 'Usuário'}</span>
                                             <span className="text-[11px] text-emerald-400 font-medium">Online</span>
                                         </div>
                                     </div>
                                     <button
-                                        onClick={logout}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            logout();
+                                        }}
                                         className="p-2 text-slate-500 hover:text-red-400 hover:bg-slate-800/50 rounded-lg transition-colors"
                                         title="Sair"
                                         aria-label="Sair"
