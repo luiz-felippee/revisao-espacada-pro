@@ -172,7 +172,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
     }, [isActive, mode, startAudio, stopAudio, isPlaying]);
 
     const isStrictFocus = pomoSettings.strictMode && isActive && mode === 'focus';
-    const showSidebar = (!zenMode && !isStrictFocus) && (modals.state.isSidebarOpen || window.innerWidth >= 768);
+    const showSidebar = (!zenMode && !isStrictFocus) && (modals.state.isSidebarOpen || window.innerWidth >= 1024);
 
     return (
         <div className="flex h-screen bg-slate-950 text-slate-100 overflow-hidden relative" style={{ scrollbarGutter: 'stable' }}>

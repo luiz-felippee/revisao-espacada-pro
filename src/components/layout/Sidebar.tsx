@@ -64,13 +64,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <aside
                 aria-label="Menu Lateral"
                 className={cn(
-                    "flex flex-col bg-slate-950/80 backdrop-blur-2xl border-r border-white/5 overflow-hidden transition-all duration-300",
+                    "flex flex-col bg-slate-950/80 backdrop-blur-2xl border-r border-white/5 overflow-hidden transition-all duration-300 ease-in-out",
                     // Largura dinâmica: compacto quando colapsado, largo quando expandido
-                    isCollapsed ? "w-20" : "w-72",
-                    // Mobile (<md): fixed overlay when open, hidden when closed
-                    isSidebarOpen ? "flex fixed inset-y-0 left-0 z-50" : "hidden",
-                    // Desktop (lg+): always visible, relative (overrides mobile logic)
-                    "lg:!flex lg:relative lg:z-20",
+                    // No mobile, usar max-w para nunca ultrapassar 90% da viewport
+                    isCollapsed ? "w-20" : "w-72 max-w-[90vw]",
+                    // Mobile (<lg): fixed overlay when open, translate-x quando closed
+                    "fixed inset-y-0 left-0 z-50",
+                    isSidebarOpen ? "translate-x-0" : "-translate-x-full",
+                    // Desktop (lg+): always visible, relative, sem translate (overrides mobile logic)
+                    "lg:translate-x-0 lg:relative lg:z-20",
                     zenMode && "opacity-30 hover:opacity-100 grayscale"
                 )}
                 style={{

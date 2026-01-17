@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '../../lib/utils';
+import { useBreakpoint } from '../../hooks/useBreakpoint';
 
 interface HeaderProps {
     isPWA: boolean;
@@ -68,6 +69,8 @@ export const Header: React.FC<HeaderProps> = ({
     missionCount = 0,
     projectCount = 0,
 }) => {
+    const { isTablet } = useBreakpoint();
+
     return (
         <>
             <header className={cn(
@@ -86,7 +89,7 @@ export const Header: React.FC<HeaderProps> = ({
                     {/* Mobile Menu Button */}
                     <button
                         onClick={() => {
-                            if (window.innerWidth >= 768 && window.innerWidth < 1024) {
+                            if (isTablet) {
                                 // Tablet: toggle sidebar
                                 setIsSidebarOpen(!isSidebarOpen);
                             } else {
@@ -96,7 +99,7 @@ export const Header: React.FC<HeaderProps> = ({
                         }}
                         className="p-3 rounded-xl hover:bg-white/5 transition-colors touch-manipulation"
                         aria-label={
-                            (window.innerWidth >= 768 && window.innerWidth < 1024 && isSidebarOpen)
+                            (isTablet && isSidebarOpen)
                                 ? "Fechar Menu"
                                 : isMobileMenuOpen
                                     ? "Fechar Menu"
@@ -104,7 +107,7 @@ export const Header: React.FC<HeaderProps> = ({
                         }
                         aria-expanded={isMobileMenuOpen || isSidebarOpen}
                     >
-                        {((window.innerWidth >= 768 && window.innerWidth < 1024 && isSidebarOpen) || isMobileMenuOpen)
+                        {((isTablet && isSidebarOpen) || isMobileMenuOpen)
                             ? <X className="w-6 h-6 text-slate-300" />
                             : <Menu className="w-6 h-6 text-slate-300" />}
                     </button>

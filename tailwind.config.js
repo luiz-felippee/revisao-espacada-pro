@@ -7,6 +7,9 @@ export default {
     darkMode: 'class',
     theme: {
         extend: {
+            screens: {
+                'xs': '480px',
+            },
             fontFamily: {
                 sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
                 display: ['Inter', 'system-ui', 'sans-serif'],
