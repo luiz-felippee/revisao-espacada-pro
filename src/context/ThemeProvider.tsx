@@ -22,7 +22,6 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         playSFX
     });
 
-    // Initial Fetch from Supabase
     useEffect(() => {
         const fetchThemes = async () => {
             if (user) {
@@ -156,7 +155,35 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 }
             }
         };
+
         fetchThemes();
+
+        // Realtime Subscription
+        if (user) {
+            const channel = supabase
+                .channel('db-changes')
+                .on(
+                    'postgres_changes',
+                    { event: '*', schema: 'public', table: 'themes', filter: `user_id=eq.${user.id}` },
+                    (payload) => {
+                        logger.info('Realtime Theme Change:', payload);
+                        fetchThemes();
+                    }
+                )
+                .on(
+                    'postgres_changes',
+                    { event: '*', schema: 'public', table: 'subthemes', filter: `user_id=eq.${user.id}` },
+                    (payload) => {
+                        logger.info('Realtime Subtheme Change:', payload);
+                        fetchThemes();
+                    }
+                )
+                .subscribe();
+
+            return () => {
+                supabase.removeChannel(channel);
+            };
+        }
     }, [user, themeActions.setThemes]);
 
     return (

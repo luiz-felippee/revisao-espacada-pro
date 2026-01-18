@@ -116,7 +116,26 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
             }
         };
         fetchTasks();
-    }, [user]); // Fixed: removed taskActions to prevent infinite loop
+
+        // Realtime Subscription
+        if (user) {
+            const channel = supabase
+                .channel('db-changes-tasks')
+                .on(
+                    'postgres_changes',
+                    { event: '*', schema: 'public', table: 'tasks', filter: `user_id=eq.${user.id}` },
+                    (payload) => {
+                        logger.info('Realtime Task Change:', payload);
+                        fetchTasks();
+                    }
+                )
+                .subscribe();
+
+            return () => {
+                supabase.removeChannel(channel);
+            };
+        }
+    }, [user]);
 
 
     return (

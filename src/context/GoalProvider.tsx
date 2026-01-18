@@ -89,7 +89,26 @@ export const GoalProvider: React.FC<{ children: React.ReactNode }> = ({ children
             }
         };
         fetchGoals();
-    }, [user]); // Fixed: removed goalActions to prevent infinite loop
+
+        // Realtime Subscription
+        if (user) {
+            const channel = supabase
+                .channel('db-changes-goals')
+                .on(
+                    'postgres_changes',
+                    { event: '*', schema: 'public', table: 'goals', filter: `user_id=eq.${user.id}` },
+                    (payload) => {
+                        logger.info('Realtime Goal Change:', payload);
+                        fetchGoals();
+                    }
+                )
+                .subscribe();
+
+            return () => {
+                supabase.removeChannel(channel);
+            };
+        }
+    }, [user]);
 
 
     return (
