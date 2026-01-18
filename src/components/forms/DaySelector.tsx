@@ -28,7 +28,7 @@ export const DaySelector: React.FC<DaySelectorProps> = ({ selectedDays, onChange
     return (
         <div className="space-y-2">
             <label className="text-sm font-medium text-slate-400">Repetir nos dias</label>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-1 sm:gap-2">
                 {DAYS.map((day, idx) => {
                     const isSelected = selectedDays.includes(day.value);
                     return (
@@ -37,7 +37,7 @@ export const DaySelector: React.FC<DaySelectorProps> = ({ selectedDays, onChange
                             type="button"
                             onClick={() => toggleDay(day.value)}
                             className={cn(
-                                "w-8 h-8 rounded-full text-xs font-bold transition-all border",
+                                "w-8 h-8 rounded-full text-xs font-bold transition-all border shrink-0",
                                 isSelected
                                     ? "bg-blue-600 border-blue-500 text-white shadow-lg shadow-blue-500/30"
                                     : "bg-slate-800 border-slate-700 text-slate-500 hover:bg-slate-700 hover:text-slate-300"

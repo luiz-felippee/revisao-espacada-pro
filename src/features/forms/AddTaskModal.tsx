@@ -158,7 +158,7 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({ isOpen, onClose, tas
                 <form onSubmit={handleSubmit} className="relative z-10 flex flex-col h-full overflow-hidden">
 
                     {/* 1. Header (Fixed Layout) */}
-                    <div className="flex-none bg-slate-950/90 backdrop-blur-xl border-b border-white/5 p-6 pb-4 space-y-4 z-20">
+                    <div className="flex-none bg-slate-950/90 backdrop-blur-xl border-b border-white/5 p-4 sm:p-6 pb-4 space-y-4 z-20">
                         <div className="flex items-start justify-between">
                             <div>
                                 <h2 className="text-2xl font-bold text-white tracking-tight">
@@ -195,7 +195,7 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({ isOpen, onClose, tas
                     </div>
 
                     {/* 2. Scrollable Body */}
-                    <div className="flex-1 overflow-y-auto custom-scrollbar p-6 space-y-8 z-10">
+                    <div className="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-6 space-y-8 z-10">
 
                         {/* Frequency Tab Selector */}
                         <div className="grid grid-cols-4 gap-2 bg-slate-900/50 p-1.5 rounded-xl border border-white/5">
@@ -229,7 +229,7 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({ isOpen, onClose, tas
                         </div>
 
                         {/* Settings Card */}
-                        <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-5 space-y-5 shadow-sm">
+                        <div className="bg-slate-900/40 border border-white/5 rounded-2xl p-3 sm:p-5 space-y-5 shadow-sm">
 
                             {/* Dates Section */}
                             <div className="space-y-3">
@@ -347,7 +347,7 @@ export const AddTaskModal: React.FC<AddTaskModalProps> = ({ isOpen, onClose, tas
                     </div>
 
                     {/* 3. Footer (Fixed Layout) */}
-                    <div className="flex-none p-6 pt-4 bg-slate-950 border-t border-white/5 flex items-center justify-between gap-3 shadow-[0_-10px_40px_-5px_rgba(0,0,0,0.5)] z-20">
+                    <div className="flex-none p-4 sm:p-6 pt-4 bg-slate-950 border-t border-white/5 flex items-center justify-between gap-3 shadow-[0_-10px_40px_-5px_rgba(0,0,0,0.5)] z-20">
                         {taskToEdit && (
                             <button
                                 type="button"
