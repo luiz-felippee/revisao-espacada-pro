@@ -440,9 +440,16 @@ export const AddThemeModal: React.FC<AddThemeModalProps> = ({ isOpen, onClose, t
                                                                                         >
                                                                                             <Minus className="w-4 h-4" />
                                                                                         </button>
-                                                                                        <div className="flex-1 px-1 text-center bg-slate-900/50 h-full flex items-center justify-center border-l border-r border-slate-800">
-                                                                                            <span className="text-sm font-bold text-white tabular-nums">{st.duration}</span>
-                                                                                            <span className="text-[10px] text-slate-500 ml-1">min</span>
+                                                                                        <div className="flex-1 px-1 text-center bg-slate-900/50 h-full flex items-center justify-center border-l border-r border-slate-800 group-focus-within:border-blue-500/50 transition-colors">
+                                                                                            <input
+                                                                                                type="text"
+                                                                                                inputMode="numeric"
+                                                                                                className="w-12 bg-transparent text-right text-sm font-bold text-white outline-none p-0 appearance-none"
+                                                                                                value={st.duration}
+                                                                                                onChange={(e) => handleChangeSubtheme(index, 'duration', e.target.value.replace(/\D/g, ''))}
+                                                                                                onBlur={() => { if (!st.duration) handleChangeSubtheme(index, 'duration', '0'); }}
+                                                                                            />
+                                                                                            <span className="text-[10px] text-slate-500 ml-1 select-none">min</span>
                                                                                         </div>
                                                                                         <button
                                                                                             type="button"
@@ -487,8 +494,16 @@ export const AddThemeModal: React.FC<AddThemeModalProps> = ({ isOpen, onClose, t
                                                                             <div className="flex items-center gap-2 pl-1">
                                                                                 <div className="bg-slate-950/50 rounded-lg border border-slate-700/80 flex items-center h-8 overflow-hidden">
                                                                                     <button type="button" onClick={() => { const val = parseInt(st.duration) || 0; handleChangeSubtheme(index, 'duration', Math.max(0, val - 5).toString()); }} className="w-6 h-full flex items-center justify-center text-slate-500 hover:text-white hover:bg-slate-800 border-r border-slate-800 transition-colors"><Minus className="w-3 h-3" /></button>
-                                                                                    <div className="w-12 h-full flex items-center justify-center bg-slate-900/30">
-                                                                                        <span className="text-xs font-bold text-slate-300 tabular-nums">{st.duration}m</span>
+                                                                                    <div className="w-14 h-full flex items-center justify-center bg-slate-900/30 group-focus-within:bg-slate-900 transition-colors cursor-text" onClick={(e) => e.currentTarget.querySelector('input')?.focus()}>
+                                                                                        <input
+                                                                                            type="text"
+                                                                                            inputMode="numeric"
+                                                                                            className="w-[26px] bg-transparent text-right text-xs font-bold text-slate-300 outline-none p-0 appearance-none selection:bg-blue-500/30"
+                                                                                            value={st.duration}
+                                                                                            onChange={(e) => handleChangeSubtheme(index, 'duration', e.target.value.replace(/\D/g, ''))}
+                                                                                            onBlur={() => { if (!st.duration) handleChangeSubtheme(index, 'duration', '0'); }}
+                                                                                        />
+                                                                                        <span className="text-xs font-bold text-slate-300 ml-0.5 select-none text-left w-3">m</span>
                                                                                     </div>
                                                                                     <button type="button" onClick={() => { const val = parseInt(st.duration) || 0; handleChangeSubtheme(index, 'duration', (val + 5).toString()); }} className="w-6 h-full flex items-center justify-center text-slate-500 hover:text-white hover:bg-slate-800 border-l border-slate-800 transition-colors"><Plus className="w-3 h-3" /></button>
                                                                                 </div>
