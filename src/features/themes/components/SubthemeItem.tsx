@@ -164,8 +164,9 @@ export const SubthemeItem = ({ sub, themeColor, projectedStart, onOpenNotes, unl
                                         // Critical: Check Ref (sync) AND State (async) AND Context (global)
                                         if (isLocked || isActive) return;
 
-                                        startFocus(sub.id, 'subtheme', sub.title, 25);
-                                        startFocusSession(sub.id, 'subtheme', sub.title, 25);
+                                        const duration = sub.durationMinutes || 25;
+                                        startFocus(sub.id, 'subtheme', sub.title, duration);
+                                        startFocusSession(sub.id, 'subtheme', sub.title, duration);
                                     }}
                                     disabled={isLocked || isActive}
                                     className={cn(

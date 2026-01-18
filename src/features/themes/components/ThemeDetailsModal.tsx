@@ -169,7 +169,7 @@ export const ThemeDetailsModal: React.FC<ThemeDetailsModalProps> = ({ isOpen, on
                                 {completedSubs}<span className="text-slate-500 text-sm">/{totalSubs}</span>
                             </div>
                         </div>
-                        <div className="bg-slate-900/20 rounded-2xl p-4 block sm:hidden md:block">
+                        <div className="bg-slate-900/20 rounded-2xl p-4">
                             <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest block mb-2">Esforço Estimado</span>
                             <div className="text-white font-bold flex items-center gap-2 text-sm">
                                 <Clock className="w-4 h-4 text-amber-400" />

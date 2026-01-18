@@ -23,6 +23,10 @@ export const ThemeCard = ({ theme, completionDate, queuedSubthemesMap, onEdit, o
     const completedSubs = theme.subthemes.filter((s: Subtheme) => s.status === 'completed').length;
     const progress = totalSubs === 0 ? 0 : (completedSubs / totalSubs) * 100;
 
+    // Calculate Total Duration
+    const totalMinutes = theme.subthemes.reduce((acc, s) => acc + (s.durationMinutes || 0), 0);
+    const timeDisplay = totalMinutes < 60 ? `${totalMinutes}m` : `${Math.floor(totalMinutes / 60)}h ${totalMinutes % 60 > 0 ? `${totalMinutes % 60}m` : ''}`;
+
     return (
         <div className="group relative w-full h-full flex flex-col">
             {/* Main Card Structure */}
@@ -74,6 +78,12 @@ export const ThemeCard = ({ theme, completionDate, queuedSubthemesMap, onEdit, o
                                     <span className="inline-flex items-center justify-center px-2 sm:px-3 py-1 rounded-full bg-black/40 border border-white/5 text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-widest backdrop-blur-sm whitespace-nowrap">
                                         {totalSubs} {totalSubs === 1 ? 'Módulo' : 'Módulos'}
                                     </span>
+                                    {totalMinutes > 0 && (
+                                        <span className="inline-flex items-center justify-center px-2 sm:px-3 py-1 rounded-full bg-black/40 border border-white/5 text-[9px] sm:text-[10px] font-bold text-amber-400/80 uppercase tracking-widest backdrop-blur-sm whitespace-nowrap gap-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-3 h-3"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+                                            {timeDisplay}
+                                        </span>
+                                    )}
                                     {/* Category Badge */}
                                     <span className={`inline-flex items-center justify-center px-2 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wider border whitespace-nowrap ${theme.category === 'project'
                                         ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
