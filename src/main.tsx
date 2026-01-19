@@ -6,6 +6,7 @@ import { registerSW } from 'virtual:pwa-register'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { SyncQueueService } from './services/SyncQueueService'
 import { initWebVitals } from './utils/webVitals'
+import { clearAllBlacklists } from './utils/deletedItemsBlacklist'
 
 // ⚠️ CRITICAL: Validate environment before anything else
 import './config/env'
@@ -24,6 +25,9 @@ registerSW({
     logger.info('App ready to work offline')
   },
 })
+
+// Clear old blacklist data (permanent deletion mode)
+clearAllBlacklists();
 
 // Initialize Sync Queue
 SyncQueueService.loadQueue();

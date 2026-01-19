@@ -1,11 +1,16 @@
 /**
- * Deleted Items Blacklist
+ * Deleted Items Blacklist - DESATIVADO
  * 
- * Mantém uma lista permanente de IDs de itens deletados para prevenir
- * "ressurreição" quando o Supabase falha em deletar ou quando há problemas de sincronização.
+ * IMPORTANTE: Sistema de blacklist DESATIVADO por solicitação do usuário.
  * 
- * Esta é uma solução de último recurso que garante que itens excluídos
- * NUNCA voltem, independente de falhas no backend.
+ * Ao deletar qualquer item (Task, Goal, Theme, Subtheme), a deleção é:
+ * - ✅ PERMANENTE
+ * - ✅ SEM histórico salvo
+ * - ✅ SEM rastros em localStorage
+ * - ✅ Completamente removido
+ * 
+ * As funções abaixo são mantidas apenas para compatibilidade com código existente,
+ * mas NÃO salvam nenhum dado.
  */
 
 const DELETED_TASKS_KEY = 'deleted_tasks_blacklist_v1';
@@ -25,97 +30,72 @@ const getBlacklistKey = (type: ItemType): string => {
 };
 
 /**
- * Adiciona um ID à blacklist permanente
+ * DESATIVADA - Não salva histórico de deleção
+ * 
+ * Esta função é mantida para compatibilidade, mas NÃO faz nada.
+ * Deleção é permanente e limpa, sem rastros.
  */
 export const addToBlacklist = (id: string, type: ItemType): void => {
-    try {
-        const key = getBlacklistKey(type);
-        const blacklist = getBlacklist(type);
-
-        if (!blacklist.includes(id)) {
-            blacklist.push(id);
-            localStorage.setItem(key, JSON.stringify(blacklist));
-            console.log(`🚫 Added ${id} to ${type} blacklist (total: ${blacklist.length})`);
-        }
-    } catch (error) {
-        console.error('Error adding to blacklist:', error);
-    }
+    console.log(`🗑️ Permanent deletion of ${type}: ${id} (no history saved)`);
+    // NÃO SALVA NADA - Deleção limpa e permanente
 };
 
 /**
- * Verifica se um ID está na blacklist
+ * DESATIVADA - Sempre retorna false
+ * 
+ * Como não salvamos mais blacklist, nenhum item está "blacklisted".
  */
 export const isBlacklisted = (id: string, type: ItemType): boolean => {
-    try {
-        const blacklist = getBlacklist(type);
-        return blacklist.includes(id);
-    } catch (error) {
-        console.error('Error checking blacklist:', error);
-        return false;
-    }
+    return false; // Sem blacklist, nada está bloqueado
 };
 
 /**
- * Remove um ID da blacklist (para rollback em caso de erro)
+ * Não faz nada - mantida para compatibilidade
  */
 export const removeFromBlacklist = (id: string, type: ItemType): void => {
-    try {
-        const key = getBlacklistKey(type);
-        const blacklist = getBlacklist(type);
-        const filtered = blacklist.filter(item => item !== id);
-
-        if (filtered.length !== blacklist.length) {
-            localStorage.setItem(key, JSON.stringify(filtered));
-            console.log(`✅ Removed ${id} from ${type} blacklist (rollback)`);
-        }
-    } catch (error) {
-        console.error('Error removing from blacklist:', error);
-    }
+    // Não precisa remover porque não adiciona
 };
 
 /**
- * Obtém a blacklist completa para um tipo
+ * DESATIVADA - Sempre retorna array vazio
  */
 export const getBlacklist = (type: ItemType): string[] => {
-    try {
-        const key = getBlacklistKey(type);
-        const stored = localStorage.getItem(key);
-        return stored ? JSON.parse(stored) : [];
-    } catch (error) {
-        console.error('Error reading blacklist:', error);
-        return [];
-    }
+    return []; // Sem blacklist
 };
 
 /**
- * Limpa a blacklist completamente (útil para reset ou troubleshooting)
+ * Limpa qualquer blacklist antiga que possa existir
  */
 export const clearBlacklist = (type: ItemType): void => {
     try {
         const key = getBlacklistKey(type);
         localStorage.removeItem(key);
-        console.log(`🧹 Cleared ${type} blacklist`);
+        console.log(`🧹 Cleared old ${type} blacklist data`);
     } catch (error) {
         console.error('Error clearing blacklist:', error);
     }
 };
 
 /**
- * Filtra um array removendo IDs que estão na blacklist
+ * DESATIVADA - Retorna todos os itens sem filtrar
+ * 
+ * Como não há blacklist, nenhum item é filtrado.
  */
 export const filterBlacklisted = <T extends { id: string }>(
     items: T[],
     type: ItemType
 ): T[] => {
-    const blacklist = getBlacklist(type);
-    if (blacklist.length === 0) return items;
+    return items; // Retorna tudo - sem filtro
+};
 
-    const filtered = items.filter(item => !blacklist.includes(item.id));
-    const blockedCount = items.length - filtered.length;
-
-    if (blockedCount > 0) {
-        console.log(`🛡️ Blocked ${blockedCount} blacklisted ${type}(s) from resurrecting`);
-    }
-
-    return filtered;
+/**
+ * Utilitário para limpar TODOS os dados de blacklist antigas
+ * Deve ser chamado na inicialização para garantir limpeza completa
+ */
+export const clearAllBlacklists = (): void => {
+    clearBlacklist('task');
+    clearBlacklist('goal');
+    clearBlacklist('theme');
+    clearBlacklist('subtheme');
+    console.log('🧹 All blacklist data cleared - clean deletion mode active');
 };
