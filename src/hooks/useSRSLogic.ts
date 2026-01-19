@@ -1,54 +1,59 @@
-import { format, addDays } from 'date-fns';
-import { parseLocalDate } from '../utils/dateHelpers';
-import { ptBR } from 'date-fns/locale';
-import type { Theme } from '../types';
+import { addDays, format, parseISO } from 'date-fns';
+import type { Theme, Subtheme } from '../types';
 
+/**
+ * Hook com lógica SRS para projeção de revisões e datas de conclusão
+ */
 export const useSRSLogic = () => {
-    // Helper to generate SRS dates (Legacy/Projected)
-    const generateProjectedReviews = (startDate: string) => {
-        const offsets = [1, 2, 7, 15, 30];
+    // SRS Intervals: +1, +1, +5, +8, +15 (Cumulative: 1, 2, 7, 15, 30)
+    const offsets = [1, 2, 7, 15, 30];
+
+    const generateProjectedReviews = (startDateStr: string) => {
+        const startDate = parseISO(startDateStr);
         return offsets.map((offset, idx) => ({
             number: idx + 1,
-            date: format(addDays(parseLocalDate(startDate), offset), 'yyyy-MM-dd'),
-            status: 'pending' as const,
-            isProjected: true
+            date: format(addDays(startDate, offset), 'yyyy-MM-dd'),
+            status: 'pending' as const
         }));
     };
 
-    // Helper for Completion Date
-    const getThemeCompletionDate = (theme: Theme, queuedSubthemesMap: Map<string, string>) => {
-        let maxDate = 0;
-        theme.subthemes.forEach((st: any) => {
-            let finishDateIdx = st.reviews.length > 0 ? parseLocalDate(st.reviews[st.reviews.length - 1].date).getTime() : 0;
+    const getThemeCompletionDate = (theme: Theme, queuedSubthemesMap: Map<string, string>): Date | null => {
+        let finishDateIdx = 0;
+        theme.subthemes.forEach(st => {
             if (st.status === 'queue') {
                 const projStartStr = queuedSubthemesMap.get(st.id);
-                if (projStartStr) finishDateIdx = addDays(parseLocalDate(projStartStr), 30).getTime();
+                if (projStartStr) finishDateIdx = addDays(parseISO(projStartStr), 30).getTime();
+            } else if (st.status === 'active' || st.status === 'completed') {
+                const lastReview = st.reviews?.slice(-1)[0];
+                if (lastReview) {
+                    const d = parseISO(lastReview.date);
+                    if (d.getTime() > finishDateIdx) finishDateIdx = d.getTime();
+                }
             }
-            if (finishDateIdx > maxDate) maxDate = finishDateIdx;
         });
-        return maxDate === 0 ? null : format(new Date(maxDate), "d 'de' MMMM", { locale: ptBR });
+        return finishDateIdx > 0 ? new Date(finishDateIdx) : null;
     };
 
-    // Calculate dates for queued items based on "one new item per day" rule
-    const calculateQueuedDates = (themes: Theme[]) => {
-        const today = new Date();
-        let queueCounter = 0;
-        const queuedSubthemesMap = new Map<string, string>();
-        themes.forEach(t => {
-            t.subthemes.forEach((st: any) => {
+    const calculateQueuedDates = (themes: Theme[]): Map<string, string> => {
+        const queuedMap = new Map<string, string>();
+        let currentDate = new Date();
+
+        themes.forEach(theme => {
+            theme.subthemes.forEach(st => {
                 if (st.status === 'queue') {
-                    queueCounter++;
-                    const projDate = format(addDays(today, queueCounter), 'yyyy-MM-dd');
-                    queuedSubthemesMap.set(st.id, projDate);
+                    queuedMap.set(st.id, format(currentDate, 'yyyy-MM-dd'));
+                    currentDate = addDays(currentDate, 1); // Each queued subtheme starts 1 day apart
                 }
             });
         });
-        return queuedSubthemesMap;
+
+        return queuedMap;
     };
 
     return {
         generateProjectedReviews,
         getThemeCompletionDate,
-        calculateQueuedDates
+        calculateQueuedDates,
+        offsets
     };
 };

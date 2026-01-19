@@ -434,7 +434,7 @@ export const AddThemeModal: React.FC<AddThemeModalProps> = ({ isOpen, onClose, t
                                                                                             onClick={(e) => {
                                                                                                 e.stopPropagation();
                                                                                                 const val = parseInt(st.duration) || 0;
-                                                                                                handleChangeSubtheme(index, 'duration', Math.max(0, val - 5).toString());
+                                                                                                handleChangeSubtheme(index, 'duration', Math.max(0, val - 1).toString());
                                                                                             }}
                                                                                             className="w-10 h-full flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 transition-colors border-r border-slate-800 active:bg-slate-700"
                                                                                         >
@@ -456,7 +456,7 @@ export const AddThemeModal: React.FC<AddThemeModalProps> = ({ isOpen, onClose, t
                                                                                             onClick={(e) => {
                                                                                                 e.stopPropagation();
                                                                                                 const val = parseInt(st.duration) || 0;
-                                                                                                handleChangeSubtheme(index, 'duration', (val + 5).toString());
+                                                                                                handleChangeSubtheme(index, 'duration', (val + 1).toString());
                                                                                             }}
                                                                                             className="w-10 h-full flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 transition-colors border-l border-slate-800 active:bg-slate-700"
                                                                                         >
@@ -493,7 +493,7 @@ export const AddThemeModal: React.FC<AddThemeModalProps> = ({ isOpen, onClose, t
                                                                         <div className="flex items-center gap-2 pl-1">
                                                                             <div className="flex items-center gap-2 pl-1">
                                                                                 <div className="bg-slate-950/50 rounded-lg border border-slate-700/80 flex items-center h-8 overflow-hidden">
-                                                                                    <button type="button" onClick={() => { const val = parseInt(st.duration) || 0; handleChangeSubtheme(index, 'duration', Math.max(0, val - 5).toString()); }} className="w-6 h-full flex items-center justify-center text-slate-500 hover:text-white hover:bg-slate-800 border-r border-slate-800 transition-colors"><Minus className="w-3 h-3" /></button>
+                                                                                    <button type="button" onClick={() => { const val = parseInt(st.duration) || 0; handleChangeSubtheme(index, 'duration', Math.max(0, val - 1).toString()); }} className="w-6 h-full flex items-center justify-center text-slate-500 hover:text-white hover:bg-slate-800 border-r border-slate-800 transition-colors"><Minus className="w-3 h-3" /></button>
                                                                                     <div className="w-14 h-full flex items-center justify-center bg-slate-900/30 group-focus-within:bg-slate-900 transition-colors cursor-text" onClick={(e) => e.currentTarget.querySelector('input')?.focus()}>
                                                                                         <input
                                                                                             type="text"
@@ -505,7 +505,7 @@ export const AddThemeModal: React.FC<AddThemeModalProps> = ({ isOpen, onClose, t
                                                                                         />
                                                                                         <span className="text-xs font-bold text-slate-300 ml-0.5 select-none text-left w-3">m</span>
                                                                                     </div>
-                                                                                    <button type="button" onClick={() => { const val = parseInt(st.duration) || 0; handleChangeSubtheme(index, 'duration', (val + 5).toString()); }} className="w-6 h-full flex items-center justify-center text-slate-500 hover:text-white hover:bg-slate-800 border-l border-slate-800 transition-colors"><Plus className="w-3 h-3" /></button>
+                                                                                    <button type="button" onClick={() => { const val = parseInt(st.duration) || 0; handleChangeSubtheme(index, 'duration', (val + 1).toString()); }} className="w-6 h-full flex items-center justify-center text-slate-500 hover:text-white hover:bg-slate-800 border-l border-slate-800 transition-colors"><Plus className="w-3 h-3" /></button>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
