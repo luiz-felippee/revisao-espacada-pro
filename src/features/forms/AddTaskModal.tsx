@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Target } from 'lucide-react';
+import { Target, Trash2 } from 'lucide-react';
 import { z } from 'zod';
 import { Modal } from '../../components/ui/Modal';
 import { Input } from '../../components/ui/Input';
@@ -16,6 +16,7 @@ import { DatePicker } from '../../components/ui/DatePicker';
 import { SymbolPicker } from '../../components/forms/SymbolPicker';
 import { cn } from '../../lib/utils';
 import type { Task } from '../../types';
+import { useFormDraft } from '../../hooks/useFormDraft';
 
 interface AddTaskModalProps {
     isOpen: boolean;
