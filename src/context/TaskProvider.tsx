@@ -7,6 +7,7 @@ import type { Task } from '../types';
 import { supabase } from '../lib/supabase';
 import { TaskContext } from './TaskContext';
 import { filterBlacklisted } from '../utils/deletedItemsBlacklist';
+import { SyncQueueService } from '../services/SyncQueueService';
 
 export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { user } = useAuth();
@@ -85,6 +86,7 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
                     taskActions.setTasks(prevTasks => {
                         const finalTasks: Task[] = [];
                         const processedIds = new Set<string>();
+                        const tasksToMigrate: Task[] = [];
 
                         // 1. Add/Update from Server (filtered)
                         nonBlacklisted.forEach(serverTask => {
@@ -96,19 +98,42 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
                             processedIds.add(serverTask.id);
                         });
 
-                        // 2. Preserve Local-Only (Optimistic)
-                        const localOnlyCount = prevTasks.filter(localTask => !processedIds.has(localTask.id)).length;
+                        // 2. Preserve Local-Only (Optimistic) & Auto-Migrate
                         prevTasks.forEach(localTask => {
                             if (!processedIds.has(localTask.id)) {
-                                finalTasks.push(localTask);
+                                // Check for ownership mismatch (Guest -> User migration)
+                                const t = localTask as any;
+                                if (!t.user_id || t.user_id !== user.id) {
+                                    // Take ownership
+                                    const migrated = { ...localTask, user_id: user.id };
+                                    tasksToMigrate.push(migrated as any);
+                                    finalTasks.push(migrated as any);
+                                } else {
+                                    finalTasks.push(localTask);
+                                }
                             }
                         });
 
-                        if (localOnlyCount > 0) {
-                            logger.info(`[TaskProvider] Preserved ${localOnlyCount} local-only tasks (unsynced)`);
+                        // 3. Process Migrations (Async)
+                        if (tasksToMigrate.length > 0) {
+                            logger.info(`[TaskProvider] Auto-migrating ${tasksToMigrate.length} local tasks to user ${user.id}`);
+                            setTimeout(() => {
+                                tasksToMigrate.forEach(t => {
+                                    SyncQueueService.enqueue({
+                                        type: 'ADD',
+                                        table: 'tasks',
+                                        data: { ...t, user_id: user.id }
+                                    });
+                                });
+                            }, 1000);
                         }
 
-                        logger.info(`[TaskProvider] Final task count: ${finalTasks.length} (${processedIds.size} from server, ${localOnlyCount} local-only)`);
+                        if (tasksToMigrate.length > 0) {
+                            logger.info(`[TaskProvider] Preserved & Migrated ${tasksToMigrate.length} local tasks`);
+                        }
+
+                        const localOnlyCount = finalTasks.length - processedIds.size;
+                        logger.info(`[TaskProvider] Final task count: ${finalTasks.length} (${processedIds.size} from server, ${localOnlyCount} local)`);
 
                         return finalTasks;
                     });

@@ -7,6 +7,7 @@ import type { Goal } from '../types';
 import { supabase } from '../lib/supabase';
 import { GoalContext } from './GoalContext'; // Updated import
 import { filterBlacklisted } from '../utils/deletedItemsBlacklist';
+import { SyncQueueService } from '../services/SyncQueueService';
 
 export const GoalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { user } = useAuth();
@@ -65,6 +66,7 @@ export const GoalProvider: React.FC<{ children: React.ReactNode }> = ({ children
                     goalActions.setGoals(prevGoals => {
                         const finalGoals: Goal[] = [];
                         const processedIds = new Set<string>();
+                        const goalsToMigrate: Goal[] = [];
 
                         // 1. Add/Update from Server (filtered)
                         nonBlacklisted.forEach(serverGoal => {
@@ -76,12 +78,34 @@ export const GoalProvider: React.FC<{ children: React.ReactNode }> = ({ children
                             processedIds.add(serverGoal.id);
                         });
 
-                        // 2. Preserve Local-Only (Optimistic)
+                        // 2. Preserve Local-Only (Optimistic) & Auto-Migrate
                         prevGoals.forEach(localGoal => {
                             if (!processedIds.has(localGoal.id)) {
-                                finalGoals.push(localGoal);
+                                const g = localGoal as any;
+                                if (!g.user_id || g.user_id !== user.id) {
+                                    // Migrate
+                                    const migrated = { ...localGoal, user_id: user.id };
+                                    goalsToMigrate.push(migrated as any);
+                                    finalGoals.push(migrated as any);
+                                } else {
+                                    finalGoals.push(localGoal);
+                                }
                             }
                         });
+
+                        // 3. Process Migrations
+                        if (goalsToMigrate.length > 0) {
+                            logger.info(`[GoalProvider] Auto-migrating ${goalsToMigrate.length} local goals`);
+                            setTimeout(() => {
+                                goalsToMigrate.forEach(g => {
+                                    SyncQueueService.enqueue({
+                                        type: 'ADD',
+                                        table: 'goals',
+                                        data: { ...g, user_id: user.id }
+                                    });
+                                });
+                            }, 1000);
+                        }
 
                         return finalGoals;
                     });

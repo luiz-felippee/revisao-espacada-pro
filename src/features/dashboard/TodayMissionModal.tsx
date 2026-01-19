@@ -745,6 +745,7 @@ export const TodayMissionModal: React.FC<TodayMissionModalProps> = ({ isOpen, on
                                                 colorClass="red" /* Force red theme */
                                                 actualStartTime={activeFocus?.id === task.id ? format(new Date(activeFocus!.startTime), 'HH:mm') : null}
                                                 onFocus={() => handleStartFocus(task.id, 'task', task.title, task.durationMinutes || 25)}
+                                                duration={task.durationMinutes}
                                                 isActive={activeFocus?.id === task.id}
                                                 onToggle={() => handleComplete(task.id, 'task', task, false)}
                                                 onOpenDetails={() => handleOpenDetails(task.id, 'task')}
@@ -772,6 +773,7 @@ export const TodayMissionModal: React.FC<TodayMissionModalProps> = ({ isOpen, on
                                                 colorClass="red"
                                                 progressCurrent={goal.completionHistory?.length || 0}
                                                 onFocus={() => handleStartFocus(goal.id, 'goal', goal.title, goal.durationMinutes)}
+                                                duration={goal.durationMinutes}
                                                 isActive={activeFocus?.id === goal.id}
                                                 onToggle={() => handleComplete(goal.id, 'goal', goal, false)}
                                                 onOpenDetails={() => handleOpenDetails(goal.id, 'goal')}
@@ -803,6 +805,7 @@ export const TodayMissionModal: React.FC<TodayMissionModalProps> = ({ isOpen, on
                                                 progressCurrent={review.reviews.filter(r => r.status === 'completed').length}
                                                 progressTotal={review.reviews.length}
                                                 onFocus={() => handleStartFocus(review.id, 'subtheme', review.title, review.durationMinutes, review.dueReview.number, (review.type as 'review' | 'intro') || 'review')}
+                                                duration={review.durationMinutes}
                                                 isActive={activeFocus?.id === review.id}
                                                 onToggle={() => handleComplete(review.id, 'review', review, false)}
                                                 onOpenDetails={() => handleOpenDetails(review.id, 'subtheme')}
@@ -890,6 +893,7 @@ export const TodayMissionModal: React.FC<TodayMissionModalProps> = ({ isOpen, on
                                                 timeCurrent={timeCurrent}
                                                 timeTotal={timeTotal}
                                                 onFocus={() => handleStartFocus(habit.id, 'goal', habit.title, habit.durationMinutes)}
+                                                duration={habit.durationMinutes}
                                                 isActive={activeFocus?.id === habit.id}
                                                 onToggle={() => {
                                                     const action = (s?: string) => {
@@ -952,6 +956,7 @@ export const TodayMissionModal: React.FC<TodayMissionModalProps> = ({ isOpen, on
                                                 progressTotal={item.reviews.length}
                                                 schedule={item.reviews}
                                                 onFocus={() => handleStartFocus(item.id, 'subtheme', item.title, item.durationMinutes, item.dueReview.number, (item.type as 'review' | 'intro') || 'review')}
+                                                duration={item.durationMinutes}
                                                 isActive={activeFocus?.id === item.id}
                                                 onToggle={() => {
                                                     const action = (s?: string) => handleComplete(item.id, 'review', item, isCompleted, s);
@@ -1015,6 +1020,7 @@ export const TodayMissionModal: React.FC<TodayMissionModalProps> = ({ isOpen, on
                                                 timeCurrent={timeCurrent}
                                                 timeTotal={timeTotal}
                                                 onFocus={() => handleStartFocus(task.id, 'task', task.title, task.durationMinutes || 25)}
+                                                duration={task.durationMinutes}
                                                 isActive={activeFocus?.id === task.id}
                                                 onToggle={() => {
                                                     const action = (s?: string) => toggleTask(task.id, today, s);

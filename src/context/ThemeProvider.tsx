@@ -8,6 +8,7 @@ import { supabase } from '../lib/supabase';
 import { useAudio } from './AudioContext';
 import { ThemeContext } from './ThemeContext';
 import { filterBlacklisted } from '../utils/deletedItemsBlacklist';
+import { SyncQueueService } from '../services/SyncQueueService';
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { user } = useAuth();
@@ -84,6 +85,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                         const currentThemesMap = new Map(prevThemes.map(t => [t.id, t]));
                         const finalThemes: Theme[] = [];
                         const processedIds = new Set<string>();
+                        const themesToMigrate: Theme[] = [];
+                        const subthemesToMigrate: Subtheme[] = [];
 
                         // 1. Process Server Themes (Merge with Local)
                         nonBlacklistedThemes.forEach((serverTheme: Theme) => {
@@ -98,38 +101,56 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                             let finalSubthemes = serverTheme.subthemes;
 
                             // Filter Server Subthemes against pending deletes + BLACKLIST
-                            // serverTheme.subthemes already has the structure, we can just map simple array check via filterBlacklisted helper
-                            // But helper expects T[], so we can cast or just use inline check if helper is not subtheme aware
-                            // Let's use helper for consistency
                             finalSubthemes = filterBlacklisted(finalSubthemes, 'subtheme');
-
-                            // Also filter pending sync queue deletes
                             finalSubthemes = finalSubthemes.filter((st: Subtheme) => !pendingSubthemeDeletes.has(st.id));
-
 
                             if (localTheme) {
                                 // --- SMART SUBTHEME MERGE ---
-                                // 1. If server has 0 subthemes but local has them, this is likely a sync glitch or latency.
-                                //    KEEP local subthemes to prevent "zeroing".
                                 if (serverTheme.subthemes.length === 0 && localTheme.subthemes.length > 0) {
-                                    logger.warn(`[SmartMerge] Preserving ${localTheme.subthemes.length} local subthemes for theme ${serverTheme.title} (Server returned 0)`);
+                                    logger.warn(`[SmartMerge] Preserving ${localTheme.subthemes.length} local subthemes for theme ${serverTheme.title}`);
                                     finalSubthemes = localTheme.subthemes;
+
+                                    // Check migration for these preserved subthemes
+                                    localTheme.subthemes.forEach(st => {
+                                        const s = st as any;
+                                        if (!s.user_id || s.user_id !== user.id) {
+                                            subthemesToMigrate.push({ ...st, user_id: user.id } as any);
+                                        }
+                                    });
                                 }
                                 else {
-                                    // 2. Union Merge: Keep local-only items (optimistic adds) + Server updates
+                                    // 2. Union Merge
                                     const subthemeMap = new Map<string, Subtheme>();
 
-                                    // Start with Local (preserves un-synced added items)
-                                    // But ignore if they are pending delete locally (already handled by useThemes deleteSubtheme logic which updates state)
-                                    localTheme.subthemes.forEach(st => subthemeMap.set(st.id, st));
+                                    // Local (Migrate if needed)
+                                    localTheme.subthemes.forEach(st => {
+                                        subthemeMap.set(st.id, st);
+                                        const s = st as any;
+                                        // Only migrate if it's NOT in the server set (optimistic add)
+                                        // But wait, if it IS in the server set, we don't need to migrate.
+                                        // We only care about local-only items here?
+                                        // Actually simplest is check if map already has it from server... 
+                                        // But we iterate local first.
+                                        // Let's refine: We will check migration in a separate pass or here?
+                                        // We can't know if server has it yet.
+                                    });
 
-                                    // Overlay Server (Source of Truth for synced items)
-                                    // serverTheme.subthemes are technically arrays from server.
-                                    // We must check if any server subtheme is in pendingSubthemeDeletes (already filtered above in finalSubthemes assignment)
-                                    // So we overlay the filtered server subthemes.
+                                    // Overlay Server
+                                    const serverSubthemeIds = new Set<string>();
                                     serverTheme.subthemes.forEach((st: Subtheme) => {
                                         if (!pendingSubthemeDeletes.has(st.id)) {
                                             subthemeMap.set(st.id, st);
+                                            serverSubthemeIds.add(st.id);
+                                        }
+                                    });
+
+                                    // Now check for migration of items that are NOT in server
+                                    localTheme.subthemes.forEach(st => {
+                                        if (!serverSubthemeIds.has(st.id)) {
+                                            const s = st as any;
+                                            if (!s.user_id || s.user_id !== user.id) {
+                                                subthemesToMigrate.push({ ...st, user_id: user.id } as any);
+                                            }
                                         }
                                     });
 
@@ -143,12 +164,53 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                             });
                         });
 
-                        // 2. Preserve Local-Only Themes (Optimistic Adds not yet on server)
+                        // 2. Preserve Local-Only Themes (Optimistic Adds & Migration)
                         prevThemes.forEach(localTheme => {
                             if (!processedIds.has(localTheme.id)) {
-                                finalThemes.push(localTheme);
+                                const t = localTheme as any;
+
+                                // Migration Check
+                                if (!t.user_id || t.user_id !== user.id) {
+                                    const migratedTheme = { ...localTheme, user_id: user.id };
+                                    themesToMigrate.push(migratedTheme as any);
+
+                                    // Also migrate its subthemes
+                                    const migratedSubthemes = localTheme.subthemes.map(st => {
+                                        subthemesToMigrate.push({ ...st, user_id: user.id, theme_id: localTheme.id } as any);
+                                        return { ...st, user_id: user.id, theme_id: localTheme.id };
+                                    });
+
+                                    finalThemes.push({ ...migratedTheme, subthemes: migratedSubthemes } as any);
+                                } else {
+                                    finalThemes.push(localTheme);
+                                }
                             }
                         });
+
+                        // 3. Execute Migration
+                        if (themesToMigrate.length > 0 || subthemesToMigrate.length > 0) {
+                            logger.info(`[ThemeProvider] Auto-migrating ${themesToMigrate.length} themes and ${subthemesToMigrate.length} subthemes`);
+                            setTimeout(() => {
+                                // Enqueue Themes
+                                themesToMigrate.forEach(t => {
+                                    SyncQueueService.enqueue({
+                                        type: 'ADD',
+                                        table: 'themes',
+                                        data: { ...t, user_id: user.id }
+                                    });
+                                });
+
+                                // Enqueue Subthemes (with dependency)
+                                subthemesToMigrate.forEach(st => {
+                                    SyncQueueService.enqueue({
+                                        type: 'ADD',
+                                        table: 'subthemes',
+                                        data: { ...st, user_id: user.id, theme_id: (st as any).themeId || (st as any).theme_id }, // Ensure theme_id
+                                        dependentOn: (st as any).themeId || (st as any).theme_id
+                                    });
+                                });
+                            }, 1000);
+                        }
 
                         return finalThemes;
                     });
