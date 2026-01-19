@@ -9,6 +9,7 @@ import { useAudio } from './AudioContext';
 import { ThemeContext } from './ThemeContext';
 import { filterBlacklisted } from '../utils/deletedItemsBlacklist';
 import { SyncQueueService } from '../services/SyncQueueService';
+import { RealtimeService } from '../services/RealtimeService';
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { user } = useAuth();
@@ -220,30 +221,21 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
         fetchThemes();
 
-        // Realtime Subscription
+        // 🚀 REALTIME SYNC - Using centralized RealtimeService
         if (user) {
-            const channel = supabase
-                .channel('db-changes')
-                .on(
-                    'postgres_changes',
-                    { event: '*', schema: 'public', table: 'themes', filter: `user_id=eq.${user.id}` },
-                    (payload) => {
-                        logger.info('Realtime Theme Change:', payload);
-                        fetchThemes();
-                    }
-                )
-                .on(
-                    'postgres_changes',
-                    { event: '*', schema: 'public', table: 'subthemes', filter: `user_id=eq.${user.id}` },
-                    (payload) => {
-                        logger.info('Realtime Subtheme Change:', payload);
-                        fetchThemes();
-                    }
-                )
-                .subscribe();
+            const unsubThemes = RealtimeService.subscribe('themes', (event, record) => {
+                logger.info(`[ThemeProvider] Realtime ${event} for theme:`, record?.id);
+                fetchThemes();
+            });
+
+            const unsubSubthemes = RealtimeService.subscribe('subthemes', (event, record) => {
+                logger.info(`[ThemeProvider] Realtime ${event} for subtheme:`, record?.id);
+                fetchThemes();
+            });
 
             return () => {
-                supabase.removeChannel(channel);
+                unsubThemes();
+                unsubSubthemes();
             };
         }
     }, [user, themeActions.setThemes]);

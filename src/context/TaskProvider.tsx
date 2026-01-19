@@ -8,6 +8,7 @@ import { supabase } from '../lib/supabase';
 import { TaskContext } from './TaskContext';
 import { filterBlacklisted } from '../utils/deletedItemsBlacklist';
 import { SyncQueueService } from '../services/SyncQueueService';
+import { RealtimeService } from '../services/RealtimeService';
 
 export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { user } = useAuth();
@@ -142,22 +143,16 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
         };
         fetchTasks();
 
-        // Realtime Subscription
+        // 🚀 REALTIME SYNC - Using centralized RealtimeService
         if (user) {
-            const channel = supabase
-                .channel('db-changes-tasks')
-                .on(
-                    'postgres_changes',
-                    { event: '*', schema: 'public', table: 'tasks', filter: `user_id=eq.${user.id}` },
-                    (payload) => {
-                        logger.info('Realtime Task Change:', payload);
-                        fetchTasks();
-                    }
-                )
-                .subscribe();
+            const unsubscribe = RealtimeService.subscribe('tasks', (event, record) => {
+                logger.info(`[TaskProvider] Realtime ${event} for task:`, record?.id);
+                // Refetch all tasks to ensure consistency
+                fetchTasks();
+            });
 
             return () => {
-                supabase.removeChannel(channel);
+                unsubscribe();
             };
         }
     }, [user]);
