@@ -27,10 +27,10 @@ export interface ProjectedReview {
  * | Revis\u00e3o | Dias desde In\u00edcio | Intervalo | Prop\u00f3sito |
  * |----------|-------------------|-----------|-----------|
  * | #1 | +1 dia | 1 dia | Reconsolidar aprendizado inicial |
- * | #2 | +3 dias | 2 dias | Refor\u00e7ar mem\u00f3ria curto prazo |
- * | #3 | +10 dias | 7 dias | Consolidar mem\u00f3ria m\u00e9dio prazo |
- * | #4 | +18 dias | 8 dias | Estabilizar conhecimento |
- * | #5 | +33 dias | 15 dias | Reten\u00e7\u00e3o de longo prazo |
+ * | #2 | +2 dias | 1 dia | Reforçar mem\u00f3ria curto prazo |
+ * | #3 | +7 dias | 5 dias | Consolidar mem\u00f3ria m\u00e9dio prazo |
+ * | #4 | +15 dias | 8 dias | Estabilizar conhecimento |
+ * | #5 | +30 dias | 15 dias | Reten\u00e7\u00e3o de longo prazo |
  * 
  * ### Escalonamento de Fila
  * 
@@ -67,8 +67,8 @@ export const getAllProjectedReviews = (themes: Theme[]): ProjectedReview[] => {
     let queueCounter = 0;
     const projectedReviews: ProjectedReview[] = [];
 
-    // SRS Intervals: +1, +2, +7, +8, +15 (Cumulative: 1, 3, 10, 18, 33)
-    const offsets = [1, 3, 10, 18, 33];
+    // SRS Intervals: +1, +1, +5, +8, +15 (Cumulative: 1, 2, 7, 15, 30)
+    const offsets = [1, 2, 7, 15, 30];
 
     themes?.forEach(theme => {
         (theme.subthemes || []).forEach(st => {

@@ -32,7 +32,7 @@ const calculateInitialSubthemeState = (
             status = 'active';
         }
 
-        const offsets = [1, 3, 7, 15, 30];
+        const offsets = [1, 2, 7, 15, 30];
         reviews = offsets.map((offset, reviewIdx) => {
             const reviewDateObj = new Date(introObj);
             reviewDateObj.setDate(reviewDateObj.getDate() + offset);

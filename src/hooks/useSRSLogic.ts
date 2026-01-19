@@ -6,7 +6,7 @@ import type { Theme } from '../types';
 export const useSRSLogic = () => {
     // Helper to generate SRS dates (Legacy/Projected)
     const generateProjectedReviews = (startDate: string) => {
-        const offsets = [1, 3, 10, 18, 33];
+        const offsets = [1, 2, 7, 15, 30];
         return offsets.map((offset, idx) => ({
             number: idx + 1,
             date: format(addDays(parseLocalDate(startDate), offset), 'yyyy-MM-dd'),
@@ -22,7 +22,7 @@ export const useSRSLogic = () => {
             let finishDateIdx = st.reviews.length > 0 ? parseLocalDate(st.reviews[st.reviews.length - 1].date).getTime() : 0;
             if (st.status === 'queue') {
                 const projStartStr = queuedSubthemesMap.get(st.id);
-                if (projStartStr) finishDateIdx = addDays(parseLocalDate(projStartStr), 33).getTime();
+                if (projStartStr) finishDateIdx = addDays(parseLocalDate(projStartStr), 30).getTime();
             }
             if (finishDateIdx > maxDate) maxDate = finishDateIdx;
         });

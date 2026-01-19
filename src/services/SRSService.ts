@@ -4,11 +4,11 @@ import type { Theme, Subtheme, Review } from '../types';
 export class SRSService {
     // Default intervals (in days) from the previous review
     // Review 1: +1d (Day 1)
-    // Review 2: +2d (Day 3)
-    // Review 3: +4d (Day 7)
+    // Review 2: +1d (Day 2)
+    // Review 3: +5d (Day 7)
     // Review 4: +8d (Day 15)
     // Review 5: +15d (Day 30)
-    private static DEFAULT_STEP_INTERVALS = [1, 2, 4, 8, 15];
+    private static DEFAULT_STEP_INTERVALS = [1, 1, 5, 8, 15];
 
     static getToday(): string {
         return format(new Date(), 'yyyy-MM-dd');
