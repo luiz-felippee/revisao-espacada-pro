@@ -18,9 +18,10 @@ interface ThemeCardProps {
 export const ThemeCard = ({ theme, completionDate, queuedSubthemesMap, onEdit, onDelete, onOpenNotes, onOpenDetails, unlockedSubthemes }: ThemeCardProps) => {
     const themeColor = theme.color || '#3b82f6';
 
-    // Calculate Progress
-    const totalSubs = theme.subthemes.length;
-    const completedSubs = theme.subthemes.filter((s: Subtheme) => s.status === 'completed').length;
+    // Calculate Progress (EXCLUDING MODULES - they don't participate in SRS)
+    const reviewableSubthemes = theme.subthemes.filter((s: Subtheme) => (s as any).difficulty !== 'module');
+    const totalSubs = reviewableSubthemes.length;
+    const completedSubs = reviewableSubthemes.filter((s: Subtheme) => s.status === 'completed').length;
     const progress = totalSubs === 0 ? 0 : (completedSubs / totalSubs) * 100;
 
     // Calculate Total Duration
