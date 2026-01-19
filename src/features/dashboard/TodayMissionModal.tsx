@@ -518,7 +518,7 @@ export const TodayMissionModal: React.FC<TodayMissionModalProps> = ({ isOpen, on
                 <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400">
                     {title}
                 </h3>
-                <div className="w-5 h-5 rounded-full bg-slate-800 flex items-center justify-center text-[10px] font-bold text-slate-400 border border-slate-700">
+                <div className="w-5 h-5 rounded-full bg-cyan-900/50 flex items-center justify-center text-[10px] font-bold text-cyan-400 border border-cyan-700/50">
                     {count}
                 </div>
             </div>

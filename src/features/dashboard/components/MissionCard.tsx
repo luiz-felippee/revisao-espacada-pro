@@ -131,6 +131,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({
 
     const getIconBackground = () => {
         if (isCompleted) return "bg-emerald-500/20 text-emerald-400 ring-1 ring-emerald-500/30";
+        if (isOverdue && !isCompleted) return "bg-red-500/20 text-red-500 ring-1 ring-red-500/30 shadow-[0_0_15px_-3px_rgba(239,68,68,0.4)]"; // New Red Style
         if (isBlocked) return "bg-slate-800/40 text-slate-500 ring-1 ring-white/5 grayscale";
 
         // Use custom color class if provided, else use scheme default
@@ -150,8 +151,8 @@ export const MissionCard: React.FC<MissionCardProps> = ({
                 "bg-[#0F172A] border",
                 isActive
                     ? "border-rose-500/50 shadow-[0_0_15px_-3px_rgba(244,63,94,0.3)]"
-                    : isOverdue
-                        ? "border-red-500/70 bg-gradient-to-br from-red-900/20 to-orange-900/10 shadow-lg shadow-red-500/20"
+                    : isOverdue && !isCompleted
+                        ? "border-red-500/50 bg-red-950/10 shadow-[0_0_15px_-5px_rgba(239,68,68,0.2)]" // Red border & bg for overdue
                         : "border-blue-900/30",
                 isBlocked ? "opacity-50 grayscale pointer-events-none select-none" : isCompleted ? "opacity-75 cursor-default border-emerald-500/20 bg-emerald-500/5 transition-none" : "hover:bg-slate-800/40 cursor-pointer"
             )}
