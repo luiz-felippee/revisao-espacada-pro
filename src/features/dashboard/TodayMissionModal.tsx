@@ -27,16 +27,16 @@ const DraggableMissionItem = ({ item, children, showDragHandle = true }: { item:
     return (
         <Reorder.Item
             value={item}
-            dragListener={false} // Disable default drag to use handle
-            dragControls={dragControls}
+            dragListener={false}
+            dragControls={showDragHandle ? dragControls : undefined}
             className="relative"
-            style={{ listStyle: 'none' }} // Remove list dots
+            style={{ listStyle: 'none' }}
         >
             <div className="flex items-center gap-2">
-                {/* Drag Handle - só aparece quando showDragHandle é true */}
+                {/* Drag Handle - only appears when showDragHandle is true */}
                 {showDragHandle && (
                     <div
-                        onPointerDown={dragControls.start}
+                        onPointerDown={(e) => dragControls.start(e)}
                         className="cursor-grab active:cursor-grabbing p-1.5 -ml-2 text-purple-500 hover:text-purple-400 transition-colors touch-none select-none flex items-center justify-center shrink-0 animate-pulse"
                     >
                         <GripVertical className="w-5 h-5" />
