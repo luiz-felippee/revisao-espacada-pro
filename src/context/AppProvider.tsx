@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { SyncQueueService } from '../services/SyncQueueService';
+import { RealtimeService } from '../services/RealtimeService';
+import { syncLogger } from '../utils/logger';
 import { format } from 'date-fns';
 import { AppContext, type ActiveFocusSession } from './AppContext';
+import { useAuth } from './AuthContext';
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    // const { user } = useAuth(); // Removed unused user
+    const { user } = useAuth();
 
     const [loading, setLoading] = useState(true);
     const [syncStatus, setSyncStatus] = useState<'synced' | 'syncing' | 'offline' | 'error'>('synced');
@@ -163,6 +166,25 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             unsubscribe();
         };
     }, []);
+
+    // 🚀 REALTIME SERVICE INITIALIZATION
+    // Inicializa/desconecta o serviço de sincronização em tempo real quando o usuário muda
+    useEffect(() => {
+        if (user) {
+            syncLogger.info('[AppProvider] Initializing RealtimeService for user:', user.id);
+            RealtimeService.initialize(user.id);
+        } else {
+            syncLogger.info('[AppProvider] User logged out, disconnecting RealtimeService');
+            RealtimeService.disconnect();
+        }
+
+        return () => {
+            // Cleanup on unmount
+            if (!user) {
+                RealtimeService.disconnect();
+            }
+        };
+    }, [user]);
 
     return (
         <AppContext.Provider value={{
