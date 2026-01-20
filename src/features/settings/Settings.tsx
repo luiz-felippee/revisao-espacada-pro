@@ -248,6 +248,44 @@ export const Settings = () => {
 
 
 
+            {/* Sync Section */}
+            <section className="space-y-4">
+                <h2 className="text-lg font-bold text-slate-200 flex items-center gap-2">
+                    <RefreshCw className="w-5 h-5 text-cyan-400" />
+                    Sincronização
+                </h2>
+                <Card className="bg-slate-900/50 border-slate-800">
+                    <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                        <div>
+                            <h3 className="font-bold text-slate-200">Forçar Sincronização</h3>
+                            <p className="text-sm text-slate-400 mt-1">
+                                Limpa o cache local e recarrega todos os dados do servidor. Use se os dados não estão sincronizando entre dispositivos.
+                            </p>
+                        </div>
+                        <button
+                            onClick={() => {
+                                // Limpar todos os caches locais
+                                localStorage.removeItem('study_tasks_backup');
+                                localStorage.removeItem('study_goals_backup');
+                                localStorage.removeItem('study_themes_backup');
+                                localStorage.removeItem('sync_queue_v1');
+                                localStorage.removeItem('deleted_tasks_blacklist_v2');
+                                localStorage.removeItem('deleted_goals_blacklist_v2');
+                                localStorage.removeItem('deleted_themes_blacklist_v2');
+                                localStorage.removeItem('deleted_subthemes_blacklist_v2');
+
+                                // Recarregar a página
+                                window.location.reload();
+                            }}
+                            className="bg-cyan-600 hover:bg-cyan-700 text-white px-6 py-2.5 rounded-lg font-bold text-sm transition-all flex items-center gap-2 shadow-lg shadow-cyan-500/20 whitespace-nowrap"
+                        >
+                            <RefreshCw className="w-4 h-4" />
+                            Limpar Cache e Recarregar
+                        </button>
+                    </div>
+                </Card>
+            </section>
+
             {/* Data Management Section */}
             <section className="space-y-4">
                 <h2 className="text-lg font-bold text-slate-200 flex items-center gap-2">
