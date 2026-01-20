@@ -171,6 +171,9 @@ export const GamificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
             if (baseState.streak?.lastDailyRewardDate === today) {
                 console.log('Recompensa já coletada no servidor.');
                 setGamification(baseState); // Atualiza local para refletir a verdade
+                if (baseState.streak.lastDailyRewardDate !== gamification.streak.lastDailyRewardDate) {
+                    showToast("Sincronizado: Recompensa já foi coletada hoje!", "info");
+                }
                 return { claimed: false, xpAmount: 0 };
             }
 
