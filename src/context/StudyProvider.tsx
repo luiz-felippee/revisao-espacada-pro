@@ -75,11 +75,11 @@ import { ContextComposer } from '../components/utils/ContextComposer';
 export const StudyProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     return (
         <ContextComposer providers={[
+            <AppProvider children={null} />,
             <GamificationProvider children={null} />,
             <TaskProvider children={null} />,
             <GoalProvider children={null} />,
-            <ThemeProvider children={null} />,
-            <AppProvider children={null} />
+            <ThemeProvider children={null} />
         ]}>
             <StudyContextFacade>
                 {children}
