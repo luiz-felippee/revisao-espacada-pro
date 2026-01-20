@@ -6,6 +6,7 @@ import { useAuth } from './context/AuthContext';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { usePWAInstall } from './hooks/usePWAInstall';
 import { useGuestReset } from './hooks/useGuestReset';
+import { useAutoMigrator } from './hooks/useAutoMigrator';
 import { StudyProvider } from './context/StudyProvider';
 import { ProjectProvider } from './context/ProjectProvider';
 import { PomodoroProvider } from './context/PomodoroProvider';
@@ -74,6 +75,7 @@ function AppContent() {
   // Hooks de infraestrutura extraídos para Clean Code
   useKeyboardShortcuts(() => setIsSearchOpen(true));
   useGuestReset(user?.id);
+  useAutoMigrator(); // 🔄 Auto-migra tasks antigas
   const { showPWAPrompt, handlePWAInstall, handlePWADismiss, platform } = usePWAInstall();
 
   // If not logged in, show Login Page directly (Personal Use Mode)
