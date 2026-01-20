@@ -343,9 +343,9 @@ export class SyncQueueService {
 
                 try {
                     if (type === 'ADD' && ops.length > 1) {
-                        // Batch INSERT
+                        // Batch UPSERT (em vez de INSERT para evitar duplicate key errors)
                         const payloads = ops.map(op => SyncQueueService.cleanPayload(SyncQueueService.preparePayload(op.table, op.data as any)));
-                        const result = await supabase.from(table).insert(payloads);
+                        const result = await supabase.from(table).upsert(payloads, { onConflict: 'id' });
 
                         if (result?.error) {
                             throw { message: result.error.message, code: result.error.code };
@@ -423,7 +423,8 @@ export class SyncQueueService {
 
         if (op.type === 'ADD') {
             const payload = SyncQueueService.cleanPayload(SyncQueueService.preparePayload(op.table, op.data as any));
-            result = await supabase.from(op.table).insert(payload);
+            // 🚀 UPSERT: Se o registro já existe, atualiza em vez de falhar com duplicate key
+            result = await supabase.from(op.table).upsert(payload, { onConflict: 'id' });
         } else if (op.type === 'UPDATE') {
             const rawPayload = SyncQueueService.preparePayload(op.table, op.data as any);
             const payload = SyncQueueService.cleanPayload(rawPayload);
