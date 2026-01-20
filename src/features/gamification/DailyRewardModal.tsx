@@ -22,18 +22,17 @@ export const DailyRewardModal: React.FC = () => {
         const day = String(now.getDate()).padStart(2, '0');
         const today = `${year}-${month}-${day}`;
 
-        // Verificação Robusta com LocalStorage (Única fonte de verdade local)
-        const lastClaimedDate = localStorage.getItem('last_daily_reward_date');
-
-        // Se já pegou hoje (marcado no storage), cancela imediatamente
-        if (lastClaimedDate === today) return;
-
         const lastLogin = gamification.streak.lastLoginDate;
         const lastRewardDate = gamification.streak.lastDailyRewardDate;
 
-        // Verificar se acessou hoje e ainda não reivindicou no banco
-        // Se lastLogin não for hoje, o usuário ainda não "logou" na lógica do service (checkStreak não rodou ou falhou)
-        // Mas se checkStreak roda no provider load, deve estar atualizado.
+        // A FONTE ÚNICA DE VERDADE é o banco de dados (Supabase)
+        // O modal só deve aparecer se:
+        // 1. O usuário fez login hoje (lastLoginDate === today)
+        // 2. Ainda não reivindicou a recompensa hoje no banco (lastDailyRewardDate !== today)
+        // Isso garante que funcione em múltiplos dispositivos:
+        // - Se reivindicou no desktop, lastDailyRewardDate já está atualizado no banco
+        // - Quando acessar no mobile, o banco já terá lastDailyRewardDate === today
+        // - Logo o modal não aparecerá novamente
         if (lastLogin === today && lastRewardDate !== today) {
             // Small delay to ensure UI is ready and it's not jarring
             const timer = setTimeout(() => setIsOpen(true), 1500);
@@ -47,15 +46,6 @@ export const DailyRewardModal: React.FC = () => {
             const result = await claimDailyReward();
 
             if (result.claimed) {
-                // Formatar today localmente de novo para garantir
-                const now = new Date();
-                const year = now.getFullYear();
-                const month = String(now.getMonth() + 1).padStart(2, '0');
-                const day = String(now.getDate()).padStart(2, '0');
-                const today = `${year}-${month}-${day}`;
-
-                localStorage.setItem('last_daily_reward_date', today);
-
                 confetti({
                     particleCount: 100,
                     spread: 70,
@@ -64,7 +54,7 @@ export const DailyRewardModal: React.FC = () => {
                 });
                 setIsOpen(false);
             } else {
-                // Se retornou claimed=false, significa que já foi coletado remotamente
+                // Se retornou claimed=false, significa que já foi coletado
                 setIsOpen(false);
             }
         } finally {
