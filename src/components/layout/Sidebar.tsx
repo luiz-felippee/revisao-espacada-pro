@@ -119,10 +119,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             {/* Botão de fechar - só quando expandido */}
                             {/* Adjusted top position for mobile safe area */}
                             <button
-                                onClick={onCloseSidebar}
+                                onClick={() => {
+                                    // Se estiver no dashboard, navega para settings para forçar o colapso
+                                    // Caso contrário, apenas fecha o sidebar (que já está colapsado)
+                                    if (activeTab === 'dashboard') {
+                                        onTabChange('settings'); // Força o colapso navegando para outra página
+                                    }
+                                    onCloseSidebar(); // Fecha no mobile
+                                }}
                                 className="absolute top-6 right-6 lg:top-6 p-2 rounded-lg text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200"
-                                aria-label="Colapsar menu"
-                                title="Colapsar menu"
+                                aria-label="Minimizar menu"
+                                title="Minimizar menu"
                             >
                                 <X className="w-5 h-5" />
                             </button>
