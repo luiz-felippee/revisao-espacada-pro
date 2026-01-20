@@ -1,187 +1,211 @@
 import { supabase } from '../lib/supabase';
 import { syncLogger } from '../utils/logger';
-import type { RealtimeChannel } from '@supabase/supabase-js';
+import type { RealtimeChannel, RealtimePostgresChangesPayload } from '@supabase/supabase-js';
 
 /**
- * Serviço centralizado de sincronização em tempo real via Supabase.
+ * 🚀 RealtimeService v2 - Serviço de Sincronização em Tempo Real
  * 
- * Gerencia todas as assinaturas realtime e garante que mudanças
- * feitas em qualquer dispositivo sejam refletidas automaticamente
- * em todos os outros dispositivos conectados.
+ * Este serviço gerencia TODA a comunicação em tempo real com o Supabase.
+ * Ele é inicializado UMA VEZ quando o usuário faz login e mantém
+ * conexões persistentes para todas as tabelas relevantes.
  * 
  * ## Arquitetura
  * 
  * ```
- * Device A: Cria Task → Supabase → Postgres Change
- *                                       ↓
- *                            Realtime Broadcast
- *                                       ↓
- * Device B: Recebe evento → Refetch → UI Update
- * ```
- * 
- * ## Features
- * - **Cross-Device Sync:** Todas as mudanças são propagadas em tempo real
- * - **Auto-Reconnect:** Reconecta automaticamente em caso de perda de conexão
- * - **Centralized:** Um único canal para todas as tabelas
- * - **Type-Safe:** Tipagem completa para todos os eventos
- * 
- * @example
- * ```typescript
- * // Inscrever-se para mudanças em tasks
- * RealtimeService.subscribe('tasks', (event, record) => {
- *   console.log('Task changed:', event, record);
- *   refreshTasks();
- * });
- * 
- * // Cleanup
- * RealtimeService.unsubscribe('tasks');
+ * Dispositivo A                    Supabase                    Dispositivo B
+ *      │                              │                              │
+ *      │── INSERT/UPDATE/DELETE ─────▶│                              │
+ *      │                              │── Postgres Changes ─────────▶│
+ *      │                              │                              │
+ *      │◀────── Realtime Event ───────│                              │
  * ```
  */
-export class RealtimeService {
-    private static channels = new Map<string, RealtimeChannel>();
-    private static subscribers = new Map<string, Set<(event: string, record: any) => void>>();
-    private static userId: string | null = null;
+
+export type SyncTable = 'tasks' | 'goals' | 'themes' | 'subthemes';
+export type SyncEvent = 'INSERT' | 'UPDATE' | 'DELETE';
+
+export interface SyncCallback {
+    (event: SyncEvent, record: any, oldRecord?: any): void;
+}
+
+class RealtimeServiceClass {
+    private channel: RealtimeChannel | null = null;
+    private userId: string | null = null;
+    private callbacks: Map<SyncTable, Set<SyncCallback>> = new Map();
+    private isConnected: boolean = false;
+    private reconnectAttempts: number = 0;
+    private maxReconnectAttempts: number = 5;
 
     /**
-     * Inicializa o serviço de realtime para um usuário específico.
-     * 
-     * @param userId - ID do usuário autenticado
+     * Inicializa o serviço de Realtime para um usuário
      */
-    static initialize(userId: string) {
-        if (this.userId === userId) return; // Already initialized for this user
-
-        this.userId = userId;
-        syncLogger.info(`[RealtimeService] Initializing for user: ${userId}`);
-
-        // Subscribe to all tables
-        this.subscribeToTable('tasks', userId);
-        this.subscribeToTable('goals', userId);
-        this.subscribeToTable('themes', userId);
-        this.subscribeToTable('subthemes', userId);
-    }
-
-    /**
-     * Desconecta todas as assinaturas realtime.
-     */
-    static disconnect() {
-        syncLogger.info('[RealtimeService] Disconnecting all channels');
-
-        this.channels.forEach((channel, table) => {
-            syncLogger.info(`[RealtimeService] Removing channel: ${table}`);
-            supabase.removeChannel(channel);
-        });
-
-        this.channels.clear();
-        this.subscribers.clear();
-        this.userId = null;
-    }
-
-    /**
-     * Inscreve-se para mudanças em uma tabela específica.
-     * 
-     * @param table - Nome da tabela (tasks, goals, themes, subthemes)
-     * @param callback - Função chamada quando há mudança
-     * @returns Função para cancelar a inscrição
-     */
-    static subscribe(
-        table: 'tasks' | 'goals' | 'themes' | 'subthemes',
-        callback: (event: string, record: any) => void
-    ): () => void {
-        if (!this.subscribers.has(table)) {
-            this.subscribers.set(table, new Set());
+    initialize(userId: string): void {
+        if (this.userId === userId && this.isConnected) {
+            syncLogger.info('[RealtimeService] Already initialized for this user');
+            return;
         }
 
-        this.subscribers.get(table)!.add(callback);
-        syncLogger.info(`[RealtimeService] Added subscriber for ${table}`);
+        // Desconectar anterior se existir
+        if (this.channel) {
+            this.disconnect();
+        }
 
-        // Return unsubscribe function
+        this.userId = userId;
+        this.reconnectAttempts = 0;
+
+        syncLogger.info(`[RealtimeService] 🚀 Initializing for user: ${userId.substring(0, 8)}...`);
+
+        this.createChannel();
+    }
+
+    /**
+     * Cria o canal de Realtime e inscreve em todas as tabelas
+     */
+    private createChannel(): void {
+        if (!this.userId) return;
+
+        const channelName = `sync-${this.userId.substring(0, 8)}-${Date.now()}`;
+
+        this.channel = supabase.channel(channelName);
+
+        // Inscrever em cada tabela
+        const tables: SyncTable[] = ['tasks', 'goals', 'themes', 'subthemes'];
+
+        tables.forEach(table => {
+            this.channel!
+                .on(
+                    'postgres_changes',
+                    {
+                        event: '*',
+                        schema: 'public',
+                        table: table,
+                        filter: `user_id=eq.${this.userId}`
+                    },
+                    (payload: RealtimePostgresChangesPayload<any>) => {
+                        this.handleChange(table, payload);
+                    }
+                );
+        });
+
+        // Conectar e monitorar status
+        this.channel.subscribe((status) => {
+            syncLogger.info(`[RealtimeService] Channel status: ${status}`);
+
+            if (status === 'SUBSCRIBED') {
+                this.isConnected = true;
+                this.reconnectAttempts = 0;
+                syncLogger.info('[RealtimeService] ✅ Connected and listening');
+            } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
+                this.isConnected = false;
+                syncLogger.error(`[RealtimeService] ❌ Connection error: ${status}`);
+                this.handleReconnect();
+            } else if (status === 'CLOSED') {
+                this.isConnected = false;
+                syncLogger.warn('[RealtimeService] Channel closed');
+            }
+        });
+    }
+
+    /**
+     * Processa mudanças recebidas do Realtime
+     */
+    private handleChange(table: SyncTable, payload: RealtimePostgresChangesPayload<any>): void {
+        const event = payload.eventType as SyncEvent;
+        const record = payload.new || payload.old;
+        const oldRecord = payload.old;
+
+        syncLogger.info(`[RealtimeService] 📥 ${table} ${event}:`, {
+            id: record?.id?.substring(0, 8)
+        });
+
+        // Notificar todos os callbacks registrados para esta tabela
+        const callbacks = this.callbacks.get(table);
+        if (callbacks) {
+            callbacks.forEach(callback => {
+                try {
+                    callback(event, record, oldRecord);
+                } catch (error) {
+                    syncLogger.error(`[RealtimeService] Callback error for ${table}:`, error);
+                }
+            });
+        }
+    }
+
+    /**
+     * Tenta reconectar em caso de falha
+     */
+    private handleReconnect(): void {
+        if (this.reconnectAttempts >= this.maxReconnectAttempts) {
+            syncLogger.error('[RealtimeService] Max reconnect attempts reached');
+            return;
+        }
+
+        this.reconnectAttempts++;
+        const delay = Math.min(1000 * Math.pow(2, this.reconnectAttempts), 30000);
+
+        syncLogger.info(`[RealtimeService] Reconnecting in ${delay}ms (attempt ${this.reconnectAttempts})`);
+
+        setTimeout(() => {
+            if (this.userId && !this.isConnected) {
+                this.createChannel();
+            }
+        }, delay);
+    }
+
+    /**
+     * Registra um callback para mudanças em uma tabela
+     * 
+     * @returns Função para cancelar a inscrição
+     */
+    subscribe(table: SyncTable, callback: SyncCallback): () => void {
+        if (!this.callbacks.has(table)) {
+            this.callbacks.set(table, new Set());
+        }
+
+        this.callbacks.get(table)!.add(callback);
+        syncLogger.info(`[RealtimeService] 📝 Subscribed to ${table}`);
+
+        // Retornar função de cleanup
         return () => {
-            this.subscribers.get(table)?.delete(callback);
-            syncLogger.info(`[RealtimeService] Removed subscriber for ${table}`);
+            this.callbacks.get(table)?.delete(callback);
+            syncLogger.info(`[RealtimeService] 🗑️ Unsubscribed from ${table}`);
         };
     }
 
     /**
-     * Cria uma assinatura realtime para uma tabela.
-     * 
-     * @private
+     * Desconecta e limpa recursos
      */
-    private static subscribeToTable(table: string, userId: string) {
-        // Remove existing channel if any
-        const existingChannel = this.channels.get(table);
-        if (existingChannel) {
-            supabase.removeChannel(existingChannel);
+    disconnect(): void {
+        syncLogger.info('[RealtimeService] 🔌 Disconnecting...');
+
+        if (this.channel) {
+            supabase.removeChannel(this.channel);
+            this.channel = null;
         }
 
-        const channelName = `realtime-${table}-${userId}`;
-        syncLogger.info(`[RealtimeService] Creating channel: ${channelName}`);
-
-        const channel = supabase
-            .channel(channelName)
-            .on(
-                'postgres_changes',
-                {
-                    event: '*',
-                    schema: 'public',
-                    table: table,
-                    filter: `user_id=eq.${userId}`
-                },
-                (payload) => {
-                    syncLogger.info(`[RealtimeService] ${table} change:`, {
-                        event: payload.eventType,
-                        id: (payload.new as any)?.id || (payload.old as any)?.id
-                    });
-
-                    // Notify all subscribers
-                    const subscribers = this.subscribers.get(table);
-                    if (subscribers) {
-                        const record = payload.new || payload.old;
-                        subscribers.forEach(callback => {
-                            try {
-                                callback(payload.eventType as any, record);
-                            } catch (error) {
-                                syncLogger.error(`[RealtimeService] Subscriber error for ${table}:`, error);
-                            }
-                        });
-                    }
-                }
-            )
-            .subscribe((status) => {
-                syncLogger.info(`[RealtimeService] Channel ${channelName} status: ${status}`);
-
-                if (status === 'SUBSCRIBED') {
-                    syncLogger.info(`[RealtimeService] ✅ Successfully subscribed to ${table}`);
-                } else if (status === 'CHANNEL_ERROR') {
-                    syncLogger.error(`[RealtimeService] ❌ Channel error for ${table}`);
-                } else if (status === 'TIMED_OUT') {
-                    syncLogger.error(`[RealtimeService] ⏱️ Connection timed out for ${table}`);
-                }
-            });
-
-        this.channels.set(table, channel);
+        this.callbacks.clear();
+        this.isConnected = false;
+        this.userId = null;
+        this.reconnectAttempts = 0;
     }
 
     /**
-     * Obtém o status de conexão de uma tabela.
+     * Verifica se está conectado
      */
-    static getChannelStatus(table: string): string | null {
-        const channel = this.channels.get(table);
-        return channel?.state ?? null;
+    isFullyConnected(): boolean {
+        return this.isConnected;
     }
 
     /**
-     * Verifica se todas as assinaturas estão ativas.
+     * Obtém o status atual
      */
-    static isFullyConnected(): boolean {
-        if (this.channels.size === 0) return false;
-
-        for (const [table, channel] of this.channels.entries()) {
-            if (channel.state !== 'joined') {
-                syncLogger.warn(`[RealtimeService] Channel ${table} not joined: ${channel.state}`);
-                return false;
-            }
-        }
-
-        return true;
+    getStatus(): 'connected' | 'connecting' | 'disconnected' | 'error' {
+        if (this.isConnected) return 'connected';
+        if (this.channel && !this.isConnected) return 'connecting';
+        if (this.reconnectAttempts >= this.maxReconnectAttempts) return 'error';
+        return 'disconnected';
     }
 }
+
+// Exportar instância singleton
+export const RealtimeService = new RealtimeServiceClass();
