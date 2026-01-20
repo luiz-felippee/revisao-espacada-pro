@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     LayoutDashboard,
     Calendar as CalendarIcon,
@@ -35,8 +35,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
     isSidebarOpen,
     onCloseSidebar,
 }) => {
-    // Sidebar collapsa quando não está no dashboard
-    const isCollapsed = activeTab !== 'dashboard';
+    // Estado para controlar colapso manual (quando usuário clica no X)
+    const [isManuallyCollapsed, setIsManuallyCollapsed] = useState(false);
+
+    // Sidebar collapsa quando não está no dashboard OU quando usuário clicou no X
+    const isCollapsed = activeTab !== 'dashboard' || isManuallyCollapsed;
 
     const menuItems = [
         { id: 'dashboard', label: 'Painel', icon: LayoutDashboard },
@@ -120,11 +123,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             {/* Adjusted top position for mobile safe area */}
                             <button
                                 onClick={() => {
-                                    // Se estiver no dashboard, navega para settings para forçar o colapso
-                                    // Caso contrário, apenas fecha o sidebar (que já está colapsado)
-                                    if (activeTab === 'dashboard') {
-                                        onTabChange('settings'); // Força o colapso navegando para outra página
-                                    }
+                                    // Minimiza o sidebar mostrando apenas ícones
+                                    setIsManuallyCollapsed(true);
                                     onCloseSidebar(); // Fecha no mobile
                                 }}
                                 className="absolute top-6 right-6 lg:top-6 p-2 rounded-lg text-slate-400 hover:text-red-400 hover:bg-red-500/10 transition-all duration-200"
@@ -194,6 +194,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
                             <button
                                 onClick={() => {
                                     onTabChange(item.id);
+                                    // Expande o menu ao clicar em qualquer item
+                                    setIsManuallyCollapsed(false);
                                     // Sempre fechar o menu ao navegar (no desktop o estado é ignorado visualmente pelo CSS)
                                     onCloseSidebar();
                                 }}
