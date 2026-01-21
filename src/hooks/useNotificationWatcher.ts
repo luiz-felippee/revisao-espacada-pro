@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import type { Theme, Task, Goal } from '../types';
 
 interface UseNotificationWatcherProps {
@@ -13,6 +13,18 @@ interface UseNotificationWatcherProps {
  * Também envia notificações automáticas de revisões e tarefas pendentes.
  */
 export const useNotificationWatcher = ({ themes, tasks, goals }: UseNotificationWatcherProps) => {
+    // 🚀 FIX: Usar refs para evitar recriar o interval toda vez que os dados mudam
+    const themesRef = useRef(themes);
+    const tasksRef = useRef(tasks);
+    const goalsRef = useRef(goals);
+
+    // Atualizar refs quando os dados mudarem
+    useEffect(() => {
+        themesRef.current = themes;
+        tasksRef.current = tasks;
+        goalsRef.current = goals;
+    }, [themes, tasks, goals]);
+
     const { notificationService, reviewNotificationService } = useMemo(() => ({
         notificationService: import('../services/NotificationService').then(m => m.NotificationService),
         reviewNotificationService: import('../services/ReviewNotificationService').then(m => m.ReviewNotificationService)
@@ -35,14 +47,14 @@ export const useNotificationWatcher = ({ themes, tasks, goals }: UseNotification
 
             // ========== NOTIFICAÇÕES AUTOMÁTICAS DE REVISÕES ==========
             // Envia notificações em horários específicos (9h, 14h, 19h) se houver revisões pendentes
-            ReviewService.notifyPendingReviews(themes, tasks);
+            ReviewService.notifyPendingReviews(themesRef.current, tasksRef.current);
 
             // ========== NOTIFICAÇÕES BASEADAS EM HORÁRIOS CONFIGURADOS ==========
             // Coletar todas as atividades que precisam ser monitoradas
             const itemsToCheck: any[] = [];
 
             // 1. THEMES/SUBTEMAS (Revisões)
-            themes.forEach(theme => {
+            themesRef.current.forEach(theme => {
                 theme.subthemes.forEach(subtheme => {
                     if (!subtheme.notificationTime) return;
 
@@ -65,7 +77,7 @@ export const useNotificationWatcher = ({ themes, tasks, goals }: UseNotification
             });
 
             // 2. TASKS (Tarefas)
-            tasks.forEach(task => {
+            tasksRef.current.forEach(task => {
                 if (!task.notificationTime) return;
 
                 // Verificar se a tarefa é para hoje
@@ -86,7 +98,7 @@ export const useNotificationWatcher = ({ themes, tasks, goals }: UseNotification
             });
 
             // 3. GOALS/HABITS (Metas e Hábitos)
-            goals.forEach(goal => {
+            goalsRef.current.forEach(goal => {
                 if (!goal.notificationTime) return;
 
                 // Verificar se já foi concluído hoje
@@ -116,5 +128,5 @@ export const useNotificationWatcher = ({ themes, tasks, goals }: UseNotification
         }, 60000); // Verifica a cada minuto
 
         return () => clearInterval(interval);
-    }, [themes, tasks, goals, notificationService, reviewNotificationService]);
+    }, [notificationService, reviewNotificationService]); // 🚀 FIX: Removido themes, tasks, goals das dependências
 };
