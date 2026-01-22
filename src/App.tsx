@@ -20,6 +20,7 @@ import { QueryProvider } from './context/QueryProvider';
 import { HelmetProvider } from 'react-helmet-async';
 import { MainLayout } from './layouts/MainLayout';
 import { LoginPage } from './features/auth/LoginPage';
+import { DebugPage } from './pages/DebugPage';
 import { LoadingSpinner } from './components/ui/LoadingSpinner';
 import { GlobalSearch } from './components/GlobalSearch';
 import { NotificationPermissionBanner } from './components/NotificationPermissionBanner';
@@ -141,6 +142,7 @@ function AppContent() {
                       <Route path="/analytics" element={<AnalyticsPage />} />
                       <Route path="/settings" element={<Settings />} />
                       <Route path="/summary-demo" element={<SummaryDemo />} />
+                      <Route path="/debug" element={<DebugPage />} />
                       <Route path="*" element={<Navigate to="/dashboard" replace />} />
                     </Routes>
                   </Suspense>

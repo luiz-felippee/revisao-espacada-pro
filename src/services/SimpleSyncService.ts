@@ -289,6 +289,17 @@ class SimpleSyncServiceClass {
         logger.info('[SimpleSyncService] 🔄 Sincronização forçada pelo usuário');
         await this.sync();
     }
+    /**
+     * DEBUG: Retorna estado interno
+     */
+    getDebugInfo() {
+        return {
+            isActive: this.isActive,
+            userId: this.userId,
+            listenersCount: this.listeners.size,
+            syncInterval: this.syncInterval
+        };
+    }
 }
 
 export const SimpleSyncService = new SimpleSyncServiceClass();
