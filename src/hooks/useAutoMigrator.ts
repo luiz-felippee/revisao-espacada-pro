@@ -123,15 +123,9 @@ export const useAutoMigrator = () => {
             }
         };
 
-        // Rodar migração uma vez quando o usuário logar
-        const migrationKey = `migration_done_${user.id}`;
-        const migrationDone = localStorage.getItem(migrationKey);
-
-        if (!migrationDone) {
-            migrateOldTasks().then(() => {
-                localStorage.setItem(migrationKey, 'true');
-            });
-        }
+        // 🔄 SEMPRE rodar migração - garante sync em TODOS dispositivos
+        // Removida verificação de migrationDone para permitir sync cross-device
+        migrateOldTasks();
 
     }, [user]);
 };
