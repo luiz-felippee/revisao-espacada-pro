@@ -27,12 +27,12 @@ export const ForceSyncButton: React.FC = () => {
             localStorage.removeItem('study_tasks_backup');
             localStorage.removeItem('study_goals_backup');
             localStorage.removeItem('study_themes_backup');
-            
+
             // Limpar flag de migração para permitir nova migração
             localStorage.removeItem(`migration_done_${user.id}`);
 
             setMessage('✅ Cache limpo! Recarregando...');
-            
+
             // Recarregar página para refazer fetch
             setTimeout(() => {
                 window.location.reload();
