@@ -21,6 +21,34 @@ class SimpleSyncServiceClass {
     private userId: string | null = null;
     private listeners: Set<SyncCallbacks> = new Set();
     private syncInterval = 5000; // 5 segundos
+    private stats = {
+        tasks: { count: 0, lastSuccess: 0 },
+        goals: { count: 0, lastSuccess: 0 },
+        themes: { count: 0, lastSuccess: 0 }
+    };
+
+    /**
+     * Helper para garantir datas válidas (evita crash em iOS/Safari)
+     */
+    private safeDate(val: any, fallbackToNow = true): number | undefined {
+        if (typeof val === 'number') return val;
+        if (!val) return fallbackToNow ? Date.now() : undefined;
+        const d = new Date(val);
+        return isNaN(d.getTime()) ? (fallbackToNow ? Date.now() : undefined) : d.getTime();
+    }
+
+    /**
+     * Helper para garantir datas formatadas (string) ou undefined
+     */
+    private safeDateString(val: any): string | undefined {
+        if (!val) return undefined;
+        if (typeof val === 'string') return val;
+        try {
+            return new Date(val).toISOString();
+        } catch {
+            return undefined;
+        }
+    }
 
     /**
      * Inicia o serviço de sincronização
@@ -133,7 +161,7 @@ class SimpleSyncServiceClass {
             return;
         }
 
-        // Converter snake_case para camelCase
+        // Converter snake_case para camelCase com sanitização
         const tasks = data?.map(task => ({
             id: task.id,
             userId: task.user_id,
@@ -142,8 +170,8 @@ class SimpleSyncServiceClass {
             priority: task.priority,
             type: task.type,
             date: task.date,
-            startDate: task.start_date,
-            endDate: task.end_date,
+            startDate: this.safeDateString(task.start_date),
+            endDate: this.safeDateString(task.end_date),
             recurrence: task.recurrence,
             icon: task.icon,
             color: task.color,
@@ -153,8 +181,10 @@ class SimpleSyncServiceClass {
             completionHistory: task.completion_history || [],
             sessions: task.sessions || [],
             summaries: task.summaries || [],
-            createdAt: task.created_at
+            createdAt: this.safeDate(task.created_at)
         })) || [];
+
+        this.stats.tasks = { count: tasks.length, lastSuccess: Date.now() };
 
         // Notificar listeners
         this.listeners.forEach(listener => {
@@ -179,7 +209,7 @@ class SimpleSyncServiceClass {
             return;
         }
 
-        // Converter snake_case para camelCase
+        // Converter snake_case para camelCase com sanitização
         const goals = data?.map(goal => ({
             id: goal.id,
             userId: goal.user_id,
@@ -197,9 +227,11 @@ class SimpleSyncServiceClass {
             completionHistory: goal.completion_history || [],
             relatedThemeId: goal.related_theme_id,
             isHabit: goal.is_habit,
-            startDate: goal.start_date,
-            createdAt: goal.created_at
+            startDate: this.safeDateString(goal.start_date),
+            createdAt: this.safeDate(goal.created_at)
         })) || [];
+
+        this.stats.goals = { count: goals.length, lastSuccess: Date.now() };
 
         // Notificar listeners
         this.listeners.forEach(listener => {
@@ -227,26 +259,28 @@ class SimpleSyncServiceClass {
             return;
         }
 
-        // Converter snake_case para camelCase
+        // Converter snake_case para camelCase com sanitização
         const themes = data?.map(theme => ({
             id: theme.id,
             userId: theme.user_id,
             title: theme.title,
             icon: theme.icon,
             color: theme.color,
-            startDate: theme.start_date,
+            startDate: this.safeDateString(theme.start_date),
             subthemes: theme.subthemes?.map((sub: any) => ({
                 id: sub.id,
                 title: sub.title,
                 difficulty: sub.difficulty,
                 status: sub.status,
-                introDate: sub.intro_date,
+                introDate: this.safeDateString(sub.intro_date),
                 reviews: sub.reviews || [],
                 durationMinutes: sub.duration_minutes,
                 timeSpent: sub.time_spent || 0
             })) || [],
-            createdAt: theme.created_at
+            createdAt: this.safeDate(theme.created_at)
         })) || [];
+
+        this.stats.themes = { count: themes.length, lastSuccess: Date.now() };
 
         // Notificar listeners
         this.listeners.forEach(listener => {
@@ -297,7 +331,8 @@ class SimpleSyncServiceClass {
             isActive: this.isActive,
             userId: this.userId,
             listenersCount: this.listeners.size,
-            syncInterval: this.syncInterval
+            syncInterval: this.syncInterval,
+            stats: this.stats
         };
     }
 }

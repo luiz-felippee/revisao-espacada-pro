@@ -164,7 +164,6 @@ export const SyncDiagnosticsPanel: React.FC<SyncDiagnosticsPanelProps> = ({ isOp
                                 </div>
                             </div>
 
-
                             {/* SimpleSync Status (NEW) */}
                             <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50">
                                 <h3 className="text-sm font-bold text-slate-300 mb-3">Sincronização em Tempo Real (Polling)</h3>
@@ -192,6 +191,26 @@ export const SyncDiagnosticsPanel: React.FC<SyncDiagnosticsPanelProps> = ({ isOp
                                         <p className="text-xs text-slate-300 font-mono truncate" title={simpleSyncInfo?.userId}>
                                             {simpleSyncInfo?.userId?.substring(0, 8)}...
                                         </p>
+                                    </div>
+                                </div>
+
+                                <div className="mt-4 border-t border-slate-700/50 pt-3">
+                                    <h4 className="text-xs font-bold text-slate-400 mb-2">Itens Sincronizados (Último ciclo)</h4>
+                                    <div className="space-y-2">
+                                        {['tasks', 'goals', 'themes'].map(type => {
+                                            const stat = simpleSyncInfo?.stats?.[type];
+                                            return (
+                                                <div key={type} className="flex justify-between items-center text-xs">
+                                                    <span className="text-slate-500 capitalize">{type}:</span>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="font-mono text-white font-bold">{stat?.count ?? '-'}</span>
+                                                        <span className="text-slate-600">
+                                                            {stat?.lastSuccess ? new Date(stat.lastSuccess).toLocaleTimeString() : 'Nunca'}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
                                     </div>
                                 </div>
                             </div>
@@ -290,4 +309,3 @@ export const SyncDiagnosticsPanel: React.FC<SyncDiagnosticsPanelProps> = ({ isOp
         </AnimatePresence>
     );
 };
-
