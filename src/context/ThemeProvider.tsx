@@ -9,7 +9,7 @@ import { useAudio } from './AudioContext';
 import { ThemeContext } from './ThemeContext';
 import { filterBlacklisted } from '../utils/deletedItemsBlacklist';
 import { SyncQueueService } from '../services/SyncQueueService';
-import { RealtimeService } from '../services/RealtimeService';
+import { SimpleSyncService } from '../services/SimpleSyncService';
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { user } = useAuth();
@@ -185,29 +185,28 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         }
     }, [user, themeActions]);
 
-    // Fetch inicial e inscrição no Realtime
+    // 🚀 SimpleSyncService - Polling robusto a cada 5 segundos
     useEffect(() => {
         if (!user) return;
 
-        // Fetch inicial
-        fetchThemes();
+        logger.info('[ThemeProvider] 🔄 Iniciando SimpleSyncService');
 
-        // Inscrever no Realtime para atualizações automáticas
-        const unsubThemes = RealtimeService.subscribe('themes', (event, record) => {
-            logger.info(`[ThemeProvider] 📥 Realtime ${event} for theme:`, record?.id?.substring(0, 8));
-            fetchThemes();
-        });
+        // Iniciar serviço (idempotente)
+        SimpleSyncService.start(user.id);
 
-        const unsubSubthemes = RealtimeService.subscribe('subthemes', (event, record) => {
-            logger.info(`[ThemeProvider] 📥 Realtime ${event} for subtheme:`, record?.id?.substring(0, 8));
-            fetchThemes();
+        // Inscrever listener para themes
+        const unsubscribe = SimpleSyncService.subscribe({
+            onThemesUpdate: (themes) => {
+                logger.info(`[ThemeProvider] 📥 SimpleSyncService atualizou ${themes.length} themes`);
+                themeActions.setThemes(themes);
+            }
         });
 
         return () => {
-            unsubThemes();
-            unsubSubthemes();
+            logger.info('[ThemeProvider] 🔌 Removendo listener do SimpleSyncService');
+            unsubscribe();
         };
-    }, [user, fetchThemes]);
+    }, [user, themeActions]);
 
     return (
         <ThemeContext.Provider value={themeActions}>

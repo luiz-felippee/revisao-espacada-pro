@@ -2,44 +2,40 @@ import { supabase } from '../lib/supabase';
 import { logger } from '../utils/logger';
 
 /**
- * 🔄 SimpleSyncService - Sistema de Sincronização Robusto
+ * 🔄 SimpleSyncService - Sistema de Sincronização Robusto (Observer Pattern)
  * 
  * Usa polling simples para buscar dados do Supabase periodicamente.
  * Funciona 100% das vezes, sem depender de WebSockets.
- * 
- * Estratégia:
- * - Polling a cada 5 segundos quando ativo
- * - Fetch direto do Supabase
- * - Atualiza providers via callbacks
+ * Suporta múltiplos listeners simultâneos.
  */
 
 export interface SyncCallbacks {
-    onTasksUpdate: (tasks: any[]) => void;
-    onGoalsUpdate: (goals: any[]) => void;
-    onThemesUpdate: (themes: any[]) => void;
+    onTasksUpdate?: (tasks: any[]) => void;
+    onGoalsUpdate?: (goals: any[]) => void;
+    onThemesUpdate?: (themes: any[]) => void;
 }
 
 class SimpleSyncServiceClass {
     private intervalId: NodeJS.Timeout | null = null;
     private isActive = false;
     private userId: string | null = null;
-    private callbacks: SyncCallbacks | null = null;
+    private listeners: Set<SyncCallbacks> = new Set();
     private syncInterval = 5000; // 5 segundos
 
     /**
      * Inicia o serviço de sincronização
      */
-    start(userId: string, callbacks: SyncCallbacks) {
+    start(userId: string) {
         if (this.isActive && this.userId === userId) {
-            logger.info('[SimpleSyncService] Já está ativo para este usuário');
             return;
         }
 
-        // Parar serviço anterior se existir
-        this.stop();
+        // Se mudar de usuário, reinicia tudo
+        if (this.userId && this.userId !== userId) {
+            this.stop();
+        }
 
         this.userId = userId;
-        this.callbacks = callbacks;
         this.isActive = true;
 
         logger.info('[SimpleSyncService] 🚀 Iniciando serviço de sincronização');
@@ -59,6 +55,25 @@ class SimpleSyncServiceClass {
     }
 
     /**
+     * Inscreve um listener para receber atualizações
+     */
+    subscribe(callbacks: SyncCallbacks): () => void {
+        this.listeners.add(callbacks);
+        logger.info('[SimpleSyncService] 👂 Novo listener inscrito. Total:', this.listeners.size);
+
+        // Se já temos dados em cache/estado interno, poderíamos enviar imediatamente
+        // Por enquanto, forçamos um sync se for o primeiro listener ou se o serviço estiver parado
+        if (this.userId && this.isActive) {
+            // Opcional: force sync on subscribe
+        }
+
+        return () => {
+            this.listeners.delete(callbacks);
+            logger.info('[SimpleSyncService] 🔌 Listener removido. Total:', this.listeners.size);
+        };
+    }
+
+    /**
      * Para o serviço de sincronização
      */
     stop() {
@@ -68,7 +83,7 @@ class SimpleSyncServiceClass {
         }
         this.isActive = false;
         this.userId = null;
-        this.callbacks = null;
+        this.listeners.clear();
 
         logger.info('[SimpleSyncService] 🛑 Serviço parado');
     }
@@ -77,22 +92,25 @@ class SimpleSyncServiceClass {
      * Executa sincronização imediata
      */
     async sync() {
-        if (!this.userId || !this.callbacks) {
-            logger.warn('[SimpleSyncService] Sync chamado sem userId ou callbacks');
+        if (!this.userId) {
+            return;
+        }
+
+        // Se não tem listeners, não precisa buscar (otimização)
+        if (this.listeners.size === 0) {
+            // logger.debug('[SimpleSyncService] Sem listeners, pulando sync');
             return;
         }
 
         try {
             logger.info('[SimpleSyncService] 🔄 Sincronizando...');
 
-            // Buscar tasks
-            await this.syncTasks();
-
-            // Buscar goals
-            await this.syncGoals();
-
-            // Buscar themes
-            await this.syncThemes();
+            // Buscar dados em paralelo para ser mais rápido
+            await Promise.all([
+                this.syncTasks(),
+                this.syncGoals(),
+                this.syncThemes()
+            ]);
 
             logger.info('[SimpleSyncService] ✅ Sincronização completa');
         } catch (error) {
@@ -138,8 +156,12 @@ class SimpleSyncServiceClass {
             createdAt: task.created_at
         })) || [];
 
-        logger.info(`[SimpleSyncService] 📋 ${tasks.length} tasks sincronizadas`);
-        this.callbacks!.onTasksUpdate(tasks);
+        // Notificar listeners
+        this.listeners.forEach(listener => {
+            if (listener.onTasksUpdate) {
+                listener.onTasksUpdate(tasks);
+            }
+        });
     }
 
     /**
@@ -179,8 +201,12 @@ class SimpleSyncServiceClass {
             createdAt: goal.created_at
         })) || [];
 
-        logger.info(`[SimpleSyncService] 🎯 ${goals.length} goals sincronizadas`);
-        this.callbacks!.onGoalsUpdate(goals);
+        // Notificar listeners
+        this.listeners.forEach(listener => {
+            if (listener.onGoalsUpdate) {
+                listener.onGoalsUpdate(goals);
+            }
+        });
     }
 
     /**
@@ -222,8 +248,12 @@ class SimpleSyncServiceClass {
             createdAt: theme.created_at
         })) || [];
 
-        logger.info(`[SimpleSyncService] 📚 ${themes.length} themes sincronizados`);
-        this.callbacks!.onThemesUpdate(themes);
+        // Notificar listeners
+        this.listeners.forEach(listener => {
+            if (listener.onThemesUpdate) {
+                listener.onThemesUpdate(themes);
+            }
+        });
     }
 
     /**

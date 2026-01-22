@@ -8,7 +8,7 @@ import { supabase } from '../lib/supabase';
 import { GoalContext } from './GoalContext';
 import { filterBlacklisted } from '../utils/deletedItemsBlacklist';
 import { SyncQueueService } from '../services/SyncQueueService';
-import { RealtimeService } from '../services/RealtimeService';
+import { SimpleSyncService } from '../services/SimpleSyncService';
 
 export const GoalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { user } = useAuth();
@@ -137,25 +137,28 @@ export const GoalProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     }, [user, goalActions]);
 
-    // Fetch inicial e inscrição no Realtime
+    // 🚀 SimpleSyncService - Polling robusto a cada 5 segundos
     useEffect(() => {
         if (!user) return;
 
-        // Fetch inicial
-        fetchGoals();
+        logger.info('[GoalProvider] 🔄 Iniciando SimpleSyncService');
 
-        // Inscrever no Realtime para atualizações automáticas
-        const unsubscribe = RealtimeService.subscribe('goals', (event, record) => {
-            logger.info(`[GoalProvider] 📥 Realtime ${event} for goal:`, record?.id?.substring(0, 8));
+        // Iniciar serviço (idempotente)
+        SimpleSyncService.start(user.id);
 
-            // Refetch para garantir consistência
-            fetchGoals();
+        // Inscrever listener para goals
+        const unsubscribe = SimpleSyncService.subscribe({
+            onGoalsUpdate: (goals) => {
+                logger.info(`[GoalProvider] 📥 SimpleSyncService atualizou ${goals.length} goals`);
+                goalActions.setGoals(goals);
+            }
         });
 
         return () => {
+            logger.info('[GoalProvider] 🔌 Removendo listener do SimpleSyncService');
             unsubscribe();
         };
-    }, [user, fetchGoals]);
+    }, [user, goalActions]);
 
     return (
         <GoalContext.Provider value={goalActions}>

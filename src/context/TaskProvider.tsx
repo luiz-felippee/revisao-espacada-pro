@@ -145,19 +145,20 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         logger.info('[TaskProvider] 🔄 Iniciando SimpleSyncService');
 
-        // Iniciar SimpleSyncService com callback para atualizar tasks
-        SimpleSyncService.start(user.id, {
+        // Iniciar serviço (idempotente)
+        SimpleSyncService.start(user.id);
+
+        // Inscrever listener para tasks
+        const unsubscribe = SimpleSyncService.subscribe({
             onTasksUpdate: (tasks) => {
                 logger.info(`[TaskProvider] 📥 SimpleSyncService atualizou ${tasks.length} tasks`);
                 taskActions.setTasks(tasks);
-            },
-            onGoalsUpdate: () => { }, // Não usado aqui
-            onThemesUpdate: () => { } // Não usado aqui
+            }
         });
 
         return () => {
-            logger.info('[TaskProvider] 🛑 Parando SimpleSyncService');
-            SimpleSyncService.stop();
+            logger.info('[TaskProvider] 🔌 Removendo listener do SimpleSyncService');
+            unsubscribe();
         };
     }, [user, taskActions]);
 
