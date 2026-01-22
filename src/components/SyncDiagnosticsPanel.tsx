@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, RefreshCw, Trash2, Download, AlertTriangle, CheckCircle } from 'lucide-react';
 import { SyncQueueService, type SyncOp } from '../services/SyncQueueService';
+import { SimpleSyncService } from '../services/SimpleSyncService';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 
@@ -15,6 +16,7 @@ export const SyncDiagnosticsPanel: React.FC<SyncDiagnosticsPanelProps> = ({ isOp
     const [queue, setQueue] = useState<SyncOp[]>([]);
     const [connectionStatus, setConnectionStatus] = useState<'testing' | 'connected' | 'failed'>('testing');
     const [refreshKey, setRefreshKey] = useState(0);
+    const [simpleSyncInfo, setSimpleSyncInfo] = useState<any>(null);
 
     const loadQueue = useCallback(() => {
         // Access private queue via reflection (for diagnostics only)
@@ -36,8 +38,18 @@ export const SyncDiagnosticsPanel: React.FC<SyncDiagnosticsPanelProps> = ({ isOp
         if (isOpen) {
             loadQueue();
             testConnection();
+            setSimpleSyncInfo(SimpleSyncService.getDebugInfo());
         }
     }, [isOpen, refreshKey, loadQueue, testConnection]);
+
+    // Timer para atualizar dados do SimpleSync quando aberto
+    useEffect(() => {
+        if (!isOpen) return;
+        const interval = setInterval(() => {
+            setSimpleSyncInfo(SimpleSyncService.getDebugInfo());
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [isOpen]);
 
     const handleClearQueue = () => {
         if (confirm('⚠️ Isso irá limpar TODAS as operações pendentes. Dados não sincronizados serão perdidos. Continuar?')) {
@@ -152,6 +164,38 @@ export const SyncDiagnosticsPanel: React.FC<SyncDiagnosticsPanelProps> = ({ isOp
                                 </div>
                             </div>
 
+
+                            {/* SimpleSync Status (NEW) */}
+                            <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50">
+                                <h3 className="text-sm font-bold text-slate-300 mb-3">Sincronização em Tempo Real (Polling)</h3>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <p className="text-xs text-slate-500">Status:</p>
+                                        <p className={`text-sm font-mono ${simpleSyncInfo?.isActive ? 'text-emerald-400' : 'text-slate-400'}`}>
+                                            {simpleSyncInfo?.isActive ? '✅ ATIVO' : '🛑 PARADO'}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p className="text-xs text-slate-500">Ouvintes:</p>
+                                        <p className="text-sm text-slate-300 font-mono">
+                                            {simpleSyncInfo?.listenersCount || 0} providers
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p className="text-xs text-slate-500">Intervalo:</p>
+                                        <p className="text-sm text-slate-300 font-mono">
+                                            {simpleSyncInfo?.syncInterval || 0}ms
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <p className="text-xs text-slate-500">User ID (Sync):</p>
+                                        <p className="text-xs text-slate-300 font-mono truncate" title={simpleSyncInfo?.userId}>
+                                            {simpleSyncInfo?.userId?.substring(0, 8)}...
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
                             {/* Queue Info */}
                             <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50">
                                 <div className="flex items-center justify-between mb-3">
@@ -246,3 +290,4 @@ export const SyncDiagnosticsPanel: React.FC<SyncDiagnosticsPanelProps> = ({ isOp
         </AnimatePresence>
     );
 };
+
