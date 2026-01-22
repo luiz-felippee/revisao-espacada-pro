@@ -27,42 +27,48 @@ export class SyncMappers {
     }
 
     static mapGoalToDb(goal: Goal & { user_id?: string }) {
+        // Campos suportados pelo schema atual (initial_schema.sql)
         return {
             id: goal.id,
             title: goal.title,
-            type: goal.type,
+            // type: goal.type, // Não existe no schema
             category: goal.category,
-            progress: goal.progress,
-            priority: goal.priority,
+            // progress: goal.progress, // Não existe no schema
+            // priority: goal.priority, // Não existe no schema
             deadline: goal.deadline,
-            image_url: goal.imageUrl,
-            duration_minutes: goal.durationMinutes,
-            time_spent: goal.timeSpent,
-            completion_history: goal.completionHistory,
-            checklist: goal.checklist,
-            summaries: goal.summaries,
+            // image_url: goal.imageUrl, // Não existe
+            // duration_minutes: goal.durationMinutes, // Não existe
+            // time_spent: goal.timeSpent, // Não existe
+            // completion_history: goal.completionHistory, // Não existe
+            // checklist: goal.checklist, // Não existe (!!!)
+            // summaries: goal.summaries, // Não existe
             user_id: goal.user_id,
-            related_theme_id: goal.relatedThemeId,
-            is_habit: goal.isHabit,
+            theme_id: goal.relatedThemeId, // CORREÇÃO DE NOME
+            // is_habit: goal.isHabit, // Não existe
             start_date: goal.startDate,
-            recurrence: goal.recurrence
+            // recurrence: goal.recurrence // Não existe
+
+            // Campos calculados/básicos suportados
+            completed: goal.progress >= 100
         };
     }
 
     static mapThemeToDb(theme: Theme & { user_id?: string }) {
+        // Campos suportados pelo schema atual
         return {
             id: theme.id,
             title: theme.title,
             icon: theme.icon,
             color: theme.color,
-            category: theme.category,
-            start_date: theme.startDate,
-            deadline: theme.deadline,
-            notification_time: theme.notificationTime,
-            image_url: theme.imageUrl,
-            priority: theme.priority,
-            summaries: theme.summaries,
-            user_id: theme.user_id
+            // category: theme.category, // Não existe
+            // start_date: theme.startDate, // Não existe
+            // deadline: theme.deadline, // Não existe
+            // notification_time: theme.notificationTime, // Não existe
+            // image_url: theme.imageUrl, // Não existe
+            // priority: theme.priority, // Não existe
+            // summaries: theme.summaries, // Não existe
+            user_id: theme.user_id,
+            order_index: (theme as any).order_index || 0
         };
     }
 

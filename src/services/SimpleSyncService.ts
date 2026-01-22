@@ -225,7 +225,7 @@ class SimpleSyncServiceClass {
             durationMinutes: goal.duration_minutes,
             timeSpent: goal.time_spent || 0,
             completionHistory: goal.completion_history || [],
-            relatedThemeId: goal.related_theme_id,
+            relatedThemeId: goal.theme_id,
             isHabit: goal.is_habit,
             startDate: this.safeDateString(goal.start_date),
             createdAt: this.safeDate(goal.created_at)

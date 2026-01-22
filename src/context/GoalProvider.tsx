@@ -46,6 +46,7 @@ export const GoalProvider: React.FC<{ children: React.ReactNode }> = ({ children
                 // Normalizar campos do banco para o formato da aplicação
                 const normalized = data.map(g => ({
                     ...g,
+                    relatedThemeId: g.theme_id,
                     createdAt: new Date(g.created_at).getTime(),
                     imageUrl: g.image_url,
                     durationMinutes: g.duration_minutes,
