@@ -8,7 +8,7 @@ import { supabase } from '../lib/supabase';
 import { TaskContext } from './TaskContext';
 import { filterBlacklisted } from '../utils/deletedItemsBlacklist';
 import { SyncQueueService } from '../services/SyncQueueService';
-import { RealtimeService } from '../services/RealtimeService';
+import { SimpleSyncService } from '../services/SimpleSyncService';
 
 export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { user } = useAuth();
@@ -139,25 +139,27 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     }, [user, taskActions]);
 
-    // Fetch inicial e inscrição no Realtime
+    // 🚀 SimpleSyncService - Polling robusto a cada 5 segundos
     useEffect(() => {
         if (!user) return;
 
-        // Fetch inicial
-        fetchTasks();
+        logger.info('[TaskProvider] 🔄 Iniciando SimpleSyncService');
 
-        // Inscrever no Realtime para atualizações automáticas
-        const unsubscribe = RealtimeService.subscribe('tasks', (event, record) => {
-            logger.info(`[TaskProvider] 📥 Realtime ${event} for task:`, record?.id?.substring(0, 8));
-
-            // Refetch para garantir consistência
-            fetchTasks();
+        // Iniciar SimpleSyncService com callback para atualizar tasks
+        SimpleSyncService.start(user.id, {
+            onTasksUpdate: (tasks) => {
+                logger.info(`[TaskProvider] 📥 SimpleSyncService atualizou ${tasks.length} tasks`);
+                taskActions.setTasks(tasks);
+            },
+            onGoalsUpdate: () => { }, // Não usado aqui
+            onThemesUpdate: () => { } // Não usado aqui
         });
 
         return () => {
-            unsubscribe();
+            logger.info('[TaskProvider] 🛑 Parando SimpleSyncService');
+            SimpleSyncService.stop();
         };
-    }, [user, fetchTasks]);
+    }, [user, taskActions]);
 
     return (
         <TaskContext.Provider value={taskActions}>

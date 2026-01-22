@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { SyncQueueService } from '../services/SyncQueueService';
-import { RealtimeService } from '../services/RealtimeService';
+// RealtimeService removido - usando SimpleSyncService nos providers
 import { syncLogger } from '../utils/logger';
 import { format } from 'date-fns';
 import { AppContext, type ActiveFocusSession } from './AppContext';
@@ -76,15 +76,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         return () => window.removeEventListener('resize', checkMobileZen);
     }, [zenMode]);
 
-    // 🚀 CRITICAL: Initialize RealtimeService for cross-device sync
-    useEffect(() => {
-        if (!user) return;
-
-        syncLogger.info('[AppProvider] Initializing RealtimeService for user:', user.id);
-        RealtimeService.initialize(user.id);
-
-
-    }, [user]);
+    // 🚀 SimpleSyncService é inicializado diretamente nos providers (TaskProvider, GoalProvider, ThemeProvider)
+    // Isso garante sincronização robusta via polling a cada 5 segundos
 
     // Broadcast Channel for Multi-Tab Sync
     useEffect(() => {
@@ -179,22 +172,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     // 🚀 REALTIME SERVICE INITIALIZATION
     // Inicializa/desconecta o serviço de sincronização em tempo real quando o usuário muda
-    useEffect(() => {
-        if (user) {
-            syncLogger.info('[AppProvider] Initializing RealtimeService for user:', user.id);
-            RealtimeService.initialize(user.id);
-        } else {
-            syncLogger.info('[AppProvider] User logged out, disconnecting RealtimeService');
-            RealtimeService.disconnect();
-        }
 
-        return () => {
-            // Cleanup on unmount
-            if (!user) {
-                RealtimeService.disconnect();
-            }
-        };
-    }, [user]);
 
     return (
         <AppContext.Provider value={{

@@ -26,7 +26,7 @@ import { NotificationPermissionBanner } from './components/NotificationPermissio
 import { OnboardingTour } from './components/onboarding/OnboardingTour';
 import { PWAPrompt } from './components/PWAPrompt';
 import { SyncStatusIndicator } from './components/SyncStatusIndicator';
-import { ForceSyncButton } from './components/ForceSyncButton';
+import { RefreshButton } from './components/RefreshButton';
 
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
