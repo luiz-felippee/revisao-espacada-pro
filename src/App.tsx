@@ -109,8 +109,8 @@ function AppContent() {
             />
           )}
 
-          {/* 🔄 Force Sync Button - Mobile */}
-          <ForceSyncButton />
+          {/* 🔄 Refresh Button - Sincronização Manual */}
+          <RefreshButton />
 
           <MainLayout
             isSummaryModalOpen={isSummaryModalOpen}
