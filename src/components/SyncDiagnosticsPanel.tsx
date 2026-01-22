@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, RefreshCw, Trash2, Download, AlertTriangle, CheckCircle } from 'lucide-react';
+import { X, RefreshCw, Trash2, Download, AlertTriangle, CheckCircle, UploadCloud } from 'lucide-react';
 import { SyncQueueService, type SyncOp } from '../services/SyncQueueService';
 import { SimpleSyncService } from '../services/SimpleSyncService';
 import { supabase } from '../lib/supabase';
@@ -80,6 +80,62 @@ export const SyncDiagnosticsPanel: React.FC<SyncDiagnosticsPanelProps> = ({ isOp
             (SyncQueueService as any).saveQueue();
             setRefreshKey(prev => prev + 1);
         }
+    };
+
+    const handleRepairUploads = () => {
+        if (!confirm('⚠️ Isso vai tentar reenviar TODOS os dados locais para o servidor. Use se seus dados não aparecem no celular.\n\nContinuar?')) return;
+
+        let count = 0;
+
+        // 1. Restaurar Goals
+        try {
+            const goalsRaw = localStorage.getItem('study_goals_backup');
+            if (goalsRaw) {
+                const goals = JSON.parse(goalsRaw);
+                goals.forEach((g: any) => {
+                    SyncQueueService.enqueue({
+                        type: 'ADD', // Upsert
+                        table: 'goals',
+                        data: { ...g, user_id: user?.id }
+                    });
+                    count++;
+                });
+            }
+        } catch (e) { console.error(e); }
+
+        // 2. Restaurar Themes
+        try {
+            const themesRaw = localStorage.getItem('study_themes_backup');
+            if (themesRaw) {
+                const themes = JSON.parse(themesRaw);
+                themes.forEach((t: any) => {
+                    // Add Theme
+                    const { subthemes, ...themeData } = t;
+                    SyncQueueService.enqueue({
+                        id: t.id, // Manter ID original
+                        type: 'ADD', // Upsert
+                        table: 'themes',
+                        data: { ...themeData, user_id: user?.id }
+                    });
+                    count++;
+
+                    // Add Subthemes
+                    if (Array.isArray(subthemes)) {
+                        subthemes.forEach((st: any) => {
+                            SyncQueueService.enqueue({
+                                type: 'ADD', // Upsert
+                                table: 'subthemes',
+                                data: { ...st, user_id: user?.id }
+                            });
+                            count++;
+                        });
+                    }
+                });
+            }
+        } catch (e) { console.error(e); }
+
+        alert(`Enfileirados ${count} itens para reenvio. A sincronização começará em instantes.`);
+        setRefreshKey(prev => prev + 1);
     };
 
     const getOpStatusIcon = (op: SyncOp) => {
@@ -220,6 +276,13 @@ export const SyncDiagnosticsPanel: React.FC<SyncDiagnosticsPanelProps> = ({ isOp
                                 <div className="flex items-center justify-between mb-3">
                                     <h3 className="text-sm font-bold text-slate-300">Fila de Sincronização</h3>
                                     <div className="flex gap-2">
+                                        <button
+                                            onClick={handleRepairUploads}
+                                            className="px-3 py-1.5 bg-yellow-500/20 hover:bg-yellow-500/30 border border-yellow-500/30 rounded-lg text-xs text-yellow-500 transition-colors flex items-center gap-1.5"
+                                        >
+                                            <UploadCloud className="w-3 h-3" />
+                                            Reparar Uploads
+                                        </button>
                                         <button
                                             onClick={handleExportQueue}
                                             className="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 rounded-lg text-xs text-slate-300 transition-colors flex items-center gap-1.5"
