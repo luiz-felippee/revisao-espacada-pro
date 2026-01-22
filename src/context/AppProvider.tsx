@@ -76,6 +76,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         return () => window.removeEventListener('resize', checkMobileZen);
     }, [zenMode]);
 
+    // 🚀 CRITICAL: Initialize RealtimeService for cross-device sync
+    useEffect(() => {
+        if (!user) return;
+
+        syncLogger.info('[AppProvider] Initializing RealtimeService for user:', user.id);
+        RealtimeService.initialize(user.id);
+
+
+    }, [user]);
+
     // Broadcast Channel for Multi-Tab Sync
     useEffect(() => {
         const channel = new BroadcastChannel('study_sync_channel');
