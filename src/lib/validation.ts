@@ -29,7 +29,7 @@ export const TaskSchema = z.object({
 // --- Goal Validation ---
 export const GoalItemSchema = z.object({
     id: z.string(),
-    title: z.string().min(1),
+    title: z.string().min(1, "O título do item é obrigatório"),
     durationDays: z.number().min(0).default(1),
     completed: z.boolean().default(false),
     order: z.number()
@@ -39,7 +39,7 @@ export const GoalSchema = z.object({
     id: z.string().optional(),
     title: z.string().min(1, "O título do objetivo é obrigatório"),
     type: z.enum(['simple', 'checklist', 'habit']),
-    category: z.string().min(1),
+    category: z.string().min(1, "A categoria é obrigatória"),
     progress: z.number().min(0).max(100).default(0),
     checklist: z.array(GoalItemSchema).optional(),
     deadline: z.string().optional(),
@@ -49,7 +49,7 @@ export const GoalSchema = z.object({
 // --- Theme Validation ---
 export const SubthemeSchema = z.object({
     id: z.string(),
-    title: z.string().min(1),
+    title: z.string().min(1, "O título do subtema é obrigatório"),
     status: z.enum(['queue', 'active', 'completed']).default('queue'),
     durationMinutes: z.number().optional(),
     sessions: z.array(SessionLogSchema).optional()
@@ -57,7 +57,7 @@ export const SubthemeSchema = z.object({
 
 export const ThemeSchema = z.object({
     id: z.string().optional(),
-    title: z.string().min(1),
+    title: z.string().min(1, "O título do tema é obrigatório"),
     priority: PrioritySchema.optional(),
     subthemes: z.array(SubthemeSchema).optional()
 });

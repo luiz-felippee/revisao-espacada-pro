@@ -46,7 +46,13 @@ export const GoalList = () => {
     const GAP = 24;
 
     const filteredGoals = goals.filter(g => {
+        // Excluir metas que pertencem a um Tema/Projeto (elas devem aparecer dentro do projeto)
         if (g.relatedThemeId) return false;
+
+        // Proteção extra: Excluir se o usuário digitou "Projeto" na categoria manualmente
+        // e quer que isso seja tratado como projeto separado (evita confusão na UI)
+        if (g.category?.toLowerCase() === 'projeto' || g.category?.toLowerCase() === 'project') return false;
+
         const cat = g.category || (g.type === 'habit' ? 'Hábitos' : 'Geral');
         return selectedCategory === 'Todos' || cat === selectedCategory;
     });

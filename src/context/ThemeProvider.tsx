@@ -196,9 +196,72 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
         // Inscrever listener para themes
         const unsubscribe = SimpleSyncService.subscribe({
-            onThemesUpdate: (themes) => {
-                logger.info(`[ThemeProvider] 📥 SimpleSyncService atualizou ${themes.length} themes`);
-                themeActions.setThemes(themes);
+            onThemesUpdate: (serverThemes: Theme[]) => {
+                logger.info(`[ThemeProvider] 📥 SimpleSyncService recebeu ${serverThemes.length} themes do servidor`);
+
+                themeActions.setThemes(prevThemes => {
+                    const mergedThemes: Theme[] = [];
+                    const serverThemeIds = new Set(serverThemes.map(t => t.id));
+
+                    // Carregar fila de deleção para evitar zumbis
+                    const pendingThemeDeletes = new Set<string>();
+                    const pendingSubthemeDeletes = new Set<string>();
+                    try {
+                        const queueRaw = localStorage.getItem('sync_queue_v1');
+                        if (queueRaw) {
+                            const queue = JSON.parse(queueRaw);
+                            if (Array.isArray(queue)) {
+                                queue.forEach((op: { type: string; table: string; data?: { id?: string } }) => {
+                                    if (op.type === 'DELETE' && op.data?.id) {
+                                        if (op.table === 'themes') pendingThemeDeletes.add(op.data.id);
+                                        if (op.table === 'subthemes') pendingSubthemeDeletes.add(op.data.id);
+                                    }
+                                });
+                            }
+                        }
+                    } catch (e) {
+                        logger.error("[ThemeProvider] Error reading sync queue", e);
+                    }
+
+                    // 1. Processar temas que vieram do servidor (com merge de subtemas)
+                    serverThemes.forEach(serverTheme => {
+                        if (pendingThemeDeletes.has(serverTheme.id)) return;
+
+                        const localTheme = prevThemes.find(t => t.id === serverTheme.id);
+                        let finalSubthemes = [...serverTheme.subthemes];
+
+                        // Merge de subtemas otimistas
+                        if (localTheme) {
+                            const serverSubthemeIds = new Set(serverTheme.subthemes.map(st => st.id));
+
+                            localTheme.subthemes.forEach(localSub => {
+                                // Se subtema existe localmente mas não no servidor, e não foi deletado
+                                if (!serverSubthemeIds.has(localSub.id) && !pendingSubthemeDeletes.has(localSub.id)) {
+                                    finalSubthemes.push(localSub);
+                                }
+                            });
+                        }
+
+                        mergedThemes.push({
+                            ...serverTheme,
+                            subthemes: finalSubthemes
+                        });
+                    });
+
+                    // 2. Manter temas locais novos que ainda não subiram
+                    prevThemes.forEach(localTheme => {
+                        if (!serverThemeIds.has(localTheme.id) && !pendingThemeDeletes.has(localTheme.id)) {
+                            // Para temas novos locais, mantemos todos os subtemas (exceto se tiver subtema deletado individualmente, o que é raro num tema novo, mas possível)
+                            const filteredSubthemes = localTheme.subthemes.filter((st: any) => !pendingSubthemeDeletes.has(st.id));
+                            mergedThemes.push({
+                                ...localTheme,
+                                subthemes: filteredSubthemes
+                            });
+                        }
+                    });
+
+                    return mergedThemes;
+                });
             }
         });
 

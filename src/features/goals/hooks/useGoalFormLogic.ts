@@ -157,7 +157,7 @@ export const useGoalFormLogic = ({ isOpen, onClose, goalToEdit, defaultThemeId, 
         const goalData = {
             title,
             type,
-            category,
+            category: category.trim() || 'Geral',
             priority,
             startDate,
             deadline: finalDeadline,

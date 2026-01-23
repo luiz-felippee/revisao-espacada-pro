@@ -48,26 +48,19 @@ export const SummaryModal = ({ isOpen, onClose, onOpenGoalModal, onOpenThemeModa
         });
 
         // 2. Process Goals (Checklists) - Find Orphans
+        // FIX: User requested to REMOVE goals from Projects view entirely. 
+        // Projects should ONLY be Themes with category='project'.
+        const goalProjs: any[] = [];
+        /*
         const goalProjs = goals.filter(g => !g.relatedThemeId).map(g => {
-            const daysLeft = g.deadline ? differenceInDays(new Date(g.deadline), new Date()) : null;
-            return {
-                id: g.id,
-                title: g.title,
-                type: 'Meta' as const,
-                progress: g.progress,
-                deadline: g.deadline,
-                itemCount: g.checklist?.length || 0,
-                daysLeft,
-                color: g.color || '#10b981', // Emerald
-                icon: <Target className="w-5 h-5 text-emerald-400" />,
-                relatedThemeTitle: undefined
-            };
+             // ... old logic ...
         });
+        */
 
         // Filter Application
         let filteredThemes = themeProjs.filter(p => {
             const fullTheme = themes.find(t => t.id === p.id);
-            return fullTheme?.category === 'project';
+            return fullTheme?.category?.toLowerCase() === 'project';
         });
         let filteredGoals = goalProjs;
 
@@ -103,7 +96,7 @@ export const SummaryModal = ({ isOpen, onClose, onOpenGoalModal, onOpenThemeModa
         });
     };
 
-    const combinedList = [...themeProjects, ...orphanGoalProjects];
+    const combinedList = [...themeProjects];  // REMOVED ...orphanGoalProjects
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">

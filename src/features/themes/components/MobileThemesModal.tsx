@@ -24,8 +24,8 @@ export const MobileThemesModal: React.FC<MobileThemesModalProps> = ({ isOpen, on
     const [selectedThemeForDetails, setSelectedThemeForDetails] = useState<Theme | null>(null);
     const [selectedSubthemeForNotes, setSelectedSubthemeForNotes] = useState<any>(null);
 
-    // Filter out projects, show only study themes
-    const studyThemes = themes.filter(t => t.category !== 'project');
+    // Filter out projects (case-insensitive), show only study themes
+    const studyThemes = themes.filter(t => t.category?.toLowerCase() !== 'project');
     const queuedSubthemesMap = calculateQueuedDates(studyThemes);
 
     return (
@@ -89,7 +89,7 @@ export const MobileThemesModal: React.FC<MobileThemesModalProps> = ({ isOpen, on
                                     <div key={theme.id} className="w-full">
                                         <ThemeCard
                                             theme={theme}
-                                            completionDate={getThemeCompletionDate(theme, queuedSubthemesMap)}
+                                            completionDate={getThemeCompletionDate(theme, queuedSubthemesMap)?.toISOString() || null}
                                             onEdit={() => setEditingTheme(theme)}
                                             onDelete={() => deleteTheme(theme.id)}
                                             onOpenNotes={setSelectedSubthemeForNotes}

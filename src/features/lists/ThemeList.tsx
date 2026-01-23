@@ -41,8 +41,8 @@ export const ThemeList = ({ forceCategory, defaultCategory }: ThemeListProps = {
     // Filter themes based on category
     // If category='project', show ONLY projects. Otherwise, show study themes (exclude projects)
     const visibleThemes = categoryFilter === 'project'
-        ? themes.filter(t => t.category === 'project')
-        : themes.filter(t => t.category !== 'project');
+        ? themes.filter(t => t.category?.toLowerCase() === 'project')
+        : themes.filter(t => t.category?.toLowerCase() !== 'project');
 
     // Queue Logic
     const queuedSubthemesMap = calculateQueuedDates(visibleThemes);
@@ -130,7 +130,7 @@ export const ThemeList = ({ forceCategory, defaultCategory }: ThemeListProps = {
                                 <ThemeCard
                                     key={theme.id}
                                     theme={theme}
-                                    completionDate={getThemeCompletionDate(theme, queuedSubthemesMap)}
+                                    completionDate={getThemeCompletionDate(theme, queuedSubthemesMap)?.toISOString() || null}
                                     onEdit={() => setEditingTheme(theme)}
                                     onDelete={() => deleteTheme(theme.id)}
                                     onOpenNotes={setSelectedSubthemeForNotes}

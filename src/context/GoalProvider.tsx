@@ -149,9 +149,51 @@ export const GoalProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         // Inscrever listener para goals
         const unsubscribe = SimpleSyncService.subscribe({
-            onGoalsUpdate: (goals) => {
-                logger.info(`[GoalProvider] 📥 SimpleSyncService atualizou ${goals.length} goals`);
-                goalActions.setGoals(goals);
+            onGoalsUpdate: (serverGoals) => {
+                logger.info(`[GoalProvider] 📥 SimpleSyncService recebeu ${serverGoals.length} goals do servidor`);
+
+                goalActions.setGoals(prevGoals => {
+                    // Proteção contra sobrescrita de dados otimistas (Smart Merge)
+                    const mergedGoals: Goal[] = [];
+                    const serverIds = new Set(serverGoals.map(g => g.id));
+
+                    // 1. Adicionar todos os goals do servidor
+                    mergedGoals.push(...serverGoals);
+
+                    // 2. Manter goals locais que NÃO estão no servidor (ainda não sincronizaram)
+                    // Mas cuidado para não ressuscitar itens deletados
+
+                    // Verificar pendências de deleção
+                    const pendingDeletes = new Set<string>();
+                    try {
+                        const queueRaw = localStorage.getItem('sync_queue_v1');
+                        if (queueRaw) {
+                            const queue = JSON.parse(queueRaw);
+                            if (Array.isArray(queue)) {
+                                queue.forEach((op: { type: string; table: string; data?: { id?: string } }) => {
+                                    if (op.type === 'DELETE' && op.table === 'goals' && op.data?.id) {
+                                        pendingDeletes.add(op.data.id);
+                                    }
+                                });
+                            }
+                        }
+                    } catch (e) {
+                        logger.error("[GoalProvider] Error reading sync queue", e);
+                    }
+
+                    prevGoals.forEach(localGoal => {
+                        // Se o item local não está no servidor
+                        if (!serverIds.has(localGoal.id)) {
+                            // E não está marcado para ser deletado
+                            if (!pendingDeletes.has(localGoal.id)) {
+                                // Então é um item novo (otimista) que ainda não subiu
+                                mergedGoals.push(localGoal);
+                            }
+                        }
+                    });
+
+                    return mergedGoals;
+                });
             }
         });
 

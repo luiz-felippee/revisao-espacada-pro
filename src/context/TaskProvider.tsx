@@ -150,9 +150,45 @@ export const TaskProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         // Inscrever listener para tasks
         const unsubscribe = SimpleSyncService.subscribe({
-            onTasksUpdate: (tasks) => {
-                logger.info(`[TaskProvider] 📥 SimpleSyncService atualizou ${tasks.length} tasks`);
-                taskActions.setTasks(tasks);
+            onTasksUpdate: (serverTasks) => {
+                logger.info(`[TaskProvider] 📥 SimpleSyncService recebeu ${serverTasks.length} tasks do servidor`);
+
+                taskActions.setTasks(prevTasks => {
+                    const mergedTasks: Task[] = [];
+                    const serverIds = new Set(serverTasks.map(t => t.id));
+
+                    // 1. Adicionar tasks do servidor
+                    mergedTasks.push(...serverTasks);
+
+                    // 2. Verificar pendências de deleção
+                    const pendingDeletes = new Set<string>();
+                    try {
+                        const queueRaw = localStorage.getItem('sync_queue_v1');
+                        if (queueRaw) {
+                            const queue = JSON.parse(queueRaw);
+                            if (Array.isArray(queue)) {
+                                queue.forEach((op: { type: string; table: string; data?: { id?: string } }) => {
+                                    if (op.type === 'DELETE' && op.table === 'tasks' && op.data?.id) {
+                                        pendingDeletes.add(op.data.id);
+                                    }
+                                });
+                            }
+                        }
+                    } catch (e) {
+                        logger.error("[TaskProvider] Error reading sync queue", e);
+                    }
+
+                    // 3. Manter tasks locais novas
+                    prevTasks.forEach(localTask => {
+                        if (!serverIds.has(localTask.id)) {
+                            if (!pendingDeletes.has(localTask.id)) {
+                                mergedTasks.push(localTask);
+                            }
+                        }
+                    });
+
+                    return mergedTasks;
+                });
             }
         });
 
