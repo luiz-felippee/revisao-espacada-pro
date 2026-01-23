@@ -362,7 +362,13 @@ export class SyncQueueService {
                     }
                 } catch (error) {
                     const syncError = error as { message?: string; code?: string } | undefined;
+                    const errorMsg = syncError?.message || 'Unknown batch error';
                     syncLogger.error(`Batch failed for ${key}:`, syncError || { message: 'Unknown error' });
+
+                    // Notify UI of specific error
+                    if (SyncQueueService.isFatalError(syncError || {})) {
+                        SyncQueueService.notifyError(`Erro Fatal (${table}): ${errorMsg}`);
+                    }
 
                     SyncQueueService.consecutiveErrors++; // 🚀 Increment on batch failure
 
@@ -379,6 +385,7 @@ export class SyncQueueService {
                             if (op.retryCount >= MAX_RETRIES) {
                                 processedOps.push(op.id);
                                 SyncQueueService.removeDependentOps(op.id);
+                                SyncQueueService.notifyError(`Falha definitiva em ${table}: ${errorMsg}`);
                             } else {
                                 // 🚀 OPTIMIZED: Linear backoff instead of exponential
                                 const delay = Math.min(500 * op.retryCount, 5000);
@@ -400,7 +407,9 @@ export class SyncQueueService {
             this.saveQueue();
 
         } catch (error) {
+            const e = error as any;
             syncLogger.error('Queue processing error:', error);
+            SyncQueueService.notifyError(`Erro na fila: ${e.message || 'Desconhecido'}`);
         }
 
         this.isProcessing = false;
@@ -518,6 +527,19 @@ export class SyncQueueService {
         return () => {
             this.statusListeners = this.statusListeners.filter(l => l !== listener);
         };
+    }
+
+    private static errorListeners: ((error: string) => void)[] = [];
+
+    static subscribeToError(listener: (error: string) => void) {
+        this.errorListeners.push(listener);
+        return () => {
+            this.errorListeners = this.errorListeners.filter(l => l !== listener);
+        };
+    }
+
+    private static notifyError(error: string) {
+        this.errorListeners.forEach(l => l(error));
     }
 
     private static notifyStatus() {

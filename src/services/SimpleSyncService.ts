@@ -134,15 +134,23 @@ class SimpleSyncServiceClass {
             logger.info('[SimpleSyncService] 🔄 Sincronizando...');
 
             // Buscar dados em paralelo para ser mais rápido
-            await Promise.all([
+            // Buscar dados em paralelo para ser mais rápido, usando allSettled para isolar falhas
+            const results = await Promise.allSettled([
                 this.syncTasks(),
                 this.syncGoals(),
                 this.syncThemes()
             ]);
 
-            logger.info('[SimpleSyncService] ✅ Sincronização completa');
+            results.forEach((result, index) => {
+                const types = ['Tasks', 'Goals', 'Themes'];
+                if (result.status === 'rejected') {
+                    logger.error(`[SimpleSyncService] ❌ Falha ao sincronizar ${types[index]}:`, result.reason);
+                }
+            });
+
+            logger.info('[SimpleSyncService] ✅ Ciclo de sincronização finalizado');
         } catch (error) {
-            logger.error('[SimpleSyncService] ❌ Erro na sincronização:', error);
+            logger.error('[SimpleSyncService] ❌ Erro geral na sincronização:', error);
         }
     }
 

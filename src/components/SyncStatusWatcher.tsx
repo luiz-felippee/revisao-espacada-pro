@@ -7,10 +7,11 @@ export const SyncStatusWatcher = () => {
     const lastStatus = useRef<string>('synced');
 
     useEffect(() => {
-        const unsubscribe = SyncQueueService.subscribe((status) => {
+        // Status Listener
+        const unsubscribeStatus = SyncQueueService.subscribe((status) => {
             if (status === 'error' && lastStatus.current !== 'error') {
                 if (navigator.onLine) {
-                    showToast("Erro na sincronização. Tentando novamente...", "error");
+                    showToast("Erro na sincronização. Verifique os detalhes.", "error");
                 }
             } else if (status === 'offline' && lastStatus.current !== 'offline') {
                 showToast("Modo Offline: Seus dados estão salvos no dispositivo.", "info");
@@ -20,7 +21,15 @@ export const SyncStatusWatcher = () => {
             lastStatus.current = status;
         });
 
-        return () => unsubscribe();
+        // Error Listener (New)
+        const unsubscribeError = SyncQueueService.subscribeToError((msg) => {
+            showToast(msg, "error");
+        });
+
+        return () => {
+            unsubscribeStatus();
+            unsubscribeError();
+        };
     }, [showToast]);
 
     return null;
