@@ -266,8 +266,8 @@ class SimpleSyncServiceClass {
             title: theme.title,
             icon: theme.icon,
             color: theme.color,
-            category: 'study', // Default seguro pois o banco não tem esse campo
-            priority: 'medium', // Default
+            category: theme.category || 'study',
+            priority: theme.priority || 'medium',
             startDate: this.safeDateString(theme.start_date),
             subthemes: theme.subthemes?.map((sub: any) => ({
                 id: sub.id,
